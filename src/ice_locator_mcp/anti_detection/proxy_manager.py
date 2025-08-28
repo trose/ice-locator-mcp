@@ -425,20 +425,338 @@ class ProxyManager:
                 )
     
     async def _health_check_proxy(self, proxy: ProxyConfig) -> None:
-        """Perform health check on a single proxy."""
+        """Perform comprehensive health check on a single proxy."""
         try:
+            await self._perform_basic_connectivity_check(proxy)
+            await self._perform_performance_check(proxy)
+            await self._perform_anonymity_check(proxy)
+            await self._perform_geolocation_check(proxy)
+            
+        except Exception as e:
+            await self.mark_proxy_failure(proxy, e)
+    
+    async def _perform_basic_connectivity_check(self, proxy: ProxyConfig) -> None:
+        """Basic connectivity test."""
+        async with httpx.AsyncClient(
+            proxies={"http://": proxy.url, "https://": proxy.url},
+            timeout=10.0
+        ) as client:
+            start_time = time.time()
+            response = await client.get("http://httpbin.org/ip")
+            response_time = time.time() - start_time
+            
+            if response.status_code == 200:
+                await self.mark_proxy_success(proxy, response_time)
+            else:
+                await self.mark_proxy_failure(proxy, Exception(f"HTTP {response.status_code}"))
+    
+    async def _perform_performance_check(self, proxy: ProxyConfig) -> None:
+        """Test proxy performance with multiple requests."""
+        performance_metrics = []
+        
+        for i in range(3):  # Test with 3 requests
+            try:
+                async with httpx.AsyncClient(
+                    proxies={"http://": proxy.url, "https://": proxy.url},
+                    timeout=15.0
+                ) as client:
+                    start_time = time.time()
+                    response = await client.get("http://httpbin.org/delay/1")
+                    response_time = time.time() - start_time
+                    
+                    if response.status_code == 200:
+                        performance_metrics.append(response_time)
+                    
+                    await asyncio.sleep(0.5)  # Brief pause between tests
+                    
+            except Exception:
+                break  # Stop testing on first failure
+        
+        if performance_metrics:
+            avg_performance = sum(performance_metrics) / len(performance_metrics)
+            metrics = self.proxy_metrics.get(proxy.endpoint, ProxyMetrics())
+            
+            # Update performance data
+            if not hasattr(metrics, 'performance_history'):
+                metrics.performance_history = deque(maxlen=10)
+            metrics.performance_history.append(avg_performance)
+            
+            self.proxy_metrics[proxy.endpoint] = metrics
+    
+    async def _perform_anonymity_check(self, proxy: ProxyConfig) -> None:
+        """Check if proxy properly hides real IP."""
+        try:
+            # Get IP without proxy first
+            async with httpx.AsyncClient(timeout=10.0) as direct_client:
+                direct_response = await direct_client.get("http://httpbin.org/ip")
+                real_ip = direct_response.json().get('origin', '')
+            
+            # Get IP through proxy
             async with httpx.AsyncClient(
                 proxies={"http://": proxy.url, "https://": proxy.url},
                 timeout=10.0
+            ) as proxy_client:
+                proxy_response = await proxy_client.get("http://httpbin.org/ip")
+                proxy_ip = proxy_response.json().get('origin', '')
+            
+            # Check if IPs are different (anonymity working)
+            metrics = self.proxy_metrics.get(proxy.endpoint, ProxyMetrics())
+            if not hasattr(metrics, 'anonymity_verified'):
+                metrics.anonymity_verified = False
+            
+            if proxy_ip != real_ip and proxy_ip:
+                metrics.anonymity_verified = True
+                self.logger.debug(
+                    "Proxy anonymity verified",
+                    proxy=proxy.endpoint,
+                    real_ip=real_ip[:8] + "...",  # Partial IP for privacy
+                    proxy_ip=proxy_ip[:8] + "..."
+                )
+            else:
+                metrics.anonymity_verified = False
+                self.logger.warning(
+                    "Proxy anonymity failed",
+                    proxy=proxy.endpoint
+                )
+            
+            self.proxy_metrics[proxy.endpoint] = metrics
+            
+        except Exception as e:
+            self.logger.debug(
+                "Anonymity check failed",
+                proxy=proxy.endpoint,
+                error=str(e)
+            )
+    
+    async def _perform_geolocation_check(self, proxy: ProxyConfig) -> None:
+        """Verify proxy geolocation matches expected region."""
+        if not proxy.country:
+            return  # Skip if no expected country
+        
+        try:
+            async with httpx.AsyncClient(
+                proxies={"http://": proxy.url, "https://": proxy.url},
+                timeout=15.0
             ) as client:
-                start_time = time.time()
-                response = await client.get("http://httpbin.org/ip")
-                response_time = time.time() - start_time
+                # Use a geolocation service
+                response = await client.get("http://ip-api.com/json")
                 
                 if response.status_code == 200:
-                    await self.mark_proxy_success(proxy, response_time)
-                else:
-                    await self.mark_proxy_failure(proxy, Exception(f"HTTP {response.status_code}"))
+                    geo_data = response.json()
+                    detected_country = geo_data.get('countryCode', '')
+                    
+                    metrics = self.proxy_metrics.get(proxy.endpoint, ProxyMetrics())
+                    if not hasattr(metrics, 'geolocation_verified'):
+                        metrics.geolocation_verified = False
+                    
+                    if detected_country.upper() == proxy.country.upper():
+                        metrics.geolocation_verified = True
+                        self.logger.debug(
+                            "Proxy geolocation verified",
+                            proxy=proxy.endpoint,
+                            expected=proxy.country,
+                            detected=detected_country
+                        )
+                    else:
+                        metrics.geolocation_verified = False
+                        self.logger.warning(
+                            "Proxy geolocation mismatch",
+                            proxy=proxy.endpoint,
+                            expected=proxy.country,
+                            detected=detected_country
+                        )
+                    
+                    self.proxy_metrics[proxy.endpoint] = metrics
                     
         except Exception as e:
-            await self.mark_proxy_failure(proxy, e)
+            self.logger.debug(
+                "Geolocation check failed",
+                proxy=proxy.endpoint,
+                error=str(e)
+            )
+    
+    async def get_proxy_analytics(self) -> Dict[str, Any]:
+        """Get comprehensive proxy pool analytics."""
+        current_time = time.time()
+        
+        # Overall statistics
+        total_proxies = len(self.proxy_pool)
+        healthy_proxies = len(self._get_healthy_proxies())
+        failed_proxies = len(self.failed_proxies)
+        
+        # Performance metrics
+        all_metrics = list(self.proxy_metrics.values())
+        if all_metrics:
+            avg_success_rate = sum(m.success_rate for m in all_metrics) / len(all_metrics)
+            avg_response_time = sum(m.average_response_time for m in all_metrics if m.average_response_time > 0) / max(1, len([m for m in all_metrics if m.average_response_time > 0]))
+            total_requests = sum(m.request_count for m in all_metrics)
+        else:
+            avg_success_rate = 0.0
+            avg_response_time = 0.0
+            total_requests = 0
+        
+        # Geographic distribution
+        country_distribution = {}
+        residential_count = 0
+        
+        for proxy in self.proxy_pool:
+            if proxy.country:
+                country_distribution[proxy.country] = country_distribution.get(proxy.country, 0) + 1
+            if proxy.is_residential:
+                residential_count += 1
+        
+        # Health status breakdown
+        status_breakdown = {status.value: 0 for status in ProxyStatus}
+        for status in self.proxy_status.values():
+            status_breakdown[status.value] += 1
+        
+        # Recent performance trends
+        recent_failures = 0
+        recent_successes = 0
+        
+        for metrics in all_metrics:
+            if current_time - metrics.last_failure < 3600:  # Last hour
+                recent_failures += 1
+            if current_time - metrics.last_success < 3600:  # Last hour
+                recent_successes += 1
+        
+        return {
+            'overview': {
+                'total_proxies': total_proxies,
+                'healthy_proxies': healthy_proxies,
+                'failed_proxies': failed_proxies,
+                'health_percentage': (healthy_proxies / max(1, total_proxies)) * 100
+            },
+            'performance': {
+                'average_success_rate': avg_success_rate,
+                'average_response_time': avg_response_time,
+                'total_requests': total_requests,
+                'recent_failures': recent_failures,
+                'recent_successes': recent_successes
+            },
+            'distribution': {
+                'by_country': country_distribution,
+                'residential_proxies': residential_count,
+                'datacenter_proxies': total_proxies - residential_count
+            },
+            'status_breakdown': status_breakdown,
+            'rotation_info': {
+                'last_rotation': current_time - self.last_rotation_time,
+                'rotation_interval': self.config.rotation_interval
+            }
+        }
+    
+    async def get_proxy_recommendations(self) -> List[Dict[str, Any]]:
+        """Get recommendations for proxy pool optimization."""
+        recommendations = []
+        
+        analytics = await self.get_proxy_analytics()
+        
+        # Health-based recommendations
+        health_percentage = analytics['overview']['health_percentage']
+        if health_percentage < 50:
+            recommendations.append({
+                'type': 'critical',
+                'title': 'Low Proxy Health',
+                'description': f'Only {health_percentage:.1f}% of proxies are healthy',
+                'action': 'Add more proxies or refresh proxy list',
+                'priority': 'high'
+            })
+        
+        # Performance recommendations
+        avg_response_time = analytics['performance']['average_response_time']
+        if avg_response_time > 5.0:
+            recommendations.append({
+                'type': 'performance',
+                'title': 'Slow Proxy Performance',
+                'description': f'Average response time is {avg_response_time:.1f}s',
+                'action': 'Consider faster proxy providers or increase timeout',
+                'priority': 'medium'
+            })
+        
+        # Geographic diversity
+        country_count = len(analytics['distribution']['by_country'])
+        if country_count < 3:
+            recommendations.append({
+                'type': 'diversity',
+                'title': 'Limited Geographic Diversity',
+                'description': f'Proxies from only {country_count} countries',
+                'action': 'Add proxies from different geographic regions',
+                'priority': 'low'
+            })
+        
+        # Residential vs datacenter balance
+        total_proxies = analytics['overview']['total_proxies']
+        residential_count = analytics['distribution']['residential_proxies']
+        if total_proxies > 0 and residential_count / total_proxies < 0.3:
+            recommendations.append({
+                'type': 'quality',
+                'title': 'Low Residential Proxy Ratio',
+                'description': f'Only {residential_count}/{total_proxies} proxies are residential',
+                'action': 'Increase residential proxy ratio for better detection avoidance',
+                'priority': 'medium'
+            })
+        
+        return recommendations
+    
+    async def optimize_proxy_pool(self) -> Dict[str, Any]:
+        """Automatically optimize proxy pool based on performance data."""
+        optimization_results = {
+            'actions_taken': [],
+            'proxies_removed': 0,
+            'proxies_demoted': 0,
+            'settings_adjusted': []
+        }
+        
+        current_time = time.time()
+        
+        # Remove consistently failing proxies
+        proxies_to_remove = []
+        for proxy in self.proxy_pool:
+            metrics = self.proxy_metrics.get(proxy.endpoint, ProxyMetrics())
+            
+            # Remove if success rate is very low with sufficient data
+            if (metrics.request_count >= 10 and 
+                metrics.success_rate < 0.2):
+                proxies_to_remove.append(proxy)
+            
+            # Remove if not used successfully in last 24 hours
+            elif (current_time - metrics.last_success > 86400 and 
+                  metrics.request_count > 0):
+                proxies_to_remove.append(proxy)
+        
+        for proxy in proxies_to_remove:
+            self.proxy_pool.remove(proxy)
+            self.failed_proxies.add(proxy.endpoint)
+            optimization_results['proxies_removed'] += 1
+            optimization_results['actions_taken'].append(
+                f"Removed underperforming proxy: {proxy.endpoint}"
+            )
+        
+        # Adjust rotation interval based on success rates
+        avg_success_rate = sum(
+            m.success_rate for m in self.proxy_metrics.values()
+        ) / max(1, len(self.proxy_metrics))
+        
+        if avg_success_rate < 0.7:
+            # Low success rate - increase rotation interval
+            old_interval = self.config.rotation_interval
+            self.config.rotation_interval = min(3600, old_interval * 1.5)
+            optimization_results['settings_adjusted'].append(
+                f"Increased rotation interval from {old_interval}s to {self.config.rotation_interval}s"
+            )
+        
+        elif avg_success_rate > 0.9:
+            # High success rate - can decrease rotation interval
+            old_interval = self.config.rotation_interval
+            self.config.rotation_interval = max(300, old_interval * 0.8)
+            optimization_results['settings_adjusted'].append(
+                f"Decreased rotation interval from {old_interval}s to {self.config.rotation_interval}s"
+            )
+        
+        self.logger.info(
+            "Proxy pool optimized",
+            **optimization_results
+        )
+        
+        return optimization_results
