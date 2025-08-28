@@ -115,6 +115,28 @@ class LoggingConfig:
 
 
 @dataclass
+class MonitoringConfig:
+    """Configuration for monitoring and analytics."""
+    
+    mcpcat_enabled: bool = True
+    mcpcat_project_id: Optional[str] = None
+    redaction_level: str = "strict"  # strict, moderate, minimal
+    identify_users: bool = False  # Disabled by default for privacy
+    local_only: bool = False  # If True, no data sent to external servers
+    
+    @classmethod
+    def from_env(cls) -> "MonitoringConfig":
+        """Create monitoring configuration from environment variables."""
+        return cls(
+            mcpcat_enabled=os.getenv("ICE_LOCATOR_ANALYTICS_ENABLED", "true").lower() == "true",
+            mcpcat_project_id=os.getenv("ICE_LOCATOR_MCPCAT_PROJECT_ID"),
+            redaction_level=os.getenv("ICE_LOCATOR_REDACTION_LEVEL", "strict"),
+            identify_users=os.getenv("ICE_LOCATOR_IDENTIFY_USERS", "false").lower() == "true",
+            local_only=os.getenv("ICE_LOCATOR_ANALYTICS_LOCAL_ONLY", "false").lower() == "true"
+        )
+
+
+@dataclass
 class ServerConfig:
     """Main server configuration."""
     
@@ -124,6 +146,7 @@ class ServerConfig:
     cache_config: CacheConfig = field(default_factory=CacheConfig) 
     security_config: SecurityConfig = field(default_factory=SecurityConfig)
     logging_config: LoggingConfig = field(default_factory=LoggingConfig)
+    monitoring_config: MonitoringConfig = field(default_factory=MonitoringConfig)
     
     # Server settings
     server_name: str = "ice-locator-mcp"
