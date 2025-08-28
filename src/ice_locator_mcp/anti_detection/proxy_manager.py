@@ -7,7 +7,7 @@ import random
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Set, Any
 import httpx
 import structlog
 from fake_useragent import UserAgent

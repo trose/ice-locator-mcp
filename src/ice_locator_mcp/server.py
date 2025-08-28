@@ -8,13 +8,13 @@ Main server implementation that provides MCP tools for accessing ICE detainee in
 import asyncio
 import logging
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 import mcp.types as types
 from mcp.server.models import InitializationOptions
 import mcp.server.stdio
-from mcp import BaseServer, get_model_capabilities
-from typing import Any, Sequence
+from mcp.server import Server
+from mcp.server.fastmcp import FastMCP
 import structlog
 
 from .core.config import ServerConfig
@@ -41,7 +41,7 @@ class ICELocatorServer:
         self.search_tools = SearchTools(self.search_engine)
         
         # Initialize MCP server
-        self.server = BaseServer("ice-locator")
+        self.server = Server("ice-locator")
         self._register_handlers()
         
     def _register_handlers(self) -> None:

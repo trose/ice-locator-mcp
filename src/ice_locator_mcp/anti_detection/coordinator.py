@@ -14,21 +14,21 @@ from .proxy_manager import ProxyManager, ProxyConfig
 from .request_obfuscator import RequestObfuscator
 from .behavioral_simulator import BehavioralSimulator, BehaviorType
 from .traffic_distributor import TrafficDistributor, TrafficPattern, RequestPriority
-from ..core.config import Config
+from ..core.config import ServerConfig
 
 
 class AntiDetectionCoordinator:
     """Coordinates all anti-detection strategies for maximum effectiveness."""
     
-    def __init__(self, config: Config):
+    def __init__(self, config: ServerConfig):
         self.config = config
         self.logger = structlog.get_logger(__name__)
         
         # Core components
-        self.proxy_manager = ProxyManager(config.proxy)
+        self.proxy_manager = ProxyManager(config.proxy_config)
         self.request_obfuscator = RequestObfuscator()
         self.behavioral_simulator = BehavioralSimulator()
-        self.traffic_distributor = TrafficDistributor(config.traffic_distribution)
+        self.traffic_distributor = TrafficDistributor(config)
         
         # Coordination state
         self.active_sessions: Dict[str, Dict[str, Any]] = {}

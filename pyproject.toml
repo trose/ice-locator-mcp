@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ice-locator-mcp"
-version = "0.1.0"
+version = "1.0.0"
 description = "Model Context Protocol server for ICE detainee location services"
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -47,7 +47,7 @@ dependencies = [
     "httpx-socks>=0.7.0",
     "fake-useragent>=1.4.0",
     "python-levenshtein>=0.21.0",
-    "fuzzy-wuzzy>=0.18.0",
+    "fuzzywuzzy>=0.18.0",
     "phonetics>=1.0.5",
     "asyncio-throttle>=1.0.2",
 ]
