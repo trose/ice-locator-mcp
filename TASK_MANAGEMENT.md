@@ -299,26 +299,49 @@
 
 ### Phase 5: Advanced Features (Week 3-4)
 
-#### TASK-014: Enhanced User Experience
-**Owner**: Lead Developer
+#### TASK-014: Enhanced User Experience  
+**Owner**: Technical Lead
 **Priority**: Medium
-**Dependencies**: TASK-006
-**Effort**: 2 days
+**Dependencies**: TASK-012
+**Effort**: 3 days
 
 **Subtasks**:
 - [ ] Implement status monitoring system
 - [ ] Create comprehensive reporting tools
-- [ ] Build multi-language support
+- [ ] Build multi-language support framework
 - [ ] Add legal resource recommendations
-- [ ] Create next steps guidance system
-- [ ] Implement progress tracking for bulk operations
+- [ ] Create user guidance system
+- [ ] Implement smart suggestions
 
 **Acceptance Criteria**:
 - Status monitoring functional
-- Reports generated correctly
-- Multi-language support working
-- Legal resources accurate and helpful
-- Progress tracking provides useful feedback
+- Reports generate correctly
+- Multi-language framework ready
+- Legal resources accessible
+- User guidance helpful
+
+#### TASK-014B: Spanish Language Support
+**Owner**: Internationalization Specialist  
+**Priority**: High
+**Dependencies**: TASK-014
+**Effort**: 2 days
+
+**Subtasks**:
+- [ ] Implement complete Spanish interface translation
+- [ ] Create Spanish natural language processing
+- [ ] Build cultural name matching for Hispanic/Latino names
+- [ ] Add Spanish legal terminology translations
+- [ ] Implement localized resource directory
+- [ ] Create bilingual report generation
+- [ ] Add Spanish query examples and documentation
+
+**Acceptance Criteria**:
+- Full Spanish interface available
+- Spanish queries parsed correctly ("Buscar a María González en Houston")
+- Hispanic name variations handled (maternal surnames, compound names, particles)
+- Legal terms properly translated with cultural context
+- Spanish legal resources and contacts included
+- Bilingual reports generated accurately
 
 #### TASK-015: Advanced Anti-Detection
 **Owner**: Anti-Detection Specialist
