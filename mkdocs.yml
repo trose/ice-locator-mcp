@@ -1,0 +1,87 @@
+site_name: ICE Locator MCP Server
+site_description: Model Context Protocol server for ICE detainee location services
+site_author: trose
+site_url: https://trose.github.io/ice-locator-mcp
+
+repo_name: trose/ice-locator-mcp
+repo_url: https://github.com/trose/ice-locator-mcp
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - content.tabs.link
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: installation.md
+    - Configuration: configuration.md
+    - Examples: examples.md
+  - Documentation:
+    - API Reference: api.md
+    - Tools Specification: tools.md
+    - Troubleshooting: troubleshooting.md
+  - Development:
+    - Contributing: contributing.md
+    - Code of Conduct: code-of-conduct.md
+  - Legal:
+    - Legal Guidelines: legal.md
+    - Privacy Policy: privacy.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+
+plugins:
+  - search
+  - mermaid2
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/trose/ice-locator-mcp
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/ice-locator-mcp/
+  analytics:
+    provider: google
+    property: !ENV GOOGLE_ANALYTICS_KEY
+
+copyright: Copyright &copy; 2024 trose
