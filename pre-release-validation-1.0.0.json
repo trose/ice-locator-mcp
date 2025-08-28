@@ -1,7 +1,7 @@
 {
   "overall_status": "READY",
   "target_version": "1.0.0",
-  "validation_time": 1756386186.031414,
+  "validation_time": 1756424373.9841652,
   "checks": {
     "version_consistency": {
       "status": "PASS",
@@ -28,7 +28,7 @@
     },
     "dependencies": {
       "status": "FAIL",
-      "message": "Missing essential dependency: fastmcp; Package import failed: name 'Any' is not defined"
+      "message": "Missing essential dependency: fastmcp"
     },
     "package_build": {
       "status": "PASS",
