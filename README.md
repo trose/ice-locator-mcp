@@ -169,6 +169,55 @@ result = await generate_search_report(
 - Traffic pattern obfuscation
 - CAPTCHA handling strategies
 
+## 🔒 Privacy-First Analytics & Monitoring
+
+### MCPcat Analytics Integration
+This MCP server includes **optional** integration with [MCPcat](https://mcpcat.io), an analytics platform specifically designed for MCP servers. **Your privacy and security are our top priority:**
+
+#### **Automatic Data Redaction** 🛡️
+- **All sensitive user data is automatically redacted** before any analytics collection
+- Personal information (names, A-numbers, birthdates) is stripped from analytics
+- Search queries are sanitized to remove personally identifiable information
+- Only anonymized usage patterns and performance metrics are collected
+
+#### **What Data is Collected** 📊
+- Tool usage frequencies (which tools are most used)
+- Performance metrics (response times, success rates)
+- Error patterns (for improving reliability)
+- AI model interaction patterns (for optimizing AI compatibility)
+- **NO personal search data or results**
+
+#### **What Data is NOT Collected** ❌
+- Detainee names, A-numbers, or personal information
+- Search query content or parameters
+- Search results or facility information
+- User identification or tracking data
+- Sensitive case information
+
+#### **Privacy Controls** 🔐
+```bash
+# Disable analytics completely
+export ICE_LOCATOR_ANALYTICS_ENABLED=false
+
+# Or configure custom redaction
+export ICE_LOCATOR_REDACTION_LEVEL=strict
+```
+
+#### **Benefits of Analytics** ✨
+- **Improved Performance**: Data-driven optimizations for better search reliability
+- **Enhanced AI Compatibility**: Better integration with different AI models
+- **Bug Detection**: Early identification of issues affecting users
+- **Feature Development**: Understanding which capabilities users need most
+
+#### **Transparency Commitment** 📋
+- All analytics code is open source and auditable
+- Data redaction happens locally before transmission
+- No data is sold or shared with third parties
+- Analytics can be completely disabled at any time
+- Detailed privacy policy available at [docs/privacy](docs/PRIVACY.md)
+
+> **🔒 Security First**: MCPcat is designed by privacy advocates for privacy advocates. All data is encrypted in transit and at rest, with comprehensive redaction ensuring sensitive information never leaves your environment.
+
 ## ⚙️ Configuration
 
 ### Environment Variables
@@ -316,18 +365,28 @@ safety check
 - **Local Processing**: All processing happens locally
 - **Optional Caching**: Cache can be disabled or encrypted
 - **Anonymized Logs**: Sensitive information is anonymized in logs
+- **Analytics Redaction**: MCPcat analytics automatically redacts all sensitive data
 
 ### Responsible Usage
 - **Legal Compliance**: Ensure compliance with applicable laws
 - **Rate Limiting**: Respect ICE website rate limits
 - **Ethical Use**: Use for legitimate purposes only
 - **Privacy Protection**: Protect individual privacy and data
+- **Analytics Transparency**: Optional analytics with full data redaction
 
 ### Security Features
 - **Encrypted Communication**: All requests use HTTPS
 - **Secure Defaults**: Security-first configuration defaults  
 - **Access Control**: No authentication required, but usage is monitored
 - **Audit Logging**: Comprehensive logging for security audits
+- **Privacy-First Analytics**: Sensitive data redaction in all monitoring
+
+### MCPcat Privacy Assurance
+- **Automatic Redaction**: All personal information is removed before analytics
+- **Local Sanitization**: Data cleaning happens on your machine
+- **Open Source**: Analytics code is fully auditable
+- **Disable Anytime**: Analytics can be turned off completely
+- **No Tracking**: No user identification or personal data collection
 
 ## 📜 Legal & Ethical Considerations
 
