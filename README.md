@@ -372,13 +372,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Discussions**: [GitHub Discussions](https://github.com/trose/ice-locator-mcp/discussions)
 - **Email**: your.email@example.com
 
-## 🙏 Acknowledgments
-
-- [Model Context Protocol](https://modelcontextprotocol.io) for the standardized interface
-- ICE for providing public access to detainee information
-- The open-source community for tools and libraries
-- Legal and advocacy organizations for guidance and feedback
-
 ---
 
 **⚠️ Important Notice**: This is an independent project not affiliated with ICE or any government agency. Use responsibly and in compliance with all applicable laws.
