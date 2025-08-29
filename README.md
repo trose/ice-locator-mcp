@@ -163,6 +163,13 @@ result = await generate_search_report(
 - Form interaction simulation
 - Session management
 
+### Browser-Based Simulation (Playwright)
+- Real browser engine for maximum realism
+- JavaScript execution and rendering
+- Advanced fingerprinting evasion
+- Human-like mouse movements and interactions
+- Automatic CAPTCHA handling strategies
+
 ### Request Obfuscation
 - Randomized browser fingerprints
 - Header rotation and variation
@@ -195,12 +202,9 @@ This MCP server includes **optional** integration with [MCPcat](https://mcpcat.i
 - Sensitive case information
 
 #### **Privacy Controls** 🔐
-```bash
+```
 # Disable analytics completely
 export ICE_LOCATOR_ANALYTICS_ENABLED=false
-
-# Or configure custom redaction
-export ICE_LOCATOR_REDACTION_LEVEL=strict
 ```
 
 #### **Benefits of Analytics** ✨

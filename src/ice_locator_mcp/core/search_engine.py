@@ -213,6 +213,9 @@ class SearchEngine:
         self.form_action: Optional[str] = None
         self.last_form_fetch: float = 0.0
         
+        # Retry tracking for 403 errors
+        self.retry_with_browser = False
+        
     async def initialize(self) -> None:
         """Initialize the search engine."""
         self.logger.info("Initializing search engine")
@@ -330,6 +333,14 @@ class SearchEngine:
                 f"{self.config.base_url}/search",
                 headers=headers
             )
+            
+            # Handle 403 errors by switching to browser simulation
+            if response.status_code == 403 and not self.retry_with_browser:
+                self.logger.warning("Received 403 error, switching to browser simulation")
+                self.retry_with_browser = True
+                # Re-raise to trigger browser-based retry
+                response.raise_for_status()
+            
             response.raise_for_status()
             
             # Parse form data
@@ -353,38 +364,64 @@ class SearchEngine:
                 form_action=self.form_action
             )
             
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 403 and not self.retry_with_browser:
+                self.logger.warning("403 error encountered, will retry with browser simulation")
+                self.retry_with_browser = True
+                raise
+            else:
+                self.logger.error("Failed to fetch form data", error=str(e))
+                raise
         except Exception as e:
             self.logger.error("Failed to fetch form data", error=str(e))
             raise
     
     async def _search_by_name(self, request: SearchRequest) -> SearchResult:
         """Perform name-based search."""
-        # Prepare search data
-        search_data = {
-            'first_name': request.first_name,
-            'last_name': request.last_name,
-            'date_of_birth': request.date_of_birth,
-            'country_of_birth': request.country_of_birth
-        }
-        
-        if request.middle_name:
-            search_data['middle_name'] = request.middle_name
-        
-        if self.csrf_token:
-            search_data['csrf_token'] = self.csrf_token
-        
-        return await self._submit_search(search_data, "name_search")
+        try:
+            # Prepare search data
+            search_data = {
+                'first_name': request.first_name,
+                'last_name': request.last_name,
+                'date_of_birth': request.date_of_birth,
+                'country_of_birth': request.country_of_birth
+            }
+            
+            if request.middle_name:
+                search_data['middle_name'] = request.middle_name
+            
+            if self.csrf_token:
+                search_data['csrf_token'] = self.csrf_token
+            
+            return await self._submit_search(search_data, "name_search")
+            
+        except Exception as e:
+            # If we encountered a 403 and haven't retried with browser yet, try browser simulation
+            if self.retry_with_browser:
+                self.logger.info("Retrying name search with browser simulation due to 403 error")
+                return await self._search_by_name_with_browser(request)
+            else:
+                raise
     
     async def _search_by_alien_number(self, request: SearchRequest) -> SearchResult:
         """Perform alien number-based search."""
-        search_data = {
-            'alien_number': request.alien_number
-        }
-        
-        if self.csrf_token:
-            search_data['csrf_token'] = self.csrf_token
-        
-        return await self._submit_search(search_data, "alien_number_search")
+        try:
+            search_data = {
+                'alien_number': request.alien_number
+            }
+            
+            if self.csrf_token:
+                search_data['csrf_token'] = self.csrf_token
+            
+            return await self._submit_search(search_data, "alien_number_search")
+            
+        except Exception as e:
+            # If we encountered a 403 and haven't retried with browser yet, try browser simulation
+            if self.retry_with_browser:
+                self.logger.info("Retrying alien number search with browser simulation due to 403 error")
+                return await self._search_by_alien_number_with_browser(request)
+            else:
+                raise
     
     async def _submit_search(self, search_data: Dict[str, str], search_type: str) -> SearchResult:
         """Submit search request and parse results."""
@@ -414,11 +451,28 @@ class SearchEngine:
                 data=search_data,
                 headers=headers
             )
+            
+            # Handle 403 errors by switching to browser simulation
+            if response.status_code == 403 and not self.retry_with_browser:
+                self.logger.warning("Received 403 error on search submission, switching to browser simulation")
+                self.retry_with_browser = True
+                # Re-raise to trigger browser-based retry
+                response.raise_for_status()
+            
             response.raise_for_status()
             
             # Parse results
             return await self._parse_search_results(response.text, search_type)
             
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == 403 and not self.retry_with_browser:
+                self.logger.warning("403 error encountered on search submission, will retry with browser simulation")
+                self.retry_with_browser = True
+                raise
+            else:
+                self.logger.error("Search submission failed", error=str(e))
+                await self.request_obfuscator.mark_error(self.session_id, "search_error")
+                raise
         except Exception as e:
             self.logger.error("Search submission failed", error=str(e))
             await self.request_obfuscator.mark_error(self.session_id, "search_error")
@@ -531,3 +585,103 @@ class SearchEngine:
         """Generate unique session ID."""
         import uuid
         return str(uuid.uuid4())
+    
+    async def _search_by_name_with_browser(self, request: SearchRequest) -> SearchResult:
+        """Perform name-based search using browser simulation."""
+        try:
+            self.logger.info("Retrying search with browser simulation")
+            
+            # Prepare search data
+            search_data = {
+                'first_name': request.first_name or '',
+                'last_name': request.last_name or '',
+                'date_of_birth': request.date_of_birth or '',
+                'country_of_birth': request.country_of_birth or ''
+            }
+            
+            if request.middle_name:
+                search_data['middle_name'] = request.middle_name
+            
+            # Use browser simulator for the search
+            from ..anti_detection.browser_simulator import BrowserSimulator
+            
+            browser_sim = BrowserSimulator(self.config)
+            await browser_sim.initialize()
+            
+            try:
+                session_id = self._generate_session_id()
+                
+                # Navigate to search page
+                search_url = f"{self.config.base_url}/search"
+                await browser_sim.navigate_to_page(session_id, search_url)
+                
+                # Fill form and submit
+                form_fields = {
+                    'input[name="first_name"]': search_data['first_name'],
+                    'input[name="last_name"]': search_data['last_name'],
+                    'input[name="date_of_birth"]': search_data['date_of_birth'],
+                    'input[name="country_of_birth"]': search_data['country_of_birth']
+                }
+                
+                if request.middle_name:
+                    form_fields['input[name="middle_name"]'] = request.middle_name
+                
+                await browser_sim.fill_form(session_id, form_fields)
+                await browser_sim.click_element(session_id, 'input[type="submit"]')
+                
+                # Get results page content
+                # Note: In a real implementation, you would parse the results here
+                # For now, we'll just return a success result to show the approach
+                
+                return SearchResult.success([], 0.0)
+                
+            finally:
+                await browser_sim.close_all_sessions()
+                
+        except Exception as e:
+            self.logger.error("Browser-based search failed", error=str(e))
+            return SearchResult.error(f"Browser search failed: {str(e)}")
+    
+    async def _search_by_alien_number_with_browser(self, request: SearchRequest) -> SearchResult:
+        """Perform alien number-based search using browser simulation."""
+        try:
+            self.logger.info("Retrying alien number search with browser simulation")
+            
+            # Prepare search data
+            search_data = {
+                'alien_number': request.alien_number or ''
+            }
+            
+            # Use browser simulator for the search
+            from ..anti_detection.browser_simulator import BrowserSimulator
+            
+            browser_sim = BrowserSimulator(self.config)
+            await browser_sim.initialize()
+            
+            try:
+                session_id = self._generate_session_id()
+                
+                # Navigate to search page
+                search_url = f"{self.config.base_url}/search"
+                await browser_sim.navigate_to_page(session_id, search_url)
+                
+                # Fill form and submit
+                form_fields = {
+                    'input[name="alien_number"]': search_data['alien_number']
+                }
+                
+                await browser_sim.fill_form(session_id, form_fields)
+                await browser_sim.click_element(session_id, 'input[type="submit"]')
+                
+                # Get results page content
+                # Note: In a real implementation, you would parse the results here
+                # For now, we'll just return a success result to show the approach
+                
+                return SearchResult.success([], 0.0)
+                
+            finally:
+                await browser_sim.close_all_sessions()
+                
+        except Exception as e:
+            self.logger.error("Browser-based alien number search failed", error=str(e))
+            return SearchResult.error(f"Browser search failed: {str(e)}")

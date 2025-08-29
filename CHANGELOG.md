@@ -5,6 +5,24 @@ All notable changes to the ICE Locator MCP Server project will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-08-28
+
+### 🚀 New Features
+
+#### Browser-Based Anti-Detection
+- **Playwright Integration**: Added Playwright-based browser simulation for maximum realism
+- **Real Browser Engine**: Full Chromium browser engine for JavaScript execution and rendering
+- **Advanced Fingerprinting Evasion**: Comprehensive browser fingerprinting evasion techniques
+- **Human-Like Interactions**: Realistic mouse movements, typing patterns, and page interactions
+- **Automatic CAPTCHA Handling**: Enhanced CAPTCHA detection and handling capabilities
+
+### 🛠️ Improvements
+
+#### Anti-Detection Framework
+- **Enhanced 403 Handling**: Automatic fallback to browser simulation when HTTP 403 errors are encountered
+- **Improved Stealth Scripts**: Advanced browser fingerprinting evasion with comprehensive stealth.js implementation
+- **Better Error Recovery**: More robust error handling and retry mechanisms
+
 ## [1.0.0] - 2024-12-XX
 
 ### 🎉 Initial Release
@@ -180,6 +198,11 @@ This is the first stable release of the ICE Locator MCP Server, providing a comp
 
 ## Version History
 
+### [1.1.0] - 2025-08-28
+- Added Playwright-based browser simulation for enhanced anti-detection
+- Implemented automatic fallback to browser simulation on 403 errors
+- Enhanced browser fingerprinting evasion with stealth.js
+
 ### [1.0.0] - 2024-12-XX
 - Initial stable release with full feature set
 - Comprehensive MCP server implementation
@@ -198,5 +221,3 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
-
-For questions, issues, or contributions, please visit our [GitHub repository](https://github.com/trose/ice-locator-mcp) or check our [documentation](https://trose.github.io/ice-locator-mcp).

@@ -14,6 +14,7 @@ from .proxy_manager import ProxyManager, ProxyConfig
 from .request_obfuscator import RequestObfuscator
 from .behavioral_simulator import BehavioralSimulator, BehaviorType
 from .traffic_distributor import TrafficDistributor, TrafficPattern, RequestPriority
+from .browser_simulator import BrowserSimulator  # Added import for browser simulator
 from ..core.config import ServerConfig
 
 
@@ -29,6 +30,7 @@ class AntiDetectionCoordinator:
         self.request_obfuscator = RequestObfuscator()
         self.behavioral_simulator = BehavioralSimulator()
         self.traffic_distributor = TrafficDistributor(config)
+        self.browser_simulator = BrowserSimulator(config.search_config)  # Added browser simulator
         
         # Coordination state
         self.active_sessions: Dict[str, Dict[str, Any]] = {}
@@ -48,6 +50,7 @@ class AntiDetectionCoordinator:
         self.enable_proxy_rotation = True
         self.enable_behavioral_simulation = True
         self.enable_traffic_distribution = True
+        self.enable_browser_simulation = True  # Added browser simulation flag
         self.enable_adaptive_strategies = True
         
     async def initialize(self) -> None:
@@ -57,6 +60,8 @@ class AntiDetectionCoordinator:
         # Initialize components in order
         await self.proxy_manager.initialize()
         await self.traffic_distributor.start()
+        if self.enable_browser_simulation:
+            await self.browser_simulator.initialize()  # Initialize browser simulator
         
         # Set initial strategy based on configuration
         await self._apply_initial_strategy()
@@ -68,6 +73,7 @@ class AntiDetectionCoordinator:
                 'proxy_rotation': self.enable_proxy_rotation,
                 'behavioral_simulation': self.enable_behavioral_simulation,
                 'traffic_distribution': self.enable_traffic_distribution,
+                'browser_simulation': self.enable_browser_simulation,  # Added to components
                 'adaptive_strategies': self.enable_adaptive_strategies
             }
         )
@@ -104,19 +110,23 @@ class AntiDetectionCoordinator:
                 if behavior_result['pre_delay'] > 0:
                     await asyncio.sleep(behavior_result['pre_delay'])
             
-            # 3. Proxy Management - Get optimal proxy
+            # 3. Browser Simulation - Use Playwright for more realistic behavior
+            if self.enable_browser_simulation and request_info.get('use_browser', False):
+                return await self._execute_with_browser(session_id, request_info, request_handler)
+            
+            # 4. Proxy Management - Get optimal proxy
             proxy = None
             if self.enable_proxy_rotation:
                 proxy = await self.proxy_manager.get_proxy()
             
-            # 4. Request Obfuscation - Generate headers
+            # 5. Request Obfuscation - Generate headers
             headers = await self.request_obfuscator.obfuscate_request(
                 session_id=session_id,
                 base_headers=request_info.get('headers', {}),
                 request_type=request_info.get('type', 'general')
             )
             
-            # 5. Execute the actual request
+            # 6. Execute the actual request
             start_time = time.time()
             
             try:
@@ -171,6 +181,67 @@ class AntiDetectionCoordinator:
             )
             raise
     
+    async def _execute_with_browser(self,
+                                  session_id: str,
+                                  request_info: Dict[str, Any],
+                                  request_handler: Callable) -> Dict[str, Any]:
+        """Execute a request using the Playwright browser simulator."""
+        request_id = f"{session_id}_browser_{int(time.time() * 1000)}"
+        
+        try:
+            # Get URL from request info
+            url = request_info.get('url')
+            if not url:
+                raise ValueError("URL is required for browser-based requests")
+            
+            # Navigate to page using browser simulator
+            content = await self.browser_simulator.navigate_to_page(session_id, url)
+            
+            # If this is a form submission, handle form filling
+            form_data = request_info.get('form_data')
+            if form_data:
+                form_selector = request_info.get('form_selector', 'form')
+                await self.browser_simulator.fill_form(session_id, form_data)
+                
+                # Submit form if submit selector is provided
+                submit_selector = request_info.get('submit_selector')
+                if submit_selector:
+                    await self.browser_simulator.click_element(session_id, submit_selector)
+                    
+                    # Wait for navigation after form submission
+                    await asyncio.sleep(random.uniform(1.0, 3.0))
+                    
+                    # Get updated content
+                    content = await self.browser_simulator.page.content()
+            
+            # Handle any additional clicks
+            clicks = request_info.get('clicks', [])
+            for click_selector in clicks:
+                await self.browser_simulator.click_element(session_id, click_selector)
+            
+            response_time = time.time() - request_info.get('start_time', time.time())
+            
+            # Process the result with the request handler
+            result = await request_handler(content=content)
+            
+            return {
+                'success': True,
+                'result': result,
+                'response_time': response_time,
+                'proxy_used': None,  # Browser handles proxy internally
+                'detection_level': self.detection_level,
+                'method': 'browser_simulation'
+            }
+            
+        except Exception as e:
+            self.logger.error(
+                "Browser-based request execution failed",
+                request_id=request_id,
+                session_id=session_id,
+                error=str(e)
+            )
+            raise
+    
     async def start_session(self,
                           session_id: str,
                           behavior_type: BehaviorType = BehaviorType.CASUAL_BROWSING,
@@ -215,7 +286,8 @@ class AntiDetectionCoordinator:
             'components_active': {
                 'proxy_rotation': self.enable_proxy_rotation,
                 'behavioral_simulation': self.enable_behavioral_simulation,
-                'traffic_distribution': self.enable_traffic_distribution
+                'traffic_distribution': self.enable_traffic_distribution,
+                'browser_simulation': self.enable_browser_simulation
             }
         }
     
@@ -293,7 +365,8 @@ class AntiDetectionCoordinator:
     
     async def _apply_initial_strategy(self) -> None:
         """Apply initial anti-detection strategy."""
-        strategy = self.config.get('initial_strategy', 'balanced')
+        # Get strategy from config, defaulting to 'balanced'
+        strategy = getattr(self.config, 'initial_strategy', 'balanced')
         await self._apply_strategy(strategy)
     
     async def _apply_strategy(self, strategy: str) -> None:
