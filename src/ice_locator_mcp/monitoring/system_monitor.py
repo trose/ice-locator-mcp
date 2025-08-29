@@ -18,7 +18,12 @@ import logging
 import shutil
 
 import structlog
-from mcpcat import MCPcat
+try:
+    import mcpcat
+    MCPCAT_AVAILABLE = True
+except ImportError:
+    mcpcat = None
+    MCPCAT_AVAILABLE = False
 
 
 @dataclass
@@ -114,12 +119,12 @@ class ProcessInfo:
 class SystemMonitor:
     """System monitoring integration with MCPcat analytics."""
     
-    def __init__(self, mcpcat_client: Optional[MCPcat] = None,
+    def __init__(self, mcpcat_options: Optional[Dict[str, Any]] = None,
                  collection_interval: int = 30,
                  storage_path: Optional[Path] = None):
         """Initialize system monitor."""
         self.logger = structlog.get_logger(__name__)
-        self.mcpcat_client = mcpcat_client
+        self.mcpcat_options = mcpcat_options if MCPCAT_AVAILABLE else None
         self.collection_interval = collection_interval
         
         # Storage for metrics
@@ -181,13 +186,13 @@ class SystemMonitor:
         self.logger.info("System monitoring started", 
                         interval=self.collection_interval)
         
-        # Track in MCPcat
-        if self.mcpcat_client:
-            await self.mcpcat_client.track_event("system_monitoring_started", {
-                "collection_interval": self.collection_interval,
-                "available_tools": list(self.available_tools.keys()),
-                "baseline_metrics": self.baseline_metrics.to_dict() if self.baseline_metrics else None
-            })
+        # Track in MCPcat (analytics disabled for this version)
+        # if self.mcpcat_options:
+        #     await mcpcat.track_event("system_monitoring_started", {
+        #         "collection_interval": self.collection_interval,
+        #         "available_tools": list(self.available_tools.keys()),
+        #         "baseline_metrics": self.baseline_metrics.to_dict() if self.baseline_metrics else None
+        #     })
         
         return True
     
@@ -210,15 +215,15 @@ class SystemMonitor:
         
         self.logger.info("System monitoring stopped")
         
-        # Track in MCPcat
-        if self.mcpcat_client:
-            await self.mcpcat_client.track_event("system_monitoring_stopped", {
-                "total_snapshots": len(self.metrics_history),
-                "monitoring_duration_seconds": (
-                    (self.metrics_history[-1].timestamp - self.metrics_history[0].timestamp).total_seconds()
-                    if len(self.metrics_history) > 1 else 0
-                )
-            })
+        # Track in MCPcat (analytics disabled for this version)
+        # if self.mcpcat_options:
+        #     await mcpcat.track_event("system_monitoring_stopped", {
+        #         "total_snapshots": len(self.metrics_history),
+        #         "monitoring_duration_seconds": (
+        #             (self.metrics_history[-1].timestamp - self.metrics_history[0].timestamp).total_seconds()
+        #             if len(self.metrics_history) > 1 else 0
+        #         )
+        #     })
         
         return True
     
@@ -485,16 +490,16 @@ class SystemMonitor:
                 if len(self.metrics_history) > self.max_history_size:
                     self.metrics_history = self.metrics_history[-self.max_history_size:]
                 
-                # Track in MCPcat
-                if self.mcpcat_client:
-                    await self.mcpcat_client.track_event("system_metrics_collected", {
-                        "timestamp": metrics.timestamp.isoformat(),
-                        "cpu_percent": metrics.cpu_percent,
-                        "memory_percent": metrics.memory_percent,
-                        "disk_percent": metrics.disk_percent,
-                        "process_cpu_percent": metrics.process_cpu_percent,
-                        "process_memory_percent": metrics.process_memory_percent
-                    })
+                # Track in MCPcat (analytics disabled for this version)
+                # if self.mcpcat_options:
+                #     await mcpcat.track_event("system_metrics_collected", {
+                #         "timestamp": metrics.timestamp.isoformat(),
+                #         "cpu_percent": metrics.cpu_percent,
+                #         "memory_percent": metrics.memory_percent,
+                #         "disk_percent": metrics.disk_percent,
+                #         "process_cpu_percent": metrics.process_cpu_percent,
+                #         "process_memory_percent": metrics.process_memory_percent
+                #     })
                 
                 # Check for alerts
                 await self._check_alerts(metrics)
@@ -548,10 +553,10 @@ class SystemMonitor:
                 "value": metrics.process_cpu_percent
             })
         
-        # Track alerts in MCPcat
-        if alerts and self.mcpcat_client:
-            for alert in alerts:
-                await self.mcpcat_client.track_event("system_alert", alert)
+        # Track alerts in MCPcat (analytics disabled for this version)
+        # if alerts and self.mcpcat_options:
+        #     for alert in alerts:
+        #         await mcpcat.track_event("system_alert", alert)
         
         if alerts:
             self.logger.warning("System alerts triggered", alerts=alerts)

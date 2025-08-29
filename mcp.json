@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "ice-locator": {
+      "command": "/Users/trose/src/locator-mcp/.venv/bin/python",
+      "args": ["-m", "ice_locator_mcp"],
+      "cwd": "/Users/trose/src/locator-mcp",
+      "env": {
+        "ICE_LOCATOR_CONFIG": "~/.config/ice-locator-mcp/config.json",
+        "ICE_LOCATOR_RATE_LIMIT": "10",
+        "ICE_LOCATOR_CACHE_ENABLED": "true",
+        "ICE_LOCATOR_PROXY_ENABLED": "false",
+        "ICE_LOCATOR_LANGUAGE": "en"
+      }
+    }
+  }
+}

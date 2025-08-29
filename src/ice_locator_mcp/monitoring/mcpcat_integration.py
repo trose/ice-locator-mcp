@@ -14,14 +14,26 @@ import structlog
 
 try:
     import mcpcat
-    from mcpcat import MCPCatOptions, UserIdentity, ExporterConfig
+    from mcpcat import MCPCatOptions, UserIdentity
+    try:
+        from mcpcat import ExporterConfig
+    except ImportError:
+        ExporterConfig = None
     MCPCAT_AVAILABLE = True
 except ImportError:
     MCPCAT_AVAILABLE = False
     mcpcat = None
+    MCPCatOptions = None
+    UserIdentity = None
+    ExporterConfig = None
 
 from .privacy_redaction import DataRedactor, RedactionConfig
 from ..core.config import MonitoringConfig
+
+# Defer import to avoid circular dependency
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from ..core.config import ServerConfig
 
 
 logger = structlog.get_logger(__name__)
@@ -136,11 +148,11 @@ class MCPcatMonitor:
             )
             self.config.enabled = False
     
-    def _setup_telemetry_exporters(self) -> Dict[str, ExporterConfig]:
+    def _setup_telemetry_exporters(self) -> Dict[str, Any]:
         """Set up telemetry exporters for MCPcat."""
         exporters = {}
         
-        if not self.telemetry_exporter:
+        if not self.telemetry_exporter or ExporterConfig is None:
             return exporters
         
         try:
@@ -417,7 +429,7 @@ class MCPcatMonitor:
         self.performance_metrics.clear()
 
 
-def create_monitor(config: ServerConfig = None) -> MCPcatMonitor:
+def create_monitor(config: "ServerConfig" = None) -> MCPcatMonitor:
     """Create MCPcat monitor with server configuration."""
     
     if config and hasattr(config, 'monitoring_config'):

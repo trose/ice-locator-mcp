@@ -16,7 +16,13 @@ from pathlib import Path
 import logging
 
 import structlog
-from mcpcat import MCPcat
+
+try:
+    import mcpcat
+    MCPCAT_AVAILABLE = True
+except ImportError:
+    mcpcat = None
+    MCPCAT_AVAILABLE = False
 
 
 @dataclass
@@ -159,12 +165,12 @@ class BehaviorPattern:
 class UserAnalytics:
     """Privacy-first user analytics and session tracking system."""
     
-    def __init__(self, mcpcat_client: Optional[MCPcat] = None, 
+    def __init__(self, mcpcat_options: Optional[Dict[str, Any]] = None, 
                  storage_path: Optional[Path] = None,
                  session_timeout: int = 1800):  # 30 minutes
         """Initialize user analytics system."""
         self.logger = structlog.get_logger(__name__)
-        self.mcpcat_client = mcpcat_client
+        self.mcpcat_options = mcpcat_options if MCPCAT_AVAILABLE else None
         self.session_timeout = session_timeout
         
         # Session storage
