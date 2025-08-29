@@ -283,15 +283,19 @@ class SearchEngine:
         """Setup HTTP client with proxy and timeouts."""
         # Get proxy if available
         proxy = await self.proxy_manager.get_proxy()
-        proxies = {"http://": proxy.url, "https://": proxy.url} if proxy else None
         
-        # Create client
-        self.client = httpx.AsyncClient(
-            proxies=proxies,
-            timeout=httpx.Timeout(self.config.timeout),
-            follow_redirects=True,
-            verify=True
-        )
+        # Create client with proper proxy configuration
+        client_kwargs = {
+            "timeout": httpx.Timeout(self.config.timeout),
+            "follow_redirects": True,
+            "verify": True
+        }
+        
+        # Add proxy if available (newer HTTPX format)
+        if proxy:
+            client_kwargs["proxy"] = proxy.url
+        
+        self.client = httpx.AsyncClient(**client_kwargs)
         
         self.logger.debug("HTTP client configured", proxy=proxy.endpoint if proxy else None)
     
