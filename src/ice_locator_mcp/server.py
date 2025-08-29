@@ -34,7 +34,7 @@ class ICELocatorServer:
         self.config = config or ServerConfig()
         self.logger = structlog.get_logger(__name__)
         
-        # Initialize monitoring and telemetry (privacy-first)
+        # Initialize comprehensive monitoring system
         self.comprehensive_monitor = None
         
         if self.config.monitoring_config.mcpcat_enabled:
@@ -68,6 +68,11 @@ class ICELocatorServer:
         # Initialize MCP server
         self.server = Server("ice-locator")
         self._register_handlers()
+        
+        # Set up MCPcat tracking after tools are registered
+        if self.comprehensive_monitor and hasattr(self.comprehensive_monitor, 'mcpcat_monitor'):
+            if self.comprehensive_monitor.mcpcat_monitor:
+                self.comprehensive_monitor.mcpcat_monitor.setup_tracking(self.server)
         
     def _register_handlers(self) -> None:
         """Register all MCP handlers."""

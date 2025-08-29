@@ -13,9 +13,7 @@ from pathlib import Path
 import logging
 
 import structlog
-from mcpcat import MCPcat
 
-from .mcpcat_integration import MCPcatMonitor
 from .telemetry_exporters import TelemetryExporter, TelemetryConfig
 from .user_analytics import UserAnalytics
 from .session_replay import SessionRecorder
@@ -37,8 +35,7 @@ class ComprehensiveMonitor:
         self.storage_path.mkdir(parents=True, exist_ok=True)
         
         # Initialize components
-        self.mcpcat_client: Optional[MCPcat] = None
-        self.mcpcat_monitor: Optional[MCPcatMonitor] = None
+        self.mcpcat_monitor: Optional[Any] = None
         self.telemetry_exporter: Optional[TelemetryExporter] = None
         self.user_analytics: Optional[UserAnalytics] = None
         self.session_recorder: Optional[SessionRecorder] = None
@@ -61,18 +58,20 @@ class ComprehensiveMonitor:
         """Initialize all monitoring components."""
         try:
             # Initialize MCPcat if enabled
-            if self.config.mcpcat_enabled and self.config.mcpcat_project_id:
-                self.mcpcat_client = MCPcat(
-                    project_id=self.config.mcpcat_project_id,
-                    api_key=None,  # Use environment variable
-                    local_only=self.config.local_only
+            if self.config.mcpcat_enabled:
+                from .mcpcat_integration import MCPcatMonitor, MCPcatConfig
+                
+                mcpcat_config = MCPcatConfig(
+                    enabled=self.config.mcpcat_enabled,
+                    project_id="proj_31wD5K62DcuF4XH65PCrsyv7MIO",  # Default project ID
+                    redaction_level=self.config.redaction_level,
+                    identify_users=self.config.identify_users
                 )
                 
                 self.mcpcat_monitor = MCPcatMonitor(
-                    self.config,
+                    mcpcat_config,
                     telemetry_exporter=None  # Will be set after telemetry initialization
                 )
-                await self.mcpcat_monitor.initialize()
             
             # Initialize telemetry framework
             if self.config.mcpcat_enabled:

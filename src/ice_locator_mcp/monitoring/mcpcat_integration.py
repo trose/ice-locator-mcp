@@ -1,8 +1,8 @@
 """
 MCPcat analytics integration with privacy-first data collection.
 
-Provides comprehensive analytics for MCP server usage while ensuring
-all sensitive user data is automatically redacted.
+Provides comprehensive analytics for MCP server usage using the
+official MCPcat Python SDK with automatic data redaction.
 """
 
 import os
@@ -14,17 +14,20 @@ import structlog
 
 try:
     import mcpcat
-    from mcpcat import MCPCatOptions, UserIdentity
+    from mcpcat import MCPCatOptions, UserIdentity, ExporterConfig
     MCPCAT_AVAILABLE = True
 except ImportError:
     MCPCAT_AVAILABLE = False
     mcpcat = None
 
 from .privacy_redaction import DataRedactor, RedactionConfig
-from ..core.config import ServerConfig
+from ..core.config import MonitoringConfig
 
 
 logger = structlog.get_logger(__name__)
+
+# Default project ID from mcpcat.io setup
+DEFAULT_PROJECT_ID = "proj_31wD5K62DcuF4XH65PCrsyv7MIO"
 
 
 @dataclass
@@ -32,28 +35,28 @@ class MCPcatConfig:
     """Configuration for MCPcat integration."""
     
     enabled: bool = True
-    project_id: Optional[str] = None
+    project_id: str = DEFAULT_PROJECT_ID
     redaction_level: str = "strict"
     identify_users: bool = False  # Disabled by default for privacy
-    local_only: bool = False  # If True, no data sent to external servers
     
     @classmethod
     def from_env(cls) -> "MCPcatConfig":
         """Create configuration from environment variables."""
         return cls(
             enabled=os.getenv("ICE_LOCATOR_ANALYTICS_ENABLED", "true").lower() == "true",
-            project_id=os.getenv("ICE_LOCATOR_MCPCAT_PROJECT_ID"),
+            project_id=os.getenv("ICE_LOCATOR_MCPCAT_PROJECT_ID", DEFAULT_PROJECT_ID),
             redaction_level=os.getenv("ICE_LOCATOR_REDACTION_LEVEL", "strict"),
-            identify_users=os.getenv("ICE_LOCATOR_IDENTIFY_USERS", "false").lower() == "true",
-            local_only=os.getenv("ICE_LOCATOR_ANALYTICS_LOCAL_ONLY", "false").lower() == "true"
+            identify_users=os.getenv("ICE_LOCATOR_IDENTIFY_USERS", "false").lower() == "true"
         )
 
 
 class MCPcatMonitor:
-    """Privacy-first MCPcat analytics integration."""
+    """Privacy-first MCPcat analytics integration using official Python SDK."""
     
-    def __init__(self, config: MCPcatConfig = None):
+    def __init__(self, config: MCPcatConfig = None, 
+                 telemetry_exporter = None):
         self.config = config or MCPcatConfig.from_env()
+        self.telemetry_exporter = telemetry_exporter
         self.logger = structlog.get_logger(__name__)
         self.redactor = DataRedactor(RedactionConfig(
             redaction_level=self.config.redaction_level
@@ -63,6 +66,7 @@ class MCPcatMonitor:
         self.session_metrics: Dict[str, Dict[str, Any]] = {}
         self.tool_usage_stats: Dict[str, int] = {}
         self.performance_metrics: Dict[str, float] = {}
+        self.is_initialized = False
         
         # Validation
         self._validate_config()
@@ -81,17 +85,20 @@ class MCPcatMonitor:
             self.config.enabled = False
             return
         
-        if not self.config.project_id and not self.config.local_only:
-            self.logger.warning(
-                "MCPcat project ID not configured - running in local-only mode",
-                help="Set ICE_LOCATOR_MCPCAT_PROJECT_ID environment variable"
-            )
-            self.config.local_only = True
+        self.logger.info(
+            "MCPcat configuration validated",
+            project_id=self.config.project_id[:8] + "..." if self.config.project_id else "None",
+            redaction_level=self.config.redaction_level
+        )
     
-    async def initialize(self, server) -> None:
-        """Initialize MCPcat tracking with the MCP server."""
+    def setup_tracking(self, server) -> None:
+        """Set up MCPcat tracking with the MCP server.
+        
+        This should be called during server initialization, after all tools are registered.
+        """
         
         if not self.config.enabled or not MCPCAT_AVAILABLE:
+            self.logger.info("MCPcat tracking not enabled")
             return
         
         try:
@@ -105,26 +112,70 @@ class MCPcatMonitor:
             # Set up data redaction
             options.redact_sensitive_information = self._redact_analytics_data
             
-            # Initialize tracking
-            if not self.config.local_only and self.config.project_id:
-                mcpcat.track(server, self.config.project_id, options)
-                self.logger.info(
-                    "MCPcat analytics initialized",
-                    project_id=self.config.project_id[:8] + "...",  # Partial ID for logging
-                    redaction_level=self.config.redaction_level
-                )
-            else:
-                self.logger.info(
-                    "MCPcat running in local-only mode",
-                    redaction_level=self.config.redaction_level
-                )
+            # Set up telemetry exporters if available
+            if self.telemetry_exporter and hasattr(self.telemetry_exporter, 'config'):
+                options.exporters = self._setup_telemetry_exporters()
+            
+            # Initialize tracking with the server and project ID
+            mcpcat.track(server, self.config.project_id, options)
+            
+            self.is_initialized = True
+            
+            self.logger.info(
+                "MCPcat tracking initialized successfully",
+                project_id=self.config.project_id[:8] + "...",
+                redaction_level=self.config.redaction_level,
+                user_identification=self.config.identify_users
+            )
                 
         except Exception as e:
             self.logger.error(
-                "Failed to initialize MCPcat analytics",
-                error=str(e)
+                "Failed to initialize MCPcat tracking",
+                error=str(e),
+                project_id=self.config.project_id[:8] + "..." if self.config.project_id else "None"
             )
             self.config.enabled = False
+    
+    def _setup_telemetry_exporters(self) -> Dict[str, ExporterConfig]:
+        """Set up telemetry exporters for MCPcat."""
+        exporters = {}
+        
+        if not self.telemetry_exporter:
+            return exporters
+        
+        try:
+            # Get telemetry config from the exporter
+            tel_config = self.telemetry_exporter.config
+            
+            # Add configured exporters
+            for name, exporter_config in tel_config.exporters.items():
+                if name == "datadog" and exporter_config.get("enabled"):
+                    exporters["datadog"] = ExporterConfig(
+                        type="datadog",
+                        api_key=exporter_config.get("api_key"),
+                        site=exporter_config.get("site", "datadoghq.com"),
+                        service="ice-locator-mcp"
+                    )
+                
+                elif name == "sentry" and exporter_config.get("enabled"):
+                    exporters["sentry"] = ExporterConfig(
+                        type="sentry",
+                        dsn=exporter_config.get("dsn"),
+                        environment=exporter_config.get("environment", "production")
+                    )
+                
+                elif name == "otlp" and exporter_config.get("enabled"):
+                    exporters["otlp"] = ExporterConfig(
+                        type="otlp",
+                        endpoint=exporter_config.get("endpoint", "http://localhost:4318/v1/traces")
+                    )
+            
+            self.logger.info("Telemetry exporters configured", exporters=list(exporters.keys()))
+            
+        except Exception as e:
+            self.logger.error("Failed to setup telemetry exporters", error=str(e))
+        
+        return exporters
     
     def _create_user_identifier(self) -> Callable:
         """Create user identification function (privacy-conscious)."""
