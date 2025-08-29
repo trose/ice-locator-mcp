@@ -8,6 +8,7 @@ Main server implementation that provides MCP tools for accessing ICE detainee in
 import asyncio
 import logging
 import json
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Sequence
 
 import mcp.types as types
@@ -22,8 +23,7 @@ from .core.search_engine import SearchEngine
 from .anti_detection.proxy_manager import ProxyManager
 from .tools.search_tools import SearchTools
 from .utils.logging import setup_logging
-from .monitoring.mcpcat_integration import MCPcatMonitor
-from .monitoring.telemetry_exporters import TelemetryExporter, TelemetryConfig
+from .monitoring.comprehensive_monitor import ComprehensiveMonitor
 
 
 class ICELocatorServer:
@@ -35,30 +35,25 @@ class ICELocatorServer:
         self.logger = structlog.get_logger(__name__)
         
         # Initialize monitoring and telemetry (privacy-first)
-        self.telemetry_exporter = None
-        self.mcpcat_monitor = None
+        self.comprehensive_monitor = None
         
         if self.config.monitoring_config.mcpcat_enabled:
             try:
-                # Initialize telemetry framework
-                telemetry_config = TelemetryConfig.from_env()
-                self.telemetry_exporter = TelemetryExporter(telemetry_config)
-                
-                # Initialize MCPcat monitoring
-                self.mcpcat_monitor = MCPcatMonitor(
+                # Initialize comprehensive monitoring system
+                self.comprehensive_monitor = ComprehensiveMonitor(
                     self.config.monitoring_config,
-                    telemetry_exporter=self.telemetry_exporter
+                    storage_path=None  # Use default storage path
                 )
                 
                 self.logger.info(
-                    "Monitoring initialized with privacy-first design",
+                    "Comprehensive monitoring initialized with privacy-first design",
                     mcpcat_enabled=True,
-                    telemetry_exporters=list(telemetry_config.exporters.keys()),
-                    redaction_level=self.config.monitoring_config.redaction_level
+                    redaction_level=self.config.monitoring_config.redaction_level,
+                    components=["mcpcat", "telemetry", "analytics", "session_replay", "system_monitor"]
                 )
             except Exception as e:
                 self.logger.warning(
-                    "Failed to initialize monitoring - continuing without analytics",
+                    "Failed to initialize comprehensive monitoring - continuing without analytics",
                     error=str(e)
                 )
         
@@ -240,9 +235,13 @@ class ICELocatorServer:
         async def handle_call_tool(name: str, arguments: dict[str, Any]) -> list[types.TextContent]:
             """Handle tool calls with telemetry instrumentation."""
             
-            # Track tool call with telemetry (privacy-preserving)
-            if self.mcpcat_monitor:
-                await self.mcpcat_monitor.track_tool_call(name, arguments)
+            # Track tool call with comprehensive monitoring (privacy-preserving)
+            if self.comprehensive_monitor:
+                await self.comprehensive_monitor.track_tool_call(
+                    session_id="default",  # Use default session or implement session management
+                    tool_name=name,
+                    arguments=arguments
+                )
             
             try:
                 self.logger.info("Tool called", tool_name=name, arguments=arguments)
@@ -261,8 +260,14 @@ class ICELocatorServer:
                     raise ValueError(f"Unknown tool: {name}")
                 
                 # Track successful tool completion
-                if self.mcpcat_monitor:
-                    await self.mcpcat_monitor.track_tool_success(name, result)
+                if self.comprehensive_monitor:
+                    await self.comprehensive_monitor.track_tool_call(
+                        session_id="default",
+                        tool_name=name,
+                        arguments=arguments,
+                        result={"status": "success", "response": result},
+                        error=None
+                    )
                 
                 self.logger.info("Tool completed successfully", tool_name=name)
                 
@@ -273,8 +278,14 @@ class ICELocatorServer:
                 
             except Exception as e:
                 # Track tool errors
-                if self.mcpcat_monitor:
-                    await self.mcpcat_monitor.track_tool_error(name, str(e))
+                if self.comprehensive_monitor:
+                    await self.comprehensive_monitor.track_tool_call(
+                        session_id="default",
+                        tool_name=name,
+                        arguments=arguments,
+                        result=None,
+                        error=str(e)
+                    )
                 
                 self.logger.error("Tool execution failed", tool_name=name, error=str(e))
                 error_response = {
@@ -292,13 +303,13 @@ class ICELocatorServer:
         self.logger.info("Starting ICE Locator MCP Server")
         
         # Initialize telemetry and monitoring
-        if self.telemetry_exporter:
-            await self.telemetry_exporter.initialize()
-            self.logger.info("Telemetry framework initialized")
-        
-        if self.mcpcat_monitor:
-            await self.mcpcat_monitor.initialize()
-            self.logger.info("MCPcat monitoring initialized")
+        if self.comprehensive_monitor:
+            await self.comprehensive_monitor.initialize()
+            await self.comprehensive_monitor.start_monitoring({
+                "server_version": self.config.server_version,
+                "startup_time": datetime.now().isoformat()
+            })
+            self.logger.info("Comprehensive monitoring started")
         
         # Initialize components
         await self.proxy_manager.initialize()
@@ -315,13 +326,10 @@ class ICELocatorServer:
         await self.proxy_manager.cleanup()
         
         # Cleanup telemetry and monitoring
-        if self.mcpcat_monitor:
-            await self.mcpcat_monitor.cleanup()
-            self.logger.info("MCPcat monitoring cleaned up")
-        
-        if self.telemetry_exporter:
-            await self.telemetry_exporter.cleanup()
-            self.logger.info("Telemetry framework cleaned up")
+        if self.comprehensive_monitor:
+            await self.comprehensive_monitor.stop_monitoring("server_shutdown")
+            await self.comprehensive_monitor.cleanup()
+            self.logger.info("Comprehensive monitoring cleaned up")
         
         self.logger.info("ICE Locator MCP Server stopped")
 
