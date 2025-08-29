@@ -128,7 +128,46 @@ class BrowserSimulator:
                     "--disable-background-timer-throttling",
                     "--disable-backgrounding-occluded-windows",
                     "--disable-renderer-backgrounding",
-                    "--disable-ipc-flooding-protection"
+                    "--disable-ipc-flooding-protection",
+                    "--disable-background-networking",
+                    "--disable-default-apps",
+                    "--disable-features=TranslateUI",
+                    "--disable-sync",
+                    "--metrics-recording-only",
+                    "--no-first-run",
+                    "--safebrowsing-disable-auto-update",
+                    "--disable-component-extensions-with-background-pages",
+                    "--disable-features=OptimizationHints",
+                    "--disable-features=InterestFeedContentSuggestions",
+                    "--disable-features=PrivacySandboxSettings4",
+                    "--disable-features=AutofillServerCommunication",
+                    "--disable-features=PasswordManager",
+                    "--disable-features=AutofillAssistant",
+                    "--disable-features=msAutofillEdgeCoupons",
+                    "--disable-features=UserAgentClientHint",
+                    "--disable-features=ChromeWhatsNewUI",
+                    "--disable-features=ChromeTipsNextToDomains",
+                    "--disable-features=ChromeWhatsNewUI",
+                    "--disable-features=ChromeTipsNextToDomains",
+                    "--disable-features=msAutofillEdgeCoupons",
+                    "--disable-features=AutofillAssistant",
+                    "--disable-features=PasswordManager",
+                    "--disable-features=AutofillServerCommunication",
+                    "--disable-features=PrivacySandboxSettings4",
+                    "--disable-features=InterestFeedContentSuggestions",
+                    "--disable-features=OptimizationHints",
+                    "--disable-component-extensions-with-background-pages",
+                    "--disable-ipc-flooding-protection",
+                    "--disable-renderer-backgrounding",
+                    "--disable-backgrounding-occluded-windows",
+                    "--disable-background-timer-throttling",
+                    "--disable-features=IsolateOrigins,site-per-process",
+                    "--disable-web-security",
+                    "--disable-plugins-discovery",
+                    "--disable-plugins",
+                    "--disable-extensions",
+                    "--disable-blink-features=AutomationControlled",
+                    "--no-sandbox"
                 ]
             )
             
@@ -148,7 +187,7 @@ class BrowserSimulator:
         # Create browser context with profile settings
         context = await self.browser.new_context(
             user_agent=profile.user_agent,
-            viewport={"width": 1920, "height": 1080},
+            viewport={"width": random.randint(1200, 1920), "height": random.randint(800, 1080)},
             locale="en-US",
             timezone_id="America/New_York",
             geolocation={"longitude": -74.0060, "latitude": 40.7128},  # New York
@@ -156,7 +195,18 @@ class BrowserSimulator:
             extra_http_headers=profile.headers,
             java_script_enabled=True,
             bypass_csp=True,
-            ignore_https_errors=True
+            ignore_https_errors=True,
+            # Additional anti-detection measures
+            device_scale_factor=random.choice([1, 1.25, 1.5, 2]),
+            is_mobile=False,
+            has_touch=False,
+            # More realistic browser fingerprinting
+            color_scheme="light",
+            reduced_motion="no-preference",
+            forced_colors="none",
+            accept_downloads=False,
+            # Emulate realistic browser features
+            screen={"width": random.randint(1200, 1920), "height": random.randint(800, 1080)}
         )
         
         # Add stealth scripts to avoid detection
@@ -180,6 +230,122 @@ class BrowserSimulator:
                     Promise.resolve({ state: Notification.permission }) :
                     originalQuery(parameters)
                 );
+            
+            // Hide webdriver property
+            delete navigator.__proto__.webdriver;
+            
+            // Hide plugins
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [1, 2, 3, 4, 5],
+            });
+            
+            // Hide languages
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['en-US', 'en'],
+            });
+            
+            // Hide missing memory
+            if (!window.performance.memory) {
+              Object.defineProperty(window.performance, 'memory', {
+                get: () => ({
+                  usedJSHeapSize: 1000000,
+                  totalJSHeapSize: 2000000,
+                  jsHeapSizeLimit: 4000000
+                })
+              });
+            }
+            
+            // Hide missing outerHeight and outerWidth
+            Object.defineProperty(window, 'outerHeight', {
+              get: () => window.innerHeight
+            });
+
+            Object.defineProperty(window, 'outerWidth', {
+              get: () => window.innerWidth
+            });
+            
+            // Hide missing screen properties
+            Object.defineProperty(screen, 'availLeft', {
+              get: () => 0
+            });
+
+            Object.defineProperty(screen, 'availTop', {
+              get: () => 0
+            });
+
+            Object.defineProperty(screen, 'availWidth', {
+              get: () => screen.width
+            });
+
+            Object.defineProperty(screen, 'availHeight', {
+              get: () => screen.height
+            });
+
+            Object.defineProperty(screen, 'colorDepth', {
+              get: () => 24
+            });
+
+            Object.defineProperty(screen, 'pixelDepth', {
+              get: () => 24
+            });
+            
+            // Hide missing devicePixelRatio
+            if (!window.devicePixelRatio) {
+              window.devicePixelRatio = 1;
+            }
+            
+            // Hide missing onorientationchange
+            if (!window.onorientationchange) {
+              window.onorientationchange = null;
+            }
+            
+            // Hide missing orientation
+            if (!window.orientation) {
+              window.orientation = 0;
+            }
+            
+            // Hide missing localStorage and sessionStorage
+            if (!window.localStorage) {
+              window.localStorage = {
+                getItem: function() { return null; },
+                setItem: function() {},
+                removeItem: function() {},
+                clear: function() {},
+                key: function() { return null; },
+                length: 0
+              };
+            }
+
+            if (!window.sessionStorage) {
+              window.sessionStorage = {
+                getItem: function() { return null; },
+                setItem: function() {},
+                removeItem: function() {},
+                clear: function() {},
+                key: function() { return null; },
+                length: 0
+              };
+            }
+            
+            // Add missing toString methods
+            if (window.chrome && window.chrome.runtime) {
+              window.chrome.runtime.toString = function() {
+                return "[object Object]";
+              };
+            }
+
+            // Hide missing toString methods
+            if (window.chrome && window.chrome.csi) {
+              window.chrome.csi.toString = function() {
+                return "function csi() { [native code] }";
+              };
+            }
+
+            if (window.chrome && window.chrome.loadTimes) {
+              window.chrome.loadTimes.toString = function() {
+                return "function loadTimes() { [native code] }";
+              };
+            }
             """)
             
         # Add the stealth.js file for more comprehensive evasion
@@ -196,6 +362,42 @@ class BrowserSimulator:
             "width": random.randint(1200, 1920),
             "height": random.randint(800, 1080)
         })
+        
+        # Emulate realistic browser features
+        await page.add_init_script("""
+            // Emulate WebGL vendor and renderer
+            const getParameter = WebGLRenderingContext.prototype.getParameter;
+            WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                if (parameter === 37445) {
+                    return 'Intel Inc.';
+                }
+                if (parameter === 37446) {
+                    return 'Intel(R) Iris(TM) Plus Graphics 640';
+                }
+                return getParameter.apply(this, [parameter]);
+            };
+            
+            // Emulate missing Chrome properties
+            if (!window.chrome) {
+                window.chrome = {
+                    runtime: {}
+                };
+            }
+            
+            // Emulate permissions
+            if (!window.Notification) {
+                window.Notification = {
+                    permission: 'default'
+                };
+            }
+            
+            // Emulate plugins
+            if (!navigator.plugins) {
+                navigator.plugins = {
+                    length: 5
+                };
+            }
+            """)
         
         # Create session
         session = BrowserSession(
@@ -270,11 +472,17 @@ class BrowserSimulator:
                 # Find the element
                 element = session.page.locator(selector)
                 
+                # Wait for element to be visible
+                await element.wait_for(state="visible", timeout=10000)
+                
                 # Simulate human focus on element
                 await element.focus()
                 
                 # Add small delay
                 await asyncio.sleep(random.uniform(0.1, 0.3))
+                
+                # Clear existing content
+                await element.clear()
                 
                 # Type with human-like delays
                 for char in value:
@@ -312,6 +520,9 @@ class BrowserSimulator:
             # Find element
             element = session.page.locator(selector)
             
+            # Wait for element to be visible
+            await element.wait_for(state="visible", timeout=10000)
+            
             # Scroll element into view with human-like scrolling
             await element.scroll_into_view_if_needed()
             
@@ -343,6 +554,41 @@ class BrowserSimulator:
                 error=str(e)
             )
             raise
+    
+    async def get_page_content(self, session_id: str) -> str:
+        """Get the current page content."""
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"No session found with ID: {session_id}")
+        
+        try:
+            content = await session.page.content()
+            return content
+        except Exception as e:
+            self.logger.error(
+                "Failed to get page content",
+                session_id=session_id,
+                error=str(e)
+            )
+            raise
+    
+    async def wait_for_selector(self, session_id: str, selector: str, timeout: int = 30000) -> bool:
+        """Wait for an element to appear on the page."""
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"No session found with ID: {session_id}")
+        
+        try:
+            await session.page.wait_for_selector(selector, timeout=timeout)
+            return True
+        except Exception as e:
+            self.logger.warning(
+                "Element not found within timeout",
+                session_id=session_id,
+                selector=selector,
+                error=str(e)
+            )
+            return False
     
     async def close_session(self, session_id: str) -> None:
         """Close a browser session and clean up resources."""
@@ -380,10 +626,139 @@ class BrowserSimulator:
         # Random reading time based on page content
         reading_time = random.uniform(2.0, 8.0)
         
-        # Occasionally scroll the page
+        # Occasionally scroll the page in a more human-like pattern
         if random.random() < 0.3:  # 30% chance to scroll
-            await session.page.mouse.wheel(0, random.randint(100, 500))
-            await asyncio.sleep(random.uniform(0.5, 1.5))
+            # Simulate human-like scrolling pattern
+            scroll_actions = random.randint(1, 3)
+            for _ in range(scroll_actions):
+                scroll_distance = random.randint(100, 500)
+                await session.page.mouse.wheel(0, scroll_distance)
+                # Random pauses between scrolls
+                await asyncio.sleep(random.uniform(0.5, 1.5))
         
         # Wait for reading time
         await asyncio.sleep(reading_time)
+    
+    async def simulate_human_mouse_movement(self, session: BrowserSession) -> None:
+        """Simulate human-like mouse movements."""
+        try:
+            # Get viewport dimensions
+            viewport_size = await session.page.evaluate("() => ({width: window.innerWidth, height: window.innerHeight})")
+            
+            # Simulate random mouse movements
+            movements = random.randint(3, 7)
+            for _ in range(movements):
+                x = random.randint(0, viewport_size['width'])
+                y = random.randint(0, viewport_size['height'])
+                
+                # Move mouse with human-like timing
+                await session.page.mouse.move(x, y, steps=random.randint(10, 30))
+                
+                # Random pauses
+                if random.random() < 0.2:  # 20% chance of pause
+                    await asyncio.sleep(random.uniform(0.1, 0.5))
+                    
+        except Exception as e:
+            self.logger.debug("Failed to simulate human mouse movement", error=str(e))
+    
+    async def simulate_human_typing(self, session: BrowserSession, text: str) -> str:
+        """Simulate human-like typing with realistic delays and errors."""
+        try:
+            typed_text = ""
+            
+            for i, char in enumerate(text):
+                # Type the character
+                typed_text += char
+                
+                # Human-like typing delay
+                delay = random.randint(50, 150)
+                await asyncio.sleep(delay / 1000.0)
+                
+                # Occasional typing mistakes (and corrections)
+                if random.random() < 0.02 and i > 0:  # 2% chance of mistake
+                    # Add a random character
+                    mistake_char = random.choice('abcdefghijklmnopqrstuvwxyz')
+                    typed_text += mistake_char
+                    
+                    # Short delay
+                    await asyncio.sleep(random.uniform(0.1, 0.3))
+                    
+                    # Backspace to correct
+                    typed_text = typed_text[:-1]
+                    
+                    # Another short delay
+                    await asyncio.sleep(random.uniform(0.1, 0.2))
+                    
+                    # Retype the correct character
+                    typed_text += char
+                    
+                    # Slightly longer delay after correction
+                    await asyncio.sleep(random.uniform(0.2, 0.4))
+                
+                # Occasional pauses during typing
+                if random.random() < 0.1:  # 10% chance of pause
+                    await asyncio.sleep(random.uniform(0.2, 0.8))
+            
+            return typed_text
+            
+        except Exception as e:
+            self.logger.debug("Failed to simulate human typing", error=str(e))
+            return text
+    
+    async def simulate_human_form_filling(self, session_id: str, form_data: Dict[str, str]) -> None:
+        """Fill a form with sophisticated human-like behavior."""
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"No session found with ID: {session_id}")
+        
+        try:
+            # Simulate thinking time before starting to fill form
+            await asyncio.sleep(random.uniform(0.5, 2.0))
+            
+            # Fill each form field with human-like behavior
+            for selector, value in form_data.items():
+                # Find the element
+                element = session.page.locator(selector)
+                
+                # Wait for element to be visible
+                await element.wait_for(state="visible", timeout=10000)
+                
+                # Simulate human focus on element
+                await element.focus()
+                
+                # Small delay after focusing
+                await asyncio.sleep(random.uniform(0.1, 0.3))
+                
+                # Clear existing content with human-like behavior
+                await element.click()
+                await asyncio.sleep(random.uniform(0.05, 0.1))
+                
+                # Select all text
+                await session.page.keyboard.press("Control+A")
+                await asyncio.sleep(random.uniform(0.05, 0.1))
+                
+                # Delete selected text
+                await session.page.keyboard.press("Backspace")
+                await asyncio.sleep(random.uniform(0.1, 0.3))
+                
+                # Type with human-like typing simulation
+                typed_value = await self.simulate_human_typing(session, value)
+                
+                # Add delay after filling field
+                await asyncio.sleep(random.uniform(0.2, 0.5))
+                
+                session.actions_performed.append(f"fill_form:{selector}")
+            
+            self.logger.debug(
+                "Successfully filled form with human-like behavior",
+                session_id=session_id,
+                fields=list(form_data.keys())
+            )
+            
+        except Exception as e:
+            self.logger.error(
+                "Failed to fill form with human-like behavior",
+                session_id=session_id,
+                error=str(e)
+            )
+            raise

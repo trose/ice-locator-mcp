@@ -74,7 +74,7 @@ class SearchTools:
             return self._format_search_response(result, language)
             
         except Exception as e:
-            self.logger.error("Name search failed", error=str(e))
+            self.logger.error("Name search failed", error=str(e), first_name=first_name, last_name=last_name)
             return self._format_error_response(str(e), language)
     
     async def search_by_alien_number(self,
@@ -113,7 +113,7 @@ class SearchTools:
             return self._format_search_response(result, language)
             
         except Exception as e:
-            self.logger.error("Alien number search failed", error=str(e))
+            self.logger.error("Alien number search failed", error=str(e), alien_number=alien_number)
             return self._format_error_response(str(e), language)
     
     async def smart_search(self,
@@ -171,7 +171,7 @@ class SearchTools:
             return self._format_search_response(result, language)
             
         except Exception as e:
-            self.logger.error("Smart search failed", error=str(e))
+            self.logger.error("Smart search failed", error=str(e), query=query)
             return self._format_error_response(str(e), language)
     
     async def bulk_search(self,

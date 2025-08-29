@@ -1,0 +1,11 @@
+# Sample proxy list file format
+# Format: host:port or host:port:username:password
+# Residential proxies preferred for ICE website access
+
+# Example entries (replace with real proxies):
+# 192.168.1.1:8080
+# 192.168.1.2:8080:username:password
+# proxy.example.com:3128
+
+# Note: For production use, you would need to obtain real residential proxies
+# from reputable proxy providers that specialize in web scraping and anti-detection.

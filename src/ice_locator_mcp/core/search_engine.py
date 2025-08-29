@@ -490,6 +490,22 @@ class SearchEngine:
         if self._detect_rate_limit(soup):
             return SearchResult.error("Rate limit exceeded", "rate_limit")
         
+        # Check for access denied or blocked responses
+        if self._detect_access_denied(soup):
+            return SearchResult.error("Access denied - IP may be blocked", "access_denied")
+        
+        # Check for maintenance pages
+        if self._detect_maintenance(soup):
+            return SearchResult.error("Website is currently under maintenance", "maintenance")
+        
+        # Check for session expiration
+        if self._detect_session_expired(soup):
+            return SearchResult.error("Session expired - please try again", "session_expired")
+        
+        # Check for no results found
+        if self._detect_no_results(soup):
+            return SearchResult.success([], 0.0)  # Return empty results but success status
+        
         # Extract detainee records
         records = await self._extract_detainee_records(soup)
         
@@ -499,7 +515,7 @@ class SearchEngine:
         """Detect if response contains CAPTCHA challenge."""
         captcha_indicators = [
             'captcha', 'recaptcha', 'hcaptcha', 'verification', 
-            'robot', 'human verification'
+            'robot', 'human verification', 'prove you are human'
         ]
         
         page_text = soup.get_text().lower()
@@ -509,21 +525,82 @@ class SearchEngine:
         """Detect if response indicates rate limiting."""
         rate_limit_indicators = [
             'too many requests', 'rate limit', 'slow down',
-            'try again later', 'temporarily unavailable'
+            'try again later', 'temporarily unavailable',
+            '429', 'request limit'
         ]
         
         page_text = soup.get_text().lower()
-        return any(indicator in page_text for indicator in rate_limit_indicators)
+        title = soup.title.get_text().lower() if soup.title else ""
+        
+        return (any(indicator in page_text for indicator in rate_limit_indicators) or
+                any(indicator in title for indicator in rate_limit_indicators))
+    
+    def _detect_access_denied(self, soup: BeautifulSoup) -> bool:
+        """Detect if response indicates access denied."""
+        access_denied_indicators = [
+            'access denied', 'forbidden', '403', 'not authorized',
+            'blocked', 'ip blocked', 'suspicious activity',
+            'security check', 'unusual traffic'
+        ]
+        
+        page_text = soup.get_text().lower()
+        title = soup.title.get_text().lower() if soup.title else ""
+        
+        return (any(indicator in page_text for indicator in access_denied_indicators) or
+                any(indicator in title for indicator in access_denied_indicators))
+    
+    def _detect_maintenance(self, soup: BeautifulSoup) -> bool:
+        """Detect if response indicates website maintenance."""
+        maintenance_indicators = [
+            'maintenance', 'down for maintenance', 'scheduled maintenance',
+            'site unavailable', 'temporarily offline', 'system maintenance'
+        ]
+        
+        page_text = soup.get_text().lower()
+        title = soup.title.get_text().lower() if soup.title else ""
+        
+        return (any(indicator in page_text for indicator in maintenance_indicators) or
+                any(indicator in title for indicator in maintenance_indicators))
+    
+    def _detect_session_expired(self, soup: BeautifulSoup) -> bool:
+        """Detect if response indicates session expiration."""
+        session_expired_indicators = [
+            'session expired', 'login required', 'authentication required',
+            'session timeout', 'please log in', 'login again'
+        ]
+        
+        page_text = soup.get_text().lower()
+        title = soup.title.get_text().lower() if soup.title else ""
+        
+        return (any(indicator in page_text for indicator in session_expired_indicators) or
+                any(indicator in title for indicator in session_expired_indicators))
+    
+    def _detect_no_results(self, soup: BeautifulSoup) -> bool:
+        """Detect if response indicates no results found."""
+        no_results_indicators = [
+            'no results found', 'no records found', 'no matches',
+            'nothing found', '0 results', 'zero results',
+            'no detainees found', 'no individuals found'
+        ]
+        
+        page_text = soup.get_text().lower()
+        title = soup.title.get_text().lower() if soup.title else ""
+        
+        return (any(indicator in page_text for indicator in no_results_indicators) or
+                any(indicator in title for indicator in no_results_indicators))
     
     async def _extract_detainee_records(self, soup: BeautifulSoup) -> List[DetaineeRecord]:
         """Extract detainee records from search results."""
         records = []
         
-        # Look for result tables or divs
+        # Look for result tables or divs with more specific selectors
         result_containers = (
             soup.find_all('tr', class_='result-row') or
             soup.find_all('div', class_='detainee-record') or
-            soup.find_all('div', class_='search-result')
+            soup.find_all('div', class_='search-result') or
+            soup.find_all('tbody', class_='results') or
+            soup.find_all('div', {'data-record': True}) or
+            soup.find_all('table')  # Fallback to any table
         )
         
         for container in result_containers:
@@ -531,7 +608,190 @@ class SearchEngine:
             if record:
                 records.append(record)
         
+        # If no records found, try a more general approach
+        if not records:
+            records = await self._extract_records_general(soup)
+            
+        # If still no records, try to parse any table that might contain results
+        if not records:
+            records = await self._extract_records_from_any_table(soup)
+        
         return records
+    
+    async def _extract_records_from_any_table(self, soup: BeautifulSoup) -> List[DetaineeRecord]:
+        """Extract detainee records from any table that might contain results."""
+        records = []
+        
+        # Look for any table with potential detainee data
+        tables = soup.find_all('table')
+        for table in tables:
+            # Check if this looks like a detainee table
+            headers = table.find_all('th')
+            if headers:
+                header_texts = [h.get_text(strip=True).lower() for h in headers]
+                # Look for common header names in detainee records
+                common_headers = ['alien', 'number', 'name', 'birth', 'country', 'facility', 'status', 'location']
+                matching_headers = [h for h in header_texts if any(ch in h for ch in common_headers)]
+                
+                if len(matching_headers) >= 3:  # At least 3 matching headers
+                    # Look for rows with data
+                    rows = table.find_all('tr')[1:]  # Skip header row
+                    for row in rows:
+                        cells = row.find_all(['td', 'th'])
+                        if len(cells) >= 3:
+                            # Try to extract basic information
+                            record = await self._parse_table_row_as_record(cells, header_texts)
+                            if record:
+                                records.append(record)
+            else:
+                # No headers, try to parse based on cell content
+                rows = table.find_all('tr')
+                for row in rows:
+                    cells = row.find_all(['td', 'th'])
+                    if len(cells) >= 3:
+                        # Try to extract basic information
+                        record = self._parse_row_as_record(cells)
+                        if record:
+                            records.append(record)
+        
+        return records
+    
+    async def _parse_table_row_as_record(self, cells, header_texts: List[str]) -> Optional[DetaineeRecord]:
+        """Parse a table row as a detainee record using header information."""
+        try:
+            # Create a mapping from header names to cell values
+            cell_values = [cell.get_text(strip=True) for cell in cells]
+            
+            # Initialize fields
+            alien_number = ""
+            name = ""
+            dob = ""
+            country = ""
+            facility = ""
+            location = ""
+            status = ""
+            
+            # Map header names to fields
+            for i, header in enumerate(header_texts):
+                if i < len(cell_values):
+                    cell_value = cell_values[i]
+                    header_lower = header.lower()
+                    
+                    if 'alien' in header_lower or 'number' in header_lower:
+                        # Check if this looks like an alien number
+                        if cell_value.startswith('A') and len(cell_value) >= 9 and cell_value[1:].isdigit():
+                            alien_number = cell_value
+                        elif not alien_number and 'A' in cell_value and len(cell_value) >= 9:
+                            # Try to extract alien number from mixed text
+                            import re
+                            alien_match = re.search(r'A\d{8,9}', cell_value)
+                            if alien_match:
+                                alien_number = alien_match.group(0)
+                    elif 'name' in header_lower:
+                        name = cell_value
+                    elif 'birth' in header_lower or 'dob' in header_lower:
+                        dob = cell_value
+                    elif 'country' in header_lower:
+                        country = cell_value
+                    elif 'facility' in header_lower:
+                        facility = cell_value
+                    elif 'location' in header_lower:
+                        location = cell_value
+                    elif 'status' in header_lower:
+                        status = cell_value
+            
+            # If we couldn't match by headers, try content-based matching
+            if not alien_number or not name:
+                for cell_value in cell_values:
+                    if not alien_number and cell_value.startswith('A') and len(cell_value) >= 9 and cell_value[1:].isdigit():
+                        alien_number = cell_value
+                    elif not alien_number and 'A' in cell_value and len(cell_value) >= 9:
+                        import re
+                        alien_match = re.search(r'A\d{8,9}', cell_value)
+                        if alien_match:
+                            alien_number = alien_match.group(0)
+                    elif not name and ',' in cell_value and len(cell_value.split()) >= 2:
+                        name = cell_value  # Assume name format is "Last, First"
+            
+            # Create a record if we have at least an alien number or name
+            if alien_number or name:
+                return DetaineeRecord(
+                    alien_number=alien_number or "Unknown",
+                    name=name or "Unknown",
+                    date_of_birth=dob or "",
+                    country_of_birth=country or "",
+                    facility_name=facility or "",
+                    facility_location=location or "",
+                    custody_status=status or "Unknown",
+                    last_updated=time.strftime("%Y-%m-%dT%H:%M:%S")
+                )
+        except Exception as e:
+            self.logger.warning("Failed to parse table row as record", error=str(e))
+        
+        return None
+    
+    async def _extract_records_general(self, soup: BeautifulSoup) -> List[DetaineeRecord]:
+        """General approach to extract detainee records when specific selectors fail."""
+        records = []
+        
+        # Look for any table with potential detainee data
+        tables = soup.find_all('table')
+        for table in tables:
+            # Check if this looks like a detainee table
+            headers = table.find_all('th')
+            if headers and len(headers) >= 3:  # At least 3 columns for basic info
+                # Look for rows with data
+                rows = table.find_all('tr')[1:]  # Skip header row
+                for row in rows:
+                    cells = row.find_all(['td', 'th'])
+                    if len(cells) >= 3:
+                        # Try to extract basic information
+                        record = self._parse_row_as_record(cells)
+                        if record:
+                            records.append(record)
+        
+        return records
+    
+    def _parse_row_as_record(self, cells) -> Optional[DetaineeRecord]:
+        """Parse a table row as a detainee record."""
+        try:
+            # This is a very basic parser that would need to be refined
+            # based on the actual ICE website structure
+            if len(cells) >= 3:
+                # Try to identify which cell contains what information
+                cell_texts = [cell.get_text(strip=True) for cell in cells]
+                
+                # Look for patterns that might indicate an alien number
+                alien_number = ""
+                name = ""
+                dob = ""
+                country = ""
+                facility = ""
+                location = ""
+                status = ""
+                
+                for text in cell_texts:
+                    if text.startswith('A') and len(text) >= 9 and text[1:].isdigit():
+                        alien_number = text
+                    elif ',' in text and len(text.split()) >= 2:
+                        name = text  # Assume name format is "Last, First"
+                
+                # Create a basic record if we have at least an alien number or name
+                if alien_number or name:
+                    return DetaineeRecord(
+                        alien_number=alien_number or "Unknown",
+                        name=name or "Unknown",
+                        date_of_birth=dob or "",
+                        country_of_birth=country or "",
+                        facility_name=facility or "",
+                        facility_location=location or "",
+                        custody_status=status or "Unknown",
+                        last_updated=time.strftime("%Y-%m-%dT%H:%M:%S")
+                    )
+        except Exception as e:
+            self.logger.warning("Failed to parse row as record", error=str(e))
+        
+        return None
     
     def _parse_detainee_record(self, container) -> Optional[DetaineeRecord]:
         """Parse individual detainee record from HTML element."""
@@ -613,27 +873,87 @@ class SearchEngine:
                 
                 # Navigate to search page
                 search_url = f"{self.config.base_url}/search"
-                await browser_sim.navigate_to_page(session_id, search_url)
+                page_content = await browser_sim.navigate_to_page(session_id, search_url)
                 
-                # Fill form and submit
-                form_fields = {
-                    'input[name="first_name"]': search_data['first_name'],
-                    'input[name="last_name"]': search_data['last_name'],
-                    'input[name="date_of_birth"]': search_data['date_of_birth'],
-                    'input[name="country_of_birth"]': search_data['country_of_birth']
+                # Parse the page to understand the form structure
+                soup = BeautifulSoup(page_content, 'html.parser')
+                
+                # Try to find the search form
+                form = soup.find('form', {'action': lambda x: x and 'search' in x.lower()}) or soup.find('form')
+                if not form:
+                    return SearchResult.error("Could not find search form on page", "form_not_found")
+                
+                # Extract form action
+                form_action = form.get('action', '/search')
+                if not form_action.startswith('http'):
+                    form_action = f"{self.config.base_url}{form_action}"
+                
+                # Fill form and submit with enhanced human-like behavior
+                form_fields = {}
+                
+                # Try to map our search data to form fields
+                # This is a simplified approach - in reality, we'd need to inspect the actual form
+                input_mapping = {
+                    'first_name': ['first_name', 'firstName', 'first-name'],
+                    'last_name': ['last_name', 'lastName', 'last-name'],
+                    'date_of_birth': ['date_of_birth', 'dob', 'date-of-birth', 'birth_date'],
+                    'country_of_birth': ['country_of_birth', 'country', 'country-of-birth'],
+                    'middle_name': ['middle_name', 'middleName', 'middle-name']
                 }
                 
-                if request.middle_name:
-                    form_fields['input[name="middle_name"]'] = request.middle_name
+                # Find form inputs and map them
+                form_inputs = form.find_all('input')
+                for field_name, possible_names in input_mapping.items():
+                    if field_name in search_data and search_data[field_name]:
+                        # Look for matching input
+                        for input_elem in form_inputs:
+                            input_name = input_elem.get('name', '').lower()
+                            if any(name in input_name for name in possible_names):
+                                form_fields[f'input[name="{input_elem.get("name")}"]'] = search_data[field_name]
+                                break
                 
-                await browser_sim.fill_form(session_id, form_fields)
-                await browser_sim.click_element(session_id, 'input[type="submit"]')
+                # Special handling for alien number search
+                if 'alien_number' in search_data and search_data['alien_number']:
+                    for input_elem in form_inputs:
+                        input_name = input_elem.get('name', '').lower()
+                        if 'alien' in input_name or 'a_number' in input_name:
+                            form_fields[f'input[name="{input_elem.get("name")}"]'] = search_data['alien_number']
                 
-                # Get results page content
-                # Note: In a real implementation, you would parse the results here
-                # For now, we'll just return a success result to show the approach
-                
-                return SearchResult.success([], 0.0)
+                if form_fields:
+                    # Use enhanced human-like form filling
+                    await browser_sim.simulate_human_form_filling(session_id, form_fields)
+                    
+                    # Try to find and click submit button with human-like behavior
+                    submit_selectors = [
+                        'input[type="submit"]',
+                        'button[type="submit"]',
+                        'input[value*="search" i]',
+                        'button:has-text("Search")'
+                    ]
+                    
+                    submit_clicked = False
+                    for selector in submit_selectors:
+                        try:
+                            await browser_sim.click_element(session_id, selector)
+                            submit_clicked = True
+                            break
+                        except:
+                            continue  # Try next selector
+                    
+                    if not submit_clicked:
+                        return SearchResult.error("Could not find submit button", "submit_not_found")
+                    
+                    # Wait for results and get page content
+                    await asyncio.sleep(2)  # Wait for page to load
+                    results_content = await browser_sim.navigate_to_page(session_id, form_action)
+                    
+                    # Parse results
+                    results_soup = BeautifulSoup(results_content, 'html.parser')
+                    records = await self._extract_detainee_records(results_soup)
+                    
+                    return SearchResult.success(records, 0.0)
+                else:
+                    return SearchResult.error("Could not map search fields to form inputs", "field_mapping_error")
                 
             finally:
                 await browser_sim.close_all_sessions()
@@ -644,44 +964,6 @@ class SearchEngine:
     
     async def _search_by_alien_number_with_browser(self, request: SearchRequest) -> SearchResult:
         """Perform alien number-based search using browser simulation."""
-        try:
-            self.logger.info("Retrying alien number search with browser simulation")
-            
-            # Prepare search data
-            search_data = {
-                'alien_number': request.alien_number or ''
-            }
-            
-            # Use browser simulator for the search
-            from ..anti_detection.browser_simulator import BrowserSimulator
-            
-            browser_sim = BrowserSimulator(self.config)
-            await browser_sim.initialize()
-            
-            try:
-                session_id = self._generate_session_id()
-                
-                # Navigate to search page
-                search_url = f"{self.config.base_url}/search"
-                await browser_sim.navigate_to_page(session_id, search_url)
-                
-                # Fill form and submit
-                form_fields = {
-                    'input[name="alien_number"]': search_data['alien_number']
-                }
-                
-                await browser_sim.fill_form(session_id, form_fields)
-                await browser_sim.click_element(session_id, 'input[type="submit"]')
-                
-                # Get results page content
-                # Note: In a real implementation, you would parse the results here
-                # For now, we'll just return a success result to show the approach
-                
-                return SearchResult.success([], 0.0)
-                
-            finally:
-                await browser_sim.close_all_sessions()
-                
-        except Exception as e:
-            self.logger.error("Browser-based alien number search failed", error=str(e))
-            return SearchResult.error(f"Browser search failed: {str(e)}")
+        # For now, we can use the same implementation as name search
+        # since the browser simulation handles both cases
+        return await self._search_by_name_with_browser(request)

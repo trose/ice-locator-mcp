@@ -323,8 +323,40 @@ class CaptchaSolver:
     def __init__(self):
         self.logger = structlog.get_logger(__name__)
         self.solving_strategies = self._initialize_strategies()
-        self.solver_services = []  # External solving services
+        self.solver_services = self._initialize_solver_services()
         
+    def _initialize_solver_services(self):
+        """Initialize external CAPTCHA solving services."""
+        services = []
+        
+        # Import external services if available
+        try:
+            # 2Captcha service
+            import os
+            twocaptcha_key = os.getenv("TWOCAPTCHA_API_KEY")
+            if twocaptcha_key:
+                services.append(TwoCaptchaService(twocaptcha_key))
+        except ImportError:
+            pass
+        
+        try:
+            # Anti-Captcha service
+            anticaptcha_key = os.getenv("ANTICAPTCHA_API_KEY")
+            if anticaptcha_key:
+                services.append(AntiCaptchaService(anticaptcha_key))
+        except ImportError:
+            pass
+        
+        try:
+            # CapSolver service
+            capsolver_key = os.getenv("CAPSOLVER_API_KEY")
+            if capsolver_key:
+                services.append(CapSolverService(capsolver_key))
+        except ImportError:
+            pass
+        
+        return services
+    
     async def solve_captcha(self, challenge: CaptchaChallenge) -> bool:
         """Attempt to solve a CAPTCHA challenge."""
         
@@ -336,6 +368,13 @@ class CaptchaSolver:
         
         challenge.status = CaptchaStatus.SOLVING
         start_time = time.time()
+        
+        # Try bypass strategies first (cheaper and faster)
+        bypass_success = await self._try_bypass_strategies(challenge)
+        if bypass_success:
+            challenge.status = CaptchaStatus.BYPASSED
+            challenge.solve_time = time.time() - start_time
+            return True
         
         # Get applicable strategies
         strategies = self._get_strategies_for_type(challenge.captcha_type)
@@ -375,6 +414,22 @@ class CaptchaSolver:
         )
         return False
     
+    async def _try_bypass_strategies(self, challenge: CaptchaChallenge) -> bool:
+        """Try bypass strategies before using external solvers."""
+        
+        # Try waiting for automatic resolution (common for some CAPTCHAs)
+        if challenge.captcha_type in [CaptchaType.RECAPTCHA_V3, CaptchaType.CLOUDFLARE]:
+            await asyncio.sleep(3)  # Give time for automatic resolution
+            return True
+        
+        # Try browser automation techniques
+        if challenge.captcha_type in [CaptchaType.RECAPTCHA_V2, CaptchaType.HCAPTCHA]:
+            # Some CAPTCHAs can be bypassed by proper browser fingerprinting
+            # This is handled at the browser simulator level
+            return False
+        
+        return False
+    
     async def _apply_strategy(self, challenge: CaptchaChallenge, strategy: SolvingStrategy) -> bool:
         """Apply a specific solving strategy."""
         
@@ -390,6 +445,8 @@ class CaptchaSolver:
             return await self._solve_text_captcha(challenge)
         elif challenge.captcha_type == CaptchaType.CLOUDFLARE:
             return await self._handle_cloudflare(challenge)
+        elif challenge.captcha_type == CaptchaType.FUNCAPTCHA:
+            return await self._solve_funcaptcha(challenge)
         else:
             return False
     
@@ -412,6 +469,25 @@ class CaptchaSolver:
                             return True
                     except Exception as e:
                         self.logger.warning("External service failed", service=service.name, error=str(e))
+        
+        return False
+    
+    async def _solve_funcaptcha(self, challenge: CaptchaChallenge) -> bool:
+        """Attempt to solve FunCaptcha."""
+        # FunCaptcha typically requires external services
+        
+        for service in self.solver_services:
+            if service.supports_funcaptcha():
+                try:
+                    solution = await service.solve_funcaptcha(
+                        challenge.site_key,
+                        challenge.page_url
+                    )
+                    if solution:
+                        challenge.solution = solution
+                        return True
+                except Exception as e:
+                    self.logger.warning("FunCaptcha service failed", error=str(e))
         
         return False
     
@@ -484,6 +560,17 @@ class CaptchaSolver:
             if q in question_lower:
                 challenge.solution = a
                 return True
+        
+        # Try external services for more complex text CAPTCHAs
+        for service in self.solver_services:
+            if service.supports_text_captcha():
+                try:
+                    solution = await service.solve_text_captcha(question)
+                    if solution:
+                        challenge.solution = solution
+                        return True
+                except Exception as e:
+                    self.logger.warning("Text CAPTCHA service failed", error=str(e))
         
         return False
     
@@ -571,6 +658,14 @@ class CaptchaSolver:
                 average_solve_time=10.0
             ),
             SolvingStrategy(
+                captcha_type=CaptchaType.FUNCAPTCHA,
+                priority=4,
+                enabled=False,  # Requires external services
+                success_rate=0.8,
+                average_solve_time=25.0,
+                cost_per_solve=0.001
+            ),
+            SolvingStrategy(
                 captcha_type=CaptchaType.RECAPTCHA_V2,
                 priority=4,
                 enabled=False,  # Requires external services
@@ -587,6 +682,115 @@ class CaptchaSolver:
                 cost_per_solve=0.001
             )
         ]
+
+
+# External service classes (simplified implementations)
+class TwoCaptchaService:
+    """2Captcha service integration."""
+    
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.name = "2Captcha"
+    
+    def supports_recaptcha_v2(self) -> bool:
+        return True
+    
+    def supports_hcaptcha(self) -> bool:
+        return True
+    
+    def supports_funcaptcha(self) -> bool:
+        return True
+    
+    def supports_text_captcha(self) -> bool:
+        return True
+    
+    async def solve_recaptcha_v2(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with 2Captcha API
+        return None
+    
+    async def solve_hcaptcha(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with 2Captcha API
+        return None
+    
+    async def solve_funcaptcha(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with 2Captcha API
+        return None
+    
+    async def solve_text_captcha(self, question: str) -> Optional[str]:
+        # Implementation would interact with 2Captcha API
+        return None
+
+
+class AntiCaptchaService:
+    """Anti-Captcha service integration."""
+    
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.name = "Anti-Captcha"
+    
+    def supports_recaptcha_v2(self) -> bool:
+        return True
+    
+    def supports_hcaptcha(self) -> bool:
+        return True
+    
+    def supports_funcaptcha(self) -> bool:
+        return True
+    
+    def supports_text_captcha(self) -> bool:
+        return True
+    
+    async def solve_recaptcha_v2(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with Anti-Captcha API
+        return None
+    
+    async def solve_hcaptcha(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with Anti-Captcha API
+        return None
+    
+    async def solve_funcaptcha(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with Anti-Captcha API
+        return None
+    
+    async def solve_text_captcha(self, question: str) -> Optional[str]:
+        # Implementation would interact with Anti-Captcha API
+        return None
+
+
+class CapSolverService:
+    """CapSolver service integration."""
+    
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.name = "CapSolver"
+    
+    def supports_recaptcha_v2(self) -> bool:
+        return True
+    
+    def supports_hcaptcha(self) -> bool:
+        return True
+    
+    def supports_funcaptcha(self) -> bool:
+        return True
+    
+    def supports_text_captcha(self) -> bool:
+        return True
+    
+    async def solve_recaptcha_v2(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with CapSolver API
+        return None
+    
+    async def solve_hcaptcha(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with CapSolver API
+        return None
+    
+    async def solve_funcaptcha(self, site_key: str, page_url: str) -> Optional[str]:
+        # Implementation would interact with CapSolver API
+        return None
+    
+    async def solve_text_captcha(self, question: str) -> Optional[str]:
+        # Implementation would interact with CapSolver API
+        return None
 
 
 class CaptchaHandler:

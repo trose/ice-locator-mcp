@@ -349,26 +349,222 @@ class ProxyManager:
         
         # Try multiple proxy sources
         try:
-            # This would connect to actual proxy providers in production
-            # For now, we'll return empty list to demonstrate fallback behavior
+            # Fetch from various proxy sources
+            free_proxies = await self._fetch_from_free_proxy_sources()
+            proxies.extend(free_proxies)
             
-            # In a real implementation, this would:
-            # 1. Connect to proxy provider APIs
-            # 2. Fetch lists of working proxies
-            # 3. Validate and filter proxies
-            # 4. Return validated proxy list
+            # Fetch from premium sources if configured
+            premium_proxies = await self._fetch_from_premium_sources()
+            proxies.extend(premium_proxies)
             
-            # Example of what real implementation might look like:
-            # proxies = await self._fetch_from_proxy_list_org()
-            # proxies.extend(await self._fetch_from_free_proxy_list())
-            # proxies.extend(await self._fetch_from_ssl_proxies())
+            # Validate and filter proxies
+            validated_proxies = await self._validate_proxies(proxies)
             
-            pass
+            self.logger.info(
+                "Fetched proxies from providers",
+                total=len(proxies),
+                validated=len(validated_proxies)
+            )
+            
+            return validated_proxies
             
         except Exception as e:
             self.logger.debug("Failed to fetch proxies from providers", error=str(e))
         
         return proxies
+    
+    async def _fetch_from_free_proxy_sources(self) -> List[ProxyConfig]:
+        """Fetch proxies from free proxy sources."""
+        proxies = []
+        
+        # Common free proxy sources
+        sources = [
+            "https://www.proxy-list.download/api/v1/get?type=http",
+            "https://www.proxy-list.download/api/v1/get?type=https",
+            "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all",
+            "https://api.proxyscrape.com/v2/?request=getproxies&protocol=socks4&timeout=10000&country=all",
+            "https://api.proxyscrape.com/v2/?request=getproxies&protocol=socks5&timeout=10000&country=all"
+        ]
+        
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            for source in sources:
+                try:
+                    response = await client.get(source)
+                    if response.status_code == 200:
+                        # Parse proxy list (format varies by source)
+                        proxy_lines = response.text.strip().split('\n')
+                        for line in proxy_lines:
+                            line = line.strip()
+                            if line and not line.startswith('#'):
+                                proxy = self._parse_proxy_line(line)
+                                if proxy:
+                                    proxies.append(proxy)
+                    
+                    await asyncio.sleep(1)  # Rate limiting
+                    
+                except Exception as e:
+                    self.logger.debug(
+                        "Failed to fetch from proxy source",
+                        source=source,
+                        error=str(e)
+                    )
+        
+        return proxies
+    
+    async def _fetch_from_premium_sources(self) -> List[ProxyConfig]:
+        """Fetch proxies from premium sources (if API keys configured)."""
+        proxies = []
+        
+        # Premium proxy services that require API keys
+        # These would be configured through environment variables
+        import os
+        
+        # ScraperAPI
+        scraperapi_key = os.getenv("SCRAPERAPI_KEY")
+        if scraperapi_key:
+            try:
+                async with httpx.AsyncClient(timeout=15.0) as client:
+                    response = await client.get(
+                        f"http://api.scraperapi.com?api_key={scraperapi_key}&url=https://httpbin.org/ip"
+                    )
+                    if response.status_code == 200:
+                        # ScraperAPI works as a proxy endpoint
+                        proxy = ProxyConfig(
+                            endpoint=f"proxy-server.scraperapi.com:8001",
+                            proxy_type="http",
+                            username=scraperapi_key,
+                            password="scraperapi",
+                            is_residential=True
+                        )
+                        proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to fetch from ScraperAPI",
+                    error=str(e)
+                )
+        
+        # BrightData (formerly BrightData)
+        brightdata_username = os.getenv("BRIGHTDATA_USERNAME")
+        brightdata_password = os.getenv("BRIGHTDATA_PASSWORD")
+        brightdata_zone = os.getenv("BRIGHTDATA_ZONE", "zone")
+        if brightdata_username and brightdata_password:
+            try:
+                # BrightData residential proxy
+                proxy = ProxyConfig(
+                    endpoint="brd.superproxy.io:22225",
+                    proxy_type="http",
+                    username=brightdata_username,
+                    password=brightdata_password,
+                    is_residential=True
+                )
+                proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to configure BrightData proxy",
+                    error=str(e)
+                )
+        
+        # SmartProxy
+        smartproxy_username = os.getenv("SMARTPROXY_USERNAME")
+        smartproxy_password = os.getenv("SMARTPROXY_PASSWORD")
+        if smartproxy_username and smartproxy_password:
+            try:
+                # SmartProxy residential proxy
+                proxy = ProxyConfig(
+                    endpoint="us.smartproxy.com:10000",
+                    proxy_type="http",
+                    username=smartproxy_username,
+                    password=smartproxy_password,
+                    is_residential=True
+                )
+                proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to configure SmartProxy",
+                    error=str(e)
+                )
+        
+        # NetNut
+        netnut_username = os.getenv("NETNUT_USERNAME")
+        netnut_password = os.getenv("NETNUT_PASSWORD")
+        if netnut_username and netnut_password:
+            try:
+                # NetNut residential proxy
+                proxy = ProxyConfig(
+                    endpoint="gw.netnut.io:8888",
+                    proxy_type="http",
+                    username=netnut_username,
+                    password=netnut_password,
+                    is_residential=True
+                )
+                proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to configure NetNut proxy",
+                    error=str(e)
+                )
+        
+        # Oxylabs
+        oxylabs_username = os.getenv("OXYLABS_USERNAME")
+        oxylabs_password = os.getenv("OXYLABS_PASSWORD")
+        if oxylabs_username and oxylabs_password:
+            try:
+                # Oxylabs residential proxy
+                proxy = ProxyConfig(
+                    endpoint="pr.oxylabs.io:7777",
+                    proxy_type="http",
+                    username=oxylabs_username,
+                    password=oxylabs_password,
+                    is_residential=True
+                )
+                proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to configure Oxylabs proxy",
+                    error=str(e)
+                )
+        
+        return proxies
+    
+    async def _validate_proxies(self, proxies: List[ProxyConfig]) -> List[ProxyConfig]:
+        """Validate and filter proxies based on connectivity and performance."""
+        validated_proxies = []
+        
+        # Test a sample of proxies to avoid overwhelming the system
+        test_proxies = random.sample(proxies, min(20, len(proxies)))
+        
+        async def test_proxy(proxy: ProxyConfig) -> Optional[ProxyConfig]:
+            try:
+                async with httpx.AsyncClient(
+                    proxies={"http://": proxy.url, "https://": proxy.url},
+                    timeout=10.0
+                ) as client:
+                    # Test basic connectivity
+                    response = await client.get("http://httpbin.org/ip", timeout=10.0)
+                    if response.status_code == 200:
+                        # Test ICE website access
+                        ice_response = await client.get("https://locator.ice.gov", timeout=10.0)
+                        if ice_response.status_code in [200, 301, 302]:
+                            return proxy
+            except Exception:
+                pass
+            return None
+        
+        # Test proxies concurrently
+        tasks = [test_proxy(proxy) for proxy in test_proxies]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        for result in results:
+            if isinstance(result, ProxyConfig):
+                validated_proxies.append(result)
+        
+        self.logger.info(
+            "Proxy validation completed",
+            tested=len(test_proxies),
+            validated=len(validated_proxies)
+        )
+        
+        return validated_proxies
     
     def _parse_proxy_line(self, line: str) -> Optional[ProxyConfig]:
         """Parse proxy configuration from line."""
