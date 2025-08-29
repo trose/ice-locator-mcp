@@ -1,0 +1,37 @@
+{
+  "proxy": {
+    "enabled": true,
+    "rotation_interval": 300,
+    "max_requests_per_proxy": 5,
+    "health_check_interval": 60,
+    "retry_failed_after": 1800,
+    "residential_preferred": true,
+    "geographic_distribution": true
+  },
+  "search": {
+    "base_url": "https://locator.ice.gov",
+    "timeout": 30,
+    "max_retries": 3,
+    "requests_per_minute": 5,
+    "fuzzy_threshold": 0.7,
+    "user_agent_rotation": true,
+    "human_delays": true,
+    "typing_simulation": true,
+    "page_reading_simulation": true
+  },
+  "cache": {
+    "enabled": true,
+    "ttl": 3600,
+    "max_size": 1000,
+    "cache_successful_searches": true,
+    "cache_not_found_results": true
+  },
+  "security": {
+    "log_sensitive_data": false,
+    "anonymize_logs": true,
+    "data_retention_days": 7,
+    "randomize_fingerprints": true,
+    "behavioral_simulation": true,
+    "traffic_obfuscation": true
+  }
+}

@@ -324,19 +324,51 @@ class ProxyManager:
     
     async def _load_from_sources(self) -> None:
         """Load proxies from configured sources."""
-        # For demo purposes, add some mock proxies
-        # In production, this would fetch from actual proxy providers
-        mock_proxies = [
-            ProxyConfig("proxy1.example.com:8080", is_residential=True, country="US"),
-            ProxyConfig("proxy2.example.com:8080", is_residential=False, country="CA"),
-            ProxyConfig("proxy3.example.com:8080", is_residential=True, country="MX"),
-        ]
+        # Try to load from actual proxy providers
+        loaded_proxies = await self._fetch_from_proxy_providers()
         
-        for proxy in mock_proxies:
-            self.proxy_pool.append(proxy)
-            self.proxy_status[proxy.endpoint] = ProxyStatus.HEALTHY
+        if loaded_proxies:
+            for proxy in loaded_proxies:
+                self.proxy_pool.append(proxy)
+                self.proxy_status[proxy.endpoint] = ProxyStatus.HEALTHY
+            
+            self.logger.info("Loaded real proxy pool", count=len(self.proxy_pool))
+        else:
+            # Fall back to direct connections if no proxies available
+            self.logger.warning(
+                "No real proxies available, system will use direct connections. "
+                "For production use, configure real proxy sources for better anti-detection."
+            )
+            
+            # Add a warning to the proxy status
+            self.proxy_status["DIRECT_CONNECTION"] = ProxyStatus.HEALTHY
+    
+    async def _fetch_from_proxy_providers(self) -> List[ProxyConfig]:
+        """Fetch proxies from actual providers."""
+        proxies = []
         
-        self.logger.info("Loaded mock proxy pool", count=len(self.proxy_pool))
+        # Try multiple proxy sources
+        try:
+            # This would connect to actual proxy providers in production
+            # For now, we'll return empty list to demonstrate fallback behavior
+            
+            # In a real implementation, this would:
+            # 1. Connect to proxy provider APIs
+            # 2. Fetch lists of working proxies
+            # 3. Validate and filter proxies
+            # 4. Return validated proxy list
+            
+            # Example of what real implementation might look like:
+            # proxies = await self._fetch_from_proxy_list_org()
+            # proxies.extend(await self._fetch_from_free_proxy_list())
+            # proxies.extend(await self._fetch_from_ssl_proxies())
+            
+            pass
+            
+        except Exception as e:
+            self.logger.debug("Failed to fetch proxies from providers", error=str(e))
+        
+        return proxies
     
     def _parse_proxy_line(self, line: str) -> Optional[ProxyConfig]:
         """Parse proxy configuration from line."""

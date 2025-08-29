@@ -161,6 +161,68 @@ class ServerConfig:
     monitoring_enabled: bool = True
     
     @classmethod
+    def from_file(cls, config_file: str) -> "ServerConfig":
+        """Load configuration from JSON file."""
+        import json
+        
+        try:
+            with open(config_file, 'r') as f:
+                config_data = json.load(f)
+            
+            config = cls()
+            
+            # Load proxy configuration
+            if "proxy" in config_data:
+                proxy_data = config_data["proxy"]
+                if "enabled" in proxy_data:
+                    config.proxy_config.enabled = proxy_data["enabled"]
+                if "rotation_interval" in proxy_data:
+                    config.proxy_config.rotation_interval = proxy_data["rotation_interval"]
+                if "max_requests_per_proxy" in proxy_data:
+                    config.proxy_config.max_requests_per_proxy = proxy_data["max_requests_per_proxy"]
+            
+            # Load search configuration
+            if "search" in config_data:
+                search_data = config_data["search"]
+                if "base_url" in search_data:
+                    config.search_config.base_url = search_data["base_url"]
+                if "timeout" in search_data:
+                    config.search_config.timeout = search_data["timeout"]
+                if "max_retries" in search_data:
+                    config.search_config.max_retries = search_data["max_retries"]
+                if "requests_per_minute" in search_data:
+                    config.search_config.requests_per_minute = search_data["requests_per_minute"]
+                if "fuzzy_threshold" in search_data:
+                    config.search_config.fuzzy_threshold = search_data["fuzzy_threshold"]
+            
+            # Load cache configuration
+            if "cache" in config_data:
+                cache_data = config_data["cache"]
+                if "enabled" in cache_data:
+                    config.cache_config.enabled = cache_data["enabled"]
+                if "ttl" in cache_data:
+                    config.cache_config.ttl = cache_data["ttl"]
+                if "max_size" in cache_data:
+                    config.cache_config.max_size = cache_data["max_size"]
+            
+            # Load security configuration
+            if "security" in config_data:
+                security_data = config_data["security"]
+                if "log_sensitive_data" in security_data:
+                    config.security_config.log_sensitive_data = security_data["log_sensitive_data"]
+                if "anonymize_logs" in security_data:
+                    config.security_config.anonymize_logs = security_data["anonymize_logs"]
+                if "randomize_fingerprints" in security_data:
+                    config.security_config.randomize_fingerprints = security_data["randomize_fingerprints"]
+                if "behavioral_simulation" in security_data:
+                    config.security_config.behavioral_simulation = security_data["behavioral_simulation"]
+            
+            return config
+            
+        except Exception as e:
+            raise ValueError(f"Failed to load config file {config_file}: {e}")
+    
+    @classmethod
     def from_env(cls) -> "ServerConfig":
         """Create configuration from environment variables."""
         

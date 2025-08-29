@@ -1,0 +1,25 @@
+{
+  "proxy": {
+    "enabled": false,
+    "rotation_interval": 300,
+    "max_requests_per_proxy": 10
+  },
+  "search": {
+    "base_url": "https://locator.ice.gov",
+    "timeout": 30,
+    "max_retries": 3,
+    "requests_per_minute": 5,
+    "fuzzy_threshold": 0.7
+  },
+  "cache": {
+    "enabled": true,
+    "ttl": 3600,
+    "max_size": 1000
+  },
+  "security": {
+    "log_sensitive_data": false,
+    "anonymize_logs": true,
+    "randomize_fingerprints": true,
+    "behavioral_simulation": true
+  }
+}
