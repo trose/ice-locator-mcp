@@ -18,6 +18,8 @@ from .user_analytics import UserAnalytics, UserSession, BehaviorPattern
 from .session_replay import SessionRecorder, SessionReplay, ReplayEvent, EventType
 from .system_monitor import SystemMonitor, SystemMetrics, ProcessInfo
 from .comprehensive_monitor import ComprehensiveMonitor
+from .dashboard import MonitoringDashboard, AlertManager
+from .privacy_security import PrivacySecurityMonitor, AdvancedDataRedactor, ComplianceMonitor, ComplianceStandard
 
 __all__ = [
     "MCPcatMonitor",
@@ -35,5 +37,11 @@ __all__ = [
     "SystemMonitor",
     "SystemMetrics",
     "ProcessInfo",
-    "ComprehensiveMonitor"
+    "ComprehensiveMonitor",
+    "MonitoringDashboard",
+    "AlertManager",
+    "PrivacySecurityMonitor",
+    "AdvancedDataRedactor",
+    "ComplianceMonitor",
+    "ComplianceStandard"
 ]
