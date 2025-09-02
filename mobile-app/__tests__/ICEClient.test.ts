@@ -34,8 +34,12 @@ import iceClient from '../src/mcp/ICEClient';
 describe('ICEClient', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Clear the cache
+    // Clear the cache and reset connection state
     iceClient.clearCache();
+    // Reset connection state for unit tests
+    (iceClient as any).isConnected = false;
+    (iceClient as any).client = null;
+    (iceClient as any).transport = null;
   });
 
   afterEach(() => {
@@ -81,13 +85,23 @@ describe('ICEClient', () => {
     });
 
     it('should check connection status', () => {
+      // Reset connection state for this test
+      (iceClient as any).isConnected = false;
       // Initially not connected
       expect(iceClient.isConnectedToServer()).toBe(false);
+      
+      // Test connected state
+      (iceClient as any).isConnected = true;
+      expect(iceClient.isConnectedToServer()).toBe(true);
     });
   });
 
   describe('Search Functionality', () => {
     it('should throw error when searching without connection', async () => {
+      // Reset connection state for this test
+      (iceClient as any).isConnected = false;
+      (iceClient as any).client = null;
+      
       await expect(iceClient.searchDetaineeByName('John', 'Doe', '1990-01-01', 'Mexico'))
         .rejects.toThrow('Not connected to ICE Locator MCP server');
         
