@@ -12,15 +12,17 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",
     "@react-native/new-app-screen": "0.81.1",
+    "expo": "53.0.22",
     "react": "19.1.0",
-    "react-native": "0.81.1",
-    "react-native-safe-area-context": "^5.5.2"
+    "react-native": "^0.81.1",
+    "react-native-safe-area-context": "^5.5.2",
+    "react-native-web": "^0.21.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "20.0.0",
+    "@react-native-community/cli": "^20.0.1",
     "@react-native-community/cli-platform-android": "20.0.0",
     "@react-native-community/cli-platform-ios": "20.0.0",
     "@react-native/babel-preset": "0.81.1",

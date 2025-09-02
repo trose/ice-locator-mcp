@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICE Locator Mobile App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .status {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .status-label {
+            font-weight: 600;
+            color: #555;
+        }
+        .status-value {
+            font-weight: 600;
+        }
+        .connected {
+            color: #4CAF50;
+        }
+        .disconnected {
+            color: #F44336;
+        }
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 0 5px;
+            font-weight: 600;
+        }
+        .tab.active {
+            background-color: #007AFF;
+            color: white;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            border-color: #007AFF;
+            outline: none;
+        }
+        .search-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007AFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .search-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .result-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+        .result-value {
+            color: #333;
+            text-align: right;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #007AFF;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ICE Detainee Locator</h1>
+            <p>Locate detained individuals in ICE custody</p>
+        </div>
+        
+        <div class="status">
+            <div class="status-row">
+                <span class="status-label">Server Status:</span>
+                <span class="status-value disconnected" id="connectionStatus">Connecting...</span>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <h2 class="form-title">Search Type</h2>
+            <div class="tabs">
+                <div class="tab active" id="nameTab" onclick="switchTab('name')">By Name</div>
+                <div class="tab" id="alienTab" onclick="switchTab('alien')">By Alien #</div>
+            </div>
+            
+            <div id="nameForm">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth (YYYY-MM-DD)</label>
+                    <input type="text" id="dateOfBirth" placeholder="Date of Birth">
+                </div>
+                <div class="form-group">
+                    <label for="countryOfBirth">Country of Birth</label>
+                    <input type="text" id="countryOfBirth" placeholder="Country of Birth">
+                </div>
+            </div>
+            
+            <div id="alienForm" style="display: none;">
+                <div class="form-group">
+                    <label for="alienNumber">Alien Number (A123456789)</label>
+                    <input type="text" id="alienNumber" placeholder="Alien Number">
+                </div>
+            </div>
+            
+            <button class="search-button" id="searchButton" onclick="performSearch()" disabled>Search</button>
+        </div>
+        
+        <div id="errorContainer" class="error" style="display: none;"></div>
+        
+        <div id="loadingContainer" class="loading" style="display: none;">
+            <p>Searching database...</p>
+        </div>
+        
+        <div id="resultContainer" class="result-container" style="display: none;">
+            <h2 class="result-title">Search Results</h2>
+            <div id="resultContent"></div>
+        </div>
+        
+        <div class="footer">
+            <p>This tool helps locate detained individuals in ICE custody.</p>
+            <p><a href="https://www.ice.gov/contact" target="_blank">Visit ICE.gov for official information</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Simulate connection status
+        setTimeout(() => {
+            document.getElementById('connectionStatus').textContent = 'Connected';
+            document.getElementById('connectionStatus').className = 'status-value connected';
+            document.getElementById('searchButton').disabled = false;
+        }, 2000);
+        
+        // Tab switching functionality
+        function switchTab(tab) {
+            if (tab === 'name') {
+                document.getElementById('nameTab').className = 'tab active';
+                document.getElementById('alienTab').className = 'tab';
+                document.getElementById('nameForm').style.display = 'block';
+                document.getElementById('alienForm').style.display = 'none';
+            } else {
+                document.getElementById('nameTab').className = 'tab';
+                document.getElementById('alienTab').className = 'tab active';
+                document.getElementById('nameForm').style.display = 'none';
+                document.getElementById('alienForm').style.display = 'block';
+            }
+        }
+        
+        // Perform search simulation
+        function performSearch() {
+            // Hide previous results and errors
+            document.getElementById('errorContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'none';
+            
+            // Show loading
+            document.getElementById('loadingContainer').style.display = 'block';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                document.getElementById('loadingContainer').style.display = 'none';
+                
+                // For demo purposes, show sample results
+                const resultContent = `
+                    <div class="result-item">
+                        <span class="result-label">Name:</span>
+                        <span class="result-value">John Doe</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Date of Birth:</span>
+                        <span class="result-value">1985-06-15</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Country of Birth:</span>
+                        <span class="result-value">Mexico</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Location:</span>
+                        <span class="result-value">Los Angeles, CA</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Status:</span>
+                        <span class="result-value" style="font-weight: bold; color: #F44336;">In Custody</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Booking Date:</span>
+                        <span class="result-value">2025-08-20</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Detainee ID:</span>
+                        <span class="result-value">D123456789</span>
+                    </div>
+                `;
+                
+                document.getElementById('resultContent').innerHTML = resultContent;
+                document.getElementById('resultContainer').style.display = 'block';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
