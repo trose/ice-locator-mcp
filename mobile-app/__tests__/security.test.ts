@@ -47,6 +47,11 @@ describe('Security and Privacy Validation', () => {
     iceClient.clearCache();
   });
 
+  afterEach(() => {
+    // Clean up intervals to prevent open handles
+    (iceClient as any).cleanup();
+  });
+
   describe('Data Storage Validation', () => {
     it('should not store personal data in cache with identifiable information', async () => {
       // Connect to the server

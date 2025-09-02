@@ -11,14 +11,18 @@ class ICEClient {
   private client: Client | null = null;
   private isConnected: boolean = false;
   private transport: StdioClientTransport | null = null;
+  private client: Client | null = null;
+  private isConnected: boolean = false;
+  private transport: StdioClientTransport | null = null;
   private cache: Map<string, any> = new Map();
   private cacheExpiry: Map<string, number> = new Map();
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+  private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor() {
     // Initialize MCP client
     // Clean up expired cache entries periodically
-    setInterval(() => this.cleanupCache(), 60 * 1000); // Every minute
+    this.cleanupInterval = setInterval(() => this.cleanupCache(), 60 * 1000); // Every minute
   }
 
   /**
@@ -70,6 +74,17 @@ class ICEClient {
       this.isConnected = false;
       console.log('Disconnected from ICE Locator MCP server');
     }
+  }
+
+  /**
+   * Clean up resources and intervals
+   */
+  cleanup(): void {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    this.clearCache();
   }
 
   /**

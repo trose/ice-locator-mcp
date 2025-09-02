@@ -38,6 +38,11 @@ describe('ICEClient', () => {
     iceClient.clearCache();
   });
 
+  afterEach(() => {
+    // Clean up intervals to prevent open handles
+    (iceClient as any).cleanup();
+  });
+
   describe('Connection Management', () => {
     it('should create client and transport instances when connecting', async () => {
       await iceClient.connect();

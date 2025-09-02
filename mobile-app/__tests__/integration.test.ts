@@ -27,6 +27,8 @@ describe('ICEClient Integration Tests', () => {
     } catch (error) {
       console.warn('Error during disconnect:', error);
     }
+    // Clean up intervals to prevent open handles
+    (iceClient as any).cleanup();
   });
 
   describe('Connection Status', () => {
