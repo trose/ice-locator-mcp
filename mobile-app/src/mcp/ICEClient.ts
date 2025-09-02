@@ -1,3 +1,5 @@
+import { Client } from '@modelcontextprotocol/sdk/client';
+
 /**
  * ICE Locator MCP Client
  * 
@@ -5,7 +7,9 @@
  * methods to search for detainees.
  */
 class ICEClient {
+  private client: Client | null = null;
   private isConnected: boolean = false;
+  private process: any = null;
 
   constructor() {
     // Initialize MCP client
@@ -13,15 +17,14 @@ class ICEClient {
 
   /**
    * Connect to the ICE Locator MCP server
-   * 
-   * Note: In a real implementation, this would establish a connection
-   * to the MCP server. For now, we're simulating the connection.
    */
   async connect(): Promise<void> {
     try {
-      // In a real implementation, we would connect to the MCP server here
-      // For now, we're just simulating the connection
       console.log('Connecting to ICE Locator MCP server...');
+      
+      // In a real mobile app, we would need to implement a proper transport
+      // For now, we'll simulate the connection and use mock data
+      // A real implementation would use a WebSocket or HTTP transport
       
       // Simulate connection delay
       await new Promise((resolve) => setTimeout(() => resolve(null), 1000));
@@ -40,6 +43,12 @@ class ICEClient {
   async disconnect(): Promise<void> {
     if (this.isConnected) {
       console.log('Disconnecting from ICE Locator MCP server...');
+      
+      // Clean up resources
+      if (this.process) {
+        this.process.kill();
+      }
+      
       this.isConnected = false;
       console.log('Disconnected from ICE Locator MCP server');
     }
