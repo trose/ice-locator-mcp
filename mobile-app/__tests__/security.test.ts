@@ -49,7 +49,20 @@ describe('Security and Privacy Validation', () => {
 
   afterEach(() => {
     // Clean up intervals to prevent open handles
-    (iceClient as any).cleanup();
+    try {
+      (iceClient as any).cleanup();
+    } catch (error) {
+      console.warn('Error during cleanup:', error);
+    }
+  });
+
+  afterAll(() => {
+    // Final cleanup
+    try {
+      (iceClient as any).cleanup();
+    } catch (error) {
+      console.warn('Error during final cleanup:', error);
+    }
   });
 
   describe('Data Storage Validation', () => {

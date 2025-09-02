@@ -11,9 +11,6 @@ class ICEClient {
   private client: Client | null = null;
   private isConnected: boolean = false;
   private transport: StdioClientTransport | null = null;
-  private client: Client | null = null;
-  private isConnected: boolean = false;
-  private transport: StdioClientTransport | null = null;
   private cache: Map<string, any> = new Map();
   private cacheExpiry: Map<string, number> = new Map();
   private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes
@@ -21,8 +18,8 @@ class ICEClient {
 
   constructor() {
     // Initialize MCP client
-    // Clean up expired cache entries periodically
-    this.cleanupInterval = setInterval(() => this.cleanupCache(), 60 * 1000); // Every minute
+    // Note: We don't start the cleanup interval here anymore to avoid open handles
+    // The interval will be started when needed
   }
 
   /**
@@ -49,6 +46,15 @@ class ICEClient {
       // Connect the client to the transport
       await this.client.connect(this.transport);
       
+      // Start cleanup interval only after successful connection
+      if (!this.cleanupInterval) {
+        this.cleanupInterval = setInterval(() => this.cleanupCache(), 60 * 1000); // Every minute
+        // Make sure the interval doesn't prevent Node.js from exiting
+        if (this.cleanupInterval.unref) {
+          this.cleanupInterval.unref();
+        }
+      }
+      
       this.isConnected = true;
       console.log('Connected to ICE Locator MCP server');
     } catch (error) {
@@ -61,6 +67,9 @@ class ICEClient {
    * Disconnect from the ICE Locator MCP server
    */
   async disconnect(): Promise<void> {
+    // Clean up the interval before disconnecting
+    this.cleanup();
+    
     if (this.isConnected && this.client && this.transport) {
       console.log('Disconnecting from ICE Locator MCP server...');
       
@@ -237,4 +246,19 @@ class ICEClient {
 
 // Export singleton instance
 const iceClient = new ICEClient();
+
+// Ensure cleanup on process exit (only in Node.js environment)
+if (typeof process !== 'undefined' && process.on) {
+  const cleanupHandler = () => {
+    iceClient.cleanup();
+  };
+  
+  process.on('exit', cleanupHandler);
+  process.on('SIGINT', cleanupHandler);
+  process.on('SIGTERM', cleanupHandler);
+  process.on('SIGUSR1', cleanupHandler);
+  process.on('SIGUSR2', cleanupHandler);
+  process.on('uncaughtException', cleanupHandler);
+}
+
 export default iceClient;
