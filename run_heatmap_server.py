@@ -10,21 +10,31 @@ import asyncio
 import sys
 import os
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 # Add the src directory to the path so we can import the package
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from ice_locator_mcp.api import app
+from ice_locator_mcp.api.heatmap_api import app
 
 
 def main():
     """Main entry point for the heatmap API server."""
     print("Starting ICE Locator Heatmap API Server...")
     
+    # Add CORS middleware to allow requests from mobile app
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # In production, restrict this to specific origins
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    
     # Run the FastAPI server with uvicorn
     uvicorn.run(
-        "ice_locator_mcp.api:app",
-        host="127.0.0.1",
+        "ice_locator_mcp.api.heatmap_api:app",
+        host="0.0.0.0",  # Changed from 127.0.0.1 to 0.0.0.0 to allow external connections
         port=8082,
         reload=True,
         root_path=os.path.join(os.path.dirname(__file__), 'src'),

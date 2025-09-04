@@ -6,15 +6,16 @@ This module provides API endpoints for retrieving heatmap data for the web and m
 import sys
 import os
 
-# Add the database directory to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'database'))
+# Add the src directory to the path so we can import the database package
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Optional
 
-# Import database modules
-from database.manager import DatabaseManager
-from database.models import Facility
+# Import database modules using the correct package structure
+from ice_locator_mcp.database.manager import DatabaseManager
+from ice_locator_mcp.database.models import Facility
 
 
 class HeatmapAPI:
@@ -151,6 +152,15 @@ app = FastAPI(
     title="ICE Locator Heatmap API",
     description="API for retrieving heatmap data for ICE facility locations",
     version="1.0.0"
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, restrict this to specific origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Global heatmap API instance
