@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ICE Locator Interactive Heatmap</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .panel {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .panel h2 {
+            margin-top: 0;
+            color: #444;
+            border-bottom: 2px solid #007cba;
+            padding-bottom: 10px;
+        }
+        button {
+            background-color: #007cba;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #005a87;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            background-color: #e9e9e9;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        #data-display {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .facility-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .facility-name {
+            font-weight: bold;
+            color: #007cba;
+        }
+        .detainee-count {
+            background-color: #c00;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ICE Locator Interactive Heatmap</h1>
+        <p>Interactive visualization of ICE facility locations and detainee counts</p>
+    </div>
+
+    <div class="container">
+        <div class="panel">
+            <h2>Controls</h2>
+            <button id="fetch-data">Fetch Heatmap Data</button>
+            <button id="show-list">Show Facility List</button>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #90EE90;"></div>
+                    <span>0 detainees</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #9ACD32;"></div>
+                    <span>1-9 detainees</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FFD700;"></div>
+                    <span>10-49 detainees</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FF8C00;"></div>
+                    <span>50-99 detainees</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FF4500;"></div>
+                    <span>100+ detainees</span>
+                </div>
+            </div>
+            
+            <h3>API Endpoints</h3>
+            <ul>
+                <li><strong>GET</strong> <a href="http://localhost:8082/api/heatmap-data" target="_blank">/api/heatmap-data</a> - Aggregated heatmap data</li>
+                <li><strong>GET</strong> <a href="http://localhost:8082/api/facilities" target="_blank">/api/facilities</a> - All facilities</li>
+                <li><strong>GET</strong> <a href="http://localhost:8082/docs" target="_blank">/docs</a> - API Documentation</li>
+            </ul>
+        </div>
+        
+        <div class="panel">
+            <h2>Data Display</h2>
+            <div id="data-display">Click "Fetch Heatmap Data" to load information</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h2>Interactive Map</h2>
+        <div id="map"></div>
+    </div>
+
+    <script>
+        let heatmapData = [];
+        let map;
+        let markers = [];
+        
+        // Initialize the map
+        function initMap() {
+            if (!map) {
+                map = L.map('map').setView([39.8283, -98.5795], 4);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+            }
+        }
+        
+        // Get color based on detainee count
+        function getColorForCount(count) {
+            if (count === 0) return '#90EE90'; // Light green
+            if (count < 10) return '#9ACD32'; // Yellow green
+            if (count < 50) return '#FFD700'; // Gold
+            if (count < 100) return '#FF8C00'; // Dark orange
+            return '#FF4500'; // Orange red
+        }
+        
+        // Create marker with popup
+        function createMarker(facility) {
+            const color = getColorForCount(facility.current_detainee_count);
+            
+            const marker = L.marker([facility.latitude, facility.longitude]).addTo(map);
+            marker.bindPopup(`
+                <div style="font-family: Arial, sans-serif;">
+                    <h3 style="margin: 0 0 10px 0; color: #333;">${facility.name}</h3>
+                    <p style="margin: 5px 0; color: #666;">📍 ${facility.address}</p>
+                    <p style="margin: 10px 0 0 0;">
+                        <span style="background-color: ${color}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 14px;">
+                            ${facility.current_detainee_count} detainees
+                        </span>
+                    </p>
+                </div>
+            `);
+            
+            return marker;
+        }
+        
+        // Clear all markers from the map
+        function clearMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+        
+        // Show facilities on the map
+        function showFacilitiesOnMap() {
+            if (heatmapData.length === 0) {
+                document.getElementById('data-display').innerHTML = '<div class="error">Please fetch data first!</div>';
+                return;
+            }
+            
+            // Clear existing markers
+            clearMarkers();
+            
+            // Add new markers
+            heatmapData.forEach(facility => {
+                const marker = createMarker(facility);
+                markers.push(marker);
+            });
+            
+            // Fit map to marker bounds if there are markers
+            if (markers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+            
+            document.getElementById('data-display').innerHTML = `<div class="loading">Showing ${markers.length} facilities on the map</div>`;
+        }
+        
+        // Fetch heatmap data from API
+        document.getElementById('fetch-data').addEventListener('click', async () => {
+            try {
+                document.getElementById('data-display').innerHTML = '<div class="loading">Loading...</div>';
+                
+                const response = await fetch('http://localhost:8082/api/heatmap-data');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                heatmapData = await response.json();
+                
+                // Display raw data
+                document.getElementById('data-display').innerHTML = JSON.stringify(heatmapData, null, 2);
+                
+                // Initialize map if not already done
+                initMap();
+                
+                // Show facilities on map
+                showFacilitiesOnMap();
+                
+                // Show notification
+                alert(`Loaded data for ${heatmapData.length} facilities`);
+            } catch (error) {
+                document.getElementById('data-display').innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                console.error('Error fetching heatmap data:', error);
+            }
+        });
+        
+        // Show facility list
+        document.getElementById('show-list').addEventListener('click', () => {
+            if (heatmapData.length === 0) {
+                document.getElementById('data-display').innerHTML = '<div class="error">Please fetch data first!</div>';
+                return;
+            }
+            
+            let listHTML = `<h3>Facility List (${heatmapData.length} facilities)</h3><div>`;
+            
+            heatmapData.forEach(facility => {
+                const color = getColorForCount(facility.current_detainee_count);
+                
+                listHTML += `
+                    <div class="facility-item">
+                        <span class="facility-name">${facility.name}</span>
+                        <span style="float: right;">
+                            <span class="detainee-count" style="background-color: ${color};">
+                                ${facility.current_detainee_count} detainees
+                            </span>
+                        </span>
+                        <br>
+                        <span style="color: #666; font-size: 14px;">${facility.address}</span>
+                        <br>
+                        <span style="color: #999; font-size: 12px;">ID: ${facility.id} | Coordinates: ${facility.latitude.toFixed(4)}, ${facility.longitude.toFixed(4)}</span>
+                    </div>
+                `;
+            });
+            
+            listHTML += `</div>`;
+            document.getElementById('data-display').innerHTML = listHTML;
+        });
+        
+        // Initialize map on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+        });
+    </script>
+</body>
+</html>
