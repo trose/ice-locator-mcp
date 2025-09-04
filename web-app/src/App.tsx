@@ -18,7 +18,7 @@ interface Facility {
   latitude: number;
   longitude: number;
   address: string;
-  detainee_count: number;
+  current_detainee_count: number; // Updated to match API response
 }
 
 const App: React.FC = () => {
@@ -30,58 +30,19 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchHeatmapData = async () => {
       try {
-        // In a real implementation, this would point to our actual API
-        // For now, we'll use mock data
-        const mockData: Facility[] = [
-          {
-            id: 1,
-            name: "Adams County Correctional Center",
-            latitude: 31.4839,
-            longitude: -91.5140,
-            address: "Natchez, MS",
-            detainee_count: 15
-          },
-          {
-            id: 2,
-            name: "Baltimore Field Office",
-            latitude: 39.2904,
-            longitude: -76.6122,
-            address: "Baltimore, MD",
-            detainee_count: 8
-          },
-          {
-            id: 3,
-            name: "Broward Transitional Center",
-            latitude: 26.1224,
-            longitude: -80.1368,
-            address: "Miami, FL",
-            detainee_count: 22
-          },
-          {
-            id: 4,
-            name: "Chicago Field Office",
-            latitude: 41.8781,
-            longitude: -87.6298,
-            address: "Chicago, IL",
-            detainee_count: 12
-          },
-          {
-            id: 5,
-            name: "Cibola County Correctional Center",
-            latitude: 34.9167,
-            longitude: -107.6500,
-            address: "Milan, NM",
-            detainee_count: 18
-          }
-        ];
-
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Use the real API endpoint
+        const response = await fetch('http://localhost:8082/api/heatmap-data');
         
-        setFacilities(mockData);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setFacilities(data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to load heatmap data');
+        console.error('Failed to fetch heatmap data:', err);
+        setError('Failed to load heatmap data: ' + (err as Error).message);
         setLoading(false);
       }
     };
@@ -145,7 +106,7 @@ const App: React.FC = () => {
                       <div className="text-sm text-gray-600">{facility.address}</div>
                       <div className="mt-1">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                          {facility.detainee_count} detainees
+                          {facility.current_detainee_count} detainees
                         </span>
                       </div>
                     </Popup>
@@ -169,7 +130,7 @@ const App: React.FC = () => {
                         </div>
                         <div className="ml-2 flex-shrink-0 flex">
                           <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                            {facility.detainee_count} detainees
+                            {facility.current_detainee_count} detainees
                           </span>
                         </div>
                       </div>
