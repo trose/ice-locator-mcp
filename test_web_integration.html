@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heatmap API Test</title>
+    <script>
+        async function fetchHeatmapData() {
+            try {
+                const response = await fetch('http://localhost:8082/api/heatmap-data');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Heatmap API Test</h1>
+    <button onclick="fetchHeatmapData()">Fetch Heatmap Data</button>
+    <div id="result"></div>
+</body>
+</html>
