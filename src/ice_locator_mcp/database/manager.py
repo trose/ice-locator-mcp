@@ -230,6 +230,70 @@ class DatabaseManager:
         cursor.close()
         return facilities
     
+    def get_all_detainees(self) -> List[Detainee]:
+        """
+        Retrieve all detainees from the database.
+        
+        Returns:
+            List of Detainee objects
+        """
+        if not self.connection:
+            raise Exception("Database not connected")
+        
+        cursor = self.connection.cursor()
+        cursor.execute("""
+            SELECT id, first_name, last_name, created_at, updated_at
+            FROM detainees
+            ORDER BY last_name, first_name
+        """)
+        
+        detainees = []
+        for row in cursor.fetchall():
+            detainee = Detainee(
+                id=row['id'],
+                first_name=row['first_name'],
+                last_name=row['last_name'],
+                created_at=row['created_at'],
+                updated_at=row['updated_at']
+            )
+            detainees.append(detainee)
+        
+        cursor.close()
+        return detainees
+    
+    def get_detainees_without_facility(self) -> List[Detainee]:
+        """
+        Retrieve detainees that are not linked to any facility.
+        
+        Returns:
+            List of Detainee objects without facility links
+        """
+        if not self.connection:
+            raise Exception("Database not connected")
+        
+        cursor = self.connection.cursor()
+        cursor.execute("""
+            SELECT d.id, d.first_name, d.last_name, d.created_at, d.updated_at
+            FROM detainees d
+            LEFT JOIN detainee_location_history dlh ON d.id = dlh.detainee_id
+            WHERE dlh.detainee_id IS NULL
+            ORDER BY d.last_name, d.first_name
+        """)
+        
+        detainees = []
+        for row in cursor.fetchall():
+            detainee = Detainee(
+                id=row['id'],
+                first_name=row['first_name'],
+                last_name=row['last_name'],
+                created_at=row['created_at'],
+                updated_at=row['updated_at']
+            )
+            detainees.append(detainee)
+        
+        cursor.close()
+        return detainees
+    
     def get_current_detainee_count_by_facility(self) -> List[dict]:
         """
         Get current detainee count for each facility.
