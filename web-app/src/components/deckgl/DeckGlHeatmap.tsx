@@ -171,9 +171,9 @@ const DeckGlHeatmap: React.FC = () => {
         data: heatmapData,
         getPosition: (d: HeatmapPoint) => d.position,
         getWeight: (d: HeatmapPoint) => d.weight,
-        radiusPixels: 50, // Increased radius for better visibility
-        intensity: 2, // Increased intensity
-        threshold: 0.01, // Lower threshold for better visibility
+        radiusPixels: 30, // Reduced radius for sparse data
+        intensity: 1, // Reduced intensity for sparse data
+        threshold: 0.05, // Adjusted threshold for sparse data
         colorRange: COLOR_RANGE,
         aggregation: 'SUM',
         pickable: true
@@ -182,7 +182,7 @@ const DeckGlHeatmap: React.FC = () => {
         id: 'scatterplot-layer',
         data: heatmapData,
         getPosition: (d: HeatmapPoint) => d.position,
-        getRadius: 8000, // Increased radius for better visibility
+        getRadius: 5000, // Reduced radius for sparse data
         getFillColor: [255, 0, 0, 180],
         pickable: true,
         onHover: (info: any) => {

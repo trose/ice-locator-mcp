@@ -26,6 +26,8 @@ import {
   findNodeHandle
 } from 'react-native';
 import iceClient from './src/mcp/ICEClient';
+import HeatmapAPI from './src/heatmap/HeatmapAPI';
+import HeatmapView from './src/heatmap/HeatmapView'; // Add this import
 
 // Get screen dimensions for responsive design
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -66,6 +68,7 @@ const App = () => {
   const [error, setError] = useState<string | null>(null);
   const [cacheCleared, setCacheCleared] = useState(false);
   const [isFocused, setIsFocused] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'search' | 'heatmap'>('search');
 
   // Connect to MCP server on app start
   useEffect(() => {
@@ -230,6 +233,13 @@ const App = () => {
     }
   };
 
+  // Load heatmap data when the heatmap tab is selected
+  useEffect(() => {
+    if (activeTab === 'heatmap' && isConnected) {
+      loadHeatmapData();
+    }
+  }, [activeTab, isConnected]);
+
   // Handle focus for accessibility
   const handleFocus = (fieldName: string) => {
     setIsFocused(fieldName);
@@ -286,255 +296,315 @@ const App = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Search Type Selector */}
+        {/* Main Tab Selector */}
         <View style={styles.formContainer}>
           <Text 
             style={styles.formTitle}
             accessibilityRole="header"
           >
-            Search Type
+            View Mode
           </Text>
           <View style={styles.buttonGroup}>
             <TouchableOpacity
               style={[
                 styles.tabButton, 
-                searchType === 'name' && styles.tabButtonActive
+                activeTab === 'search' && styles.tabButtonActive
               ]}
-              onPress={() => setSearchType('name')}
+              onPress={() => setActiveTab('search')}
               accessibilityRole="button"
-              accessibilityState={{ selected: searchType === 'name' }}
-              accessibilityLabel="Search by name"
+              accessibilityState={{ selected: activeTab === 'search' }}
+              accessibilityLabel="Search view"
             >
               <Text 
                 style={[
                   styles.tabButtonText,
-                  searchType === 'name' && styles.tabButtonTextActive
+                  activeTab === 'search' && styles.tabButtonTextActive
                 ]}
               >
-                By Name
+                Search
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.tabButton, 
-                searchType === 'alien' && styles.tabButtonActive
+                activeTab === 'heatmap' && styles.tabButtonActive
               ]}
-              onPress={() => setSearchType('alien')}
+              onPress={() => setActiveTab('heatmap')}
               accessibilityRole="button"
-              accessibilityState={{ selected: searchType === 'alien' }}
-              accessibilityLabel="Search by alien number"
+              accessibilityState={{ selected: activeTab === 'heatmap' }}
+              accessibilityLabel="Heatmap view"
             >
               <Text 
                 style={[
                   styles.tabButtonText,
-                  searchType === 'alien' && styles.tabButtonTextActive
+                  activeTab === 'heatmap' && styles.tabButtonTextActive
                 ]}
               >
-                By Alien #
+                Heatmap
               </Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* Search Form */}
-        <View style={styles.formContainer}>
-          <Text 
-            style={styles.formTitle}
-            accessibilityRole="header"
-          >
-            {searchType === 'name' ? 'Search by Name' : 'Search by Alien Number'}
-          </Text>
-          
-          {searchType === 'name' ? (
-            <>
-              <TextInput
-                style={[
-                  styles.input, 
-                  isFocused === 'firstName' && styles.inputFocused
-                ]}
-                placeholder="First Name"
-                value={searchForm.firstName}
-                onChangeText={(value) => handleInputChange('firstName', value)}
-                onFocus={() => handleFocus('First Name')}
-                onBlur={handleBlur}
-                accessibilityLabel="First name"
-                accessibilityHint="Enter the detainee's first name"
-              />
-              
-              <TextInput
-                style={[
-                  styles.input, 
-                  isFocused === 'lastName' && styles.inputFocused
-                ]}
-                placeholder="Last Name"
-                value={searchForm.lastName}
-                onChangeText={(value) => handleInputChange('lastName', value)}
-                onFocus={() => handleFocus('Last Name')}
-                onBlur={handleBlur}
-                accessibilityLabel="Last name"
-                accessibilityHint="Enter the detainee's last name"
-              />
-              
-              <TextInput
-                style={[
-                  styles.input, 
-                  isFocused === 'dateOfBirth' && styles.inputFocused
-                ]}
-                placeholder="Date of Birth (YYYY-MM-DD)"
-                value={searchForm.dateOfBirth}
-                onChangeText={(value) => handleInputChange('dateOfBirth', value)}
-                keyboardType="numeric"
-                onFocus={() => handleFocus('Date of Birth')}
-                onBlur={handleBlur}
-                accessibilityLabel="Date of birth"
-                accessibilityHint="Enter the detainee's date of birth in YYYY-MM-DD format"
-              />
-              
-              <TextInput
-                style={[
-                  styles.input, 
-                  isFocused === 'countryOfBirth' && styles.inputFocused
-                ]}
-                placeholder="Country of Birth"
-                value={searchForm.countryOfBirth}
-                onChangeText={(value) => handleInputChange('countryOfBirth', value)}
-                onFocus={() => handleFocus('Country of Birth')}
-                onBlur={handleBlur}
-                accessibilityLabel="Country of birth"
-                accessibilityHint="Enter the detainee's country of birth"
-              />
-            </>
-          ) : (
-            <TextInput
-              style={[
-                styles.input, 
-                isFocused === 'alienNumber' && styles.inputFocused
-              ]}
-              placeholder="Alien Number (A123456789)"
-              value={searchForm.alienNumber}
-              onChangeText={(value) => handleInputChange('alienNumber', value)}
-              autoCapitalize="characters"
-              onFocus={() => handleFocus('Alien Number')}
-              onBlur={handleBlur}
-              accessibilityLabel="Alien number"
-              accessibilityHint="Enter the detainee's alien registration number starting with A"
-            />
-          )}
-          
-          <TouchableOpacity
-            style={[styles.searchButton, (!isConnected || isLoading) && styles.searchButtonDisabled]}
-            onPress={handleSearch}
-            disabled={!isConnected || isLoading}
-            accessibilityRole="button"
-            accessibilityLabel={isLoading ? "Searching" : "Search for detainee"}
-            accessibilityState={{ disabled: !isConnected || isLoading }}
-          >
-            <Text style={styles.searchButtonText}>
-              {isLoading ? "Searching..." : "Search"}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {/* Search View */}
+        {activeTab === 'search' && (
+          <>
+            {/* Search Type Selector */}
+            <View style={styles.formContainer}>
+              <Text 
+                style={styles.formTitle}
+                accessibilityRole="header"
+              >
+                Search Type
+              </Text>
+              <View style={styles.buttonGroup}>
+                <TouchableOpacity
+                  style={[
+                    styles.tabButton, 
+                    searchType === 'name' && styles.tabButtonActive
+                  ]}
+                  onPress={() => setSearchType('name')}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: searchType === 'name' }}
+                  accessibilityLabel="Search by name"
+                >
+                  <Text 
+                    style={[
+                      styles.tabButtonText,
+                      searchType === 'name' && styles.tabButtonTextActive
+                    ]}
+                  >
+                    By Name
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.tabButton, 
+                    searchType === 'alien' && styles.tabButtonActive
+                  ]}
+                  onPress={() => setSearchType('alien')}
+                  accessibilityRole="button"
+                  accessibilityState={{ selected: searchType === 'alien' }}
+                  accessibilityLabel="Search by alien number"
+                >
+                  <Text 
+                    style={[
+                      styles.tabButtonText,
+                      searchType === 'alien' && styles.tabButtonTextActive
+                    ]}
+                  >
+                    By Alien #
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
 
-        {/* Error Message */}
-        {error && (
-          <View 
-            style={styles.errorContainer}
-            accessibilityRole="alert"
-            accessible={true}
-          >
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
+            {/* Search Form */}
+            <View style={styles.formContainer}>
+              <Text 
+                style={styles.formTitle}
+                accessibilityRole="header"
+              >
+                {searchType === 'name' ? 'Search by Name' : 'Search by Alien Number'}
+              </Text>
+              
+              {searchType === 'name' ? (
+                <>
+                  <TextInput
+                    style={[
+                      styles.input, 
+                      isFocused === 'firstName' && styles.inputFocused
+                    ]}
+                    placeholder="First Name"
+                    value={searchForm.firstName}
+                    onChangeText={(value) => handleInputChange('firstName', value)}
+                    onFocus={() => handleFocus('First Name')}
+                    onBlur={handleBlur}
+                    accessibilityLabel="First name"
+                    accessibilityHint="Enter the detainee's first name"
+                  />
+                  
+                  <TextInput
+                    style={[
+                      styles.input, 
+                      isFocused === 'lastName' && styles.inputFocused
+                    ]}
+                    placeholder="Last Name"
+                    value={searchForm.lastName}
+                    onChangeText={(value) => handleInputChange('lastName', value)}
+                    onFocus={() => handleFocus('Last Name')}
+                    onBlur={handleBlur}
+                    accessibilityLabel="Last name"
+                    accessibilityHint="Enter the detainee's last name"
+                  />
+                  
+                  <TextInput
+                    style={[
+                      styles.input, 
+                      isFocused === 'dateOfBirth' && styles.inputFocused
+                    ]}
+                    placeholder="Date of Birth (YYYY-MM-DD)"
+                    value={searchForm.dateOfBirth}
+                    onChangeText={(value) => handleInputChange('dateOfBirth', value)}
+                    keyboardType="numeric"
+                    onFocus={() => handleFocus('Date of Birth')}
+                    onBlur={handleBlur}
+                    accessibilityLabel="Date of birth"
+                    accessibilityHint="Enter the detainee's date of birth in YYYY-MM-DD format"
+                  />
+                  
+                  <TextInput
+                    style={[
+                      styles.input, 
+                      isFocused === 'countryOfBirth' && styles.inputFocused
+                    ]}
+                    placeholder="Country of Birth"
+                    value={searchForm.countryOfBirth}
+                    onChangeText={(value) => handleInputChange('countryOfBirth', value)}
+                    onFocus={() => handleFocus('Country of Birth')}
+                    onBlur={handleBlur}
+                    accessibilityLabel="Country of birth"
+                    accessibilityHint="Enter the detainee's country of birth"
+                  />
+                </>
+              ) : (
+                <TextInput
+                  style={[
+                    styles.input, 
+                    isFocused === 'alienNumber' && styles.inputFocused
+                  ]}
+                  placeholder="Alien Number (A123456789)"
+                  value={searchForm.alienNumber}
+                  onChangeText={(value) => handleInputChange('alienNumber', value)}
+                  autoCapitalize="characters"
+                  onFocus={() => handleFocus('Alien Number')}
+                  onBlur={handleBlur}
+                  accessibilityLabel="Alien number"
+                  accessibilityHint="Enter the detainee's alien registration number starting with A"
+                />
+              )}
+              
+              <TouchableOpacity
+                style={[styles.searchButton, (!isConnected || isLoading) && styles.searchButtonDisabled]}
+                onPress={handleSearch}
+                disabled={!isConnected || isLoading}
+                accessibilityRole="button"
+                accessibilityLabel={isLoading ? "Searching" : "Search for detainee"}
+                accessibilityState={{ disabled: !isConnected || isLoading }}
+              >
+                <Text style={styles.searchButtonText}>
+                  {isLoading ? "Searching..." : "Search"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Error Message */}
+            {error && (
+              <View 
+                style={styles.errorContainer}
+                accessibilityRole="alert"
+                accessible={true}
+              >
+                <Text style={styles.errorText}>{error}</Text>
+              </View>
+            )}
+
+            {/* Loading Indicator */}
+            {isLoading && (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator 
+                  size="large" 
+                  color="#0000ff" 
+                  accessibilityLabel="Searching for detainee information"
+                />
+                <Text style={styles.loadingText}>Searching database...</Text>
+              </View>
+            )}
+
+            {/* Search Results */}
+            {searchResult && (
+              <View 
+                style={styles.resultContainer}
+                accessibilityRole="summary"
+                accessible={true}
+              >
+                <Text 
+                  style={styles.resultTitle}
+                  accessibilityRole="header"
+                >
+                  Search Results
+                </Text>
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultLabel}>Name:</Text>
+                  <Text 
+                    style={styles.resultValue}
+                    accessibilityLabel={`Name: ${searchResult.first_name} ${searchResult.last_name}`}
+                  >
+                    {searchResult.first_name} {searchResult.last_name}
+                  </Text>
+                </View>
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultLabel}>Date of Birth:</Text>
+                  <Text 
+                    style={styles.resultValue}
+                    accessibilityLabel={`Date of birth: ${searchResult.date_of_birth}`}
+                  >
+                    {searchResult.date_of_birth}
+                  </Text>
+                </View>
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultLabel}>Country of Birth:</Text>
+                  <Text 
+                    style={styles.resultValue}
+                    accessibilityLabel={`Country of birth: ${searchResult.country_of_birth}`}
+                  >
+                    {searchResult.country_of_birth}
+                  </Text>
+                </View>
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultLabel}>Location:</Text>
+                  <Text 
+                    style={styles.resultValue}
+                    accessibilityLabel={`Location: ${searchResult.location}`}
+                  >
+                    {searchResult.location}
+                  </Text>
+                </View>
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultLabel}>Status:</Text>
+                  <Text 
+                    style={[styles.resultValue, styles.statusText]}
+                    accessibilityLabel={`Status: ${searchResult.status}`}
+                  >
+                    {searchResult.status}
+                  </Text>
+                </View>
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultLabel}>Booking Date:</Text>
+                  <Text 
+                    style={styles.resultValue}
+                    accessibilityLabel={`Booking date: ${searchResult.booking_date}`}
+                  >
+                    {searchResult.booking_date}
+                  </Text>
+                </View>
+                <View style={styles.resultItem}>
+                  <Text style={styles.resultLabel}>Detainee ID:</Text>
+                  <Text 
+                    style={styles.resultValue}
+                    accessibilityLabel={`Detainee ID: ${searchResult.detainee_id}`}
+                  >
+                    {searchResult.detainee_id}
+                  </Text>
+                </View>
+              </View>
+            )}
+          </>
         )}
 
-        {/* Loading Indicator */}
-        {isLoading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator 
-              size="large" 
-              color="#0000ff" 
-              accessibilityLabel="Searching for detainee information"
-            />
-            <Text style={styles.loadingText}>Searching database...</Text>
-          </View>
-        )}
-
-        {/* Search Results */}
-        {searchResult && (
-          <View 
-            style={styles.resultContainer}
-            accessibilityRole="summary"
-            accessible={true}
-          >
-            <Text 
-              style={styles.resultTitle}
-              accessibilityRole="header"
-            >
-              Search Results
-            </Text>
-            <View style={styles.resultItem}>
-              <Text style={styles.resultLabel}>Name:</Text>
-              <Text 
-                style={styles.resultValue}
-                accessibilityLabel={`Name: ${searchResult.first_name} ${searchResult.last_name}`}
-              >
-                {searchResult.first_name} {searchResult.last_name}
-              </Text>
-            </View>
-            <View style={styles.resultItem}>
-              <Text style={styles.resultLabel}>Date of Birth:</Text>
-              <Text 
-                style={styles.resultValue}
-                accessibilityLabel={`Date of birth: ${searchResult.date_of_birth}`}
-              >
-                {searchResult.date_of_birth}
-              </Text>
-            </View>
-            <View style={styles.resultItem}>
-              <Text style={styles.resultLabel}>Country of Birth:</Text>
-              <Text 
-                style={styles.resultValue}
-                accessibilityLabel={`Country of birth: ${searchResult.country_of_birth}`}
-              >
-                {searchResult.country_of_birth}
-              </Text>
-            </View>
-            <View style={styles.resultItem}>
-              <Text style={styles.resultLabel}>Location:</Text>
-              <Text 
-                style={styles.resultValue}
-                accessibilityLabel={`Location: ${searchResult.location}`}
-              >
-                {searchResult.location}
-              </Text>
-            </View>
-            <View style={styles.resultItem}>
-              <Text style={styles.resultLabel}>Status:</Text>
-              <Text 
-                style={[styles.resultValue, styles.statusText]}
-                accessibilityLabel={`Status: ${searchResult.status}`}
-              >
-                {searchResult.status}
-              </Text>
-            </View>
-            <View style={styles.resultItem}>
-              <Text style={styles.resultLabel}>Booking Date:</Text>
-              <Text 
-                style={styles.resultValue}
-                accessibilityLabel={`Booking date: ${searchResult.booking_date}`}
-              >
-                {searchResult.booking_date}
-              </Text>
-            </View>
-            <View style={styles.resultItem}>
-              <Text style={styles.resultLabel}>Detainee ID:</Text>
-              <Text 
-                style={styles.resultValue}
-                accessibilityLabel={`Detainee ID: ${searchResult.detainee_id}`}
-              >
-                {searchResult.detainee_id}
-              </Text>
-            </View>
-          </View>
+        {/* Heatmap View */}
+        {activeTab === 'heatmap' && (
+          <HeatmapView isConnected={isConnected} />
         )}
         
         {/* Footer with help information */}

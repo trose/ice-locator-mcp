@@ -11,10 +11,14 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native/new-app-screen": "0.81.1",
     "expo": "53.0.22",
+    "leaflet": "^1.9.4",
     "react": "19.1.0",
+    "react-leaflet": "^5.0.0",
     "react-native": "^0.81.1",
+    "react-native-maps": "^1.26.0",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-web": "^0.21.1"
   },
