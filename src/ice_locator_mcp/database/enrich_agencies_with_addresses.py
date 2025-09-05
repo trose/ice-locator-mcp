@@ -101,20 +101,30 @@ def enrich_csv_with_geocoded_addresses(csv_file_path: str, output_file_path: str
     if 'LONGITUDE' not in fieldnames:
         fieldnames = list(fieldnames) + ['LONGITUDE']
     
-    # Process first 10 rows as a sample
-    sample_rows = rows[:10]
-    print(f"Processing first {len(sample_rows)} rows as sample...")
-    
+    # Process ALL rows
     enriched_rows = []
     geocoded_count = 0
+    error_count = 0
     
-    for i, row in enumerate(sample_rows):
+    # Check if output file already exists and has processed rows
+    processed_rows = 0
+    if os.path.exists(output_file_path):
+        with open(output_file_path, 'r', encoding='utf-8') as existing_file:
+            existing_reader = csv.DictReader(existing_file)
+            existing_rows = list(existing_reader)
+            processed_rows = len(existing_rows) - 1  # Subtract header row
+            if processed_rows > 0:
+                print(f"Resuming from row {processed_rows + 1}")
+                enriched_rows = existing_rows[1:]  # Skip header
+    
+    for i in range(processed_rows, len(rows)):
+        row = rows[i]
         state = row.get('STATE', '').strip()
         agency = row.get('LAW ENFORCEMENT AGENCY', '').strip()
         county = row.get('COUNTY', '').strip()
         
         if state and agency and county:
-            print(f"Processing {i+1}/{len(sample_rows)}: {agency}, {county}, {state}")
+            print(f"Processing {i+1}/{len(rows)}: {agency}, {county}, {state}")
             
             # Construct a search address
             search_address = construct_search_address(agency, county, state)
@@ -133,24 +143,36 @@ def enrich_csv_with_geocoded_addresses(csv_file_path: str, output_file_path: str
                 geocoded_count += 1
             else:
                 print(f"  No coordinates found")
+                error_count += 1
         else:
             row['ADDRESS'] = ""
             row['LATITUDE'] = ""
             row['LONGITUDE'] = ""
+            error_count += 1
         
         enriched_rows.append(row)
         
+        # Write batch of rows to file every 50 rows
+        if (i + 1) % 50 == 0 or i == len(rows) - 1:
+            # Write the enriched CSV
+            with open(output_file_path, 'w', newline='', encoding='utf-8') as outfile:
+                writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(enriched_rows)
+            print(f"  Saved progress to {output_file_path}")
+        
         # Add a delay to respect API rate limits
-        time.sleep(1)
+        if (i + 1) % 10 == 0:
+            time.sleep(1)
     
-    # Write the enriched CSV
+    # Write the final enriched CSV
     with open(output_file_path, 'w', newline='', encoding='utf-8') as outfile:
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(enriched_rows)
     
     print(f"Geocoded CSV saved to {output_file_path}")
-    print(f"Processed {len(enriched_rows)} rows, successfully geocoded {geocoded_count} rows")
+    print(f"Processed {len(rows)} rows, successfully geocoded {geocoded_count} rows, errors: {error_count}")
 
 
 if __name__ == "__main__":

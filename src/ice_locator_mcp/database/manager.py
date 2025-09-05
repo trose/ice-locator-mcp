@@ -294,3 +294,37 @@ class DatabaseManager:
         
         cursor.close()
         return results
+    
+    def get_facilities_without_coordinates(self) -> List[Facility]:
+        """
+        Retrieve facilities that have missing or invalid coordinates (0.0, 0.0).
+        
+        Returns:
+            List of Facility objects without valid coordinates
+        """
+        if not self.connection:
+            raise Exception("Database not connected")
+        
+        cursor = self.connection.cursor()
+        cursor.execute("""
+            SELECT id, name, latitude, longitude, address, created_at, updated_at
+            FROM facilities
+            WHERE latitude = 0.0 AND longitude = 0.0
+            ORDER BY name
+        """)
+        
+        facilities = []
+        for row in cursor.fetchall():
+            facility = Facility(
+                id=row['id'],
+                name=row['name'],
+                latitude=row['latitude'],
+                longitude=row['longitude'],
+                address=row['address'],
+                created_at=row['created_at'],
+                updated_at=row['updated_at']
+            )
+            facilities.append(facility)
+        
+        cursor.close()
+        return facilities

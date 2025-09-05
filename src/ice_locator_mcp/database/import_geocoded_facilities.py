@@ -39,6 +39,7 @@ def import_geocoded_facilities(database_url: str, csv_file_path: str = None):
         imported_count = 0
         skipped_count = 0
         error_count = 0
+        duplicate_count = 0
         
         # Read the geocoded CSV
         with open(csv_file_path, 'r', encoding='utf-8') as infile:
@@ -67,7 +68,7 @@ def import_geocoded_facilities(database_url: str, csv_file_path: str = None):
                 existing_facilities = db_manager.get_all_facilities()
                 if any(f.name == facility_name for f in existing_facilities):
                     print(f"Facility {facility_name} already exists, skipping...")
-                    skipped_count += 1
+                    duplicate_count += 1
                     continue
             except Exception as e:
                 print(f"Error checking existing facilities: {e}")
@@ -80,6 +81,12 @@ def import_geocoded_facilities(database_url: str, csv_file_path: str = None):
                 lon = float(longitude) if longitude else 0.0
             except ValueError:
                 lat, lon = 0.0, 0.0
+            
+            # Skip facilities without coordinates
+            if lat == 0.0 and lon == 0.0:
+                print(f"Skipping facility {facility_name}: No coordinates")
+                skipped_count += 1
+                continue
             
             # Create facility object
             facility = Facility(
@@ -103,7 +110,7 @@ def import_geocoded_facilities(database_url: str, csv_file_path: str = None):
                 error_count += 1
                 continue
         
-        print(f"Import complete. Imported: {imported_count}, Skipped: {skipped_count}, Errors: {error_count}")
+        print(f"Import complete. Imported: {imported_count}, Skipped: {skipped_count}, Duplicates: {duplicate_count}, Errors: {error_count}")
         
     finally:
         db_manager.disconnect()
