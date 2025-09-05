@@ -62,6 +62,7 @@ class DatabaseManager:
                 latitude REAL NOT NULL,
                 longitude REAL NOT NULL,
                 address TEXT,
+                population_count INTEGER,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -146,14 +147,15 @@ class DatabaseManager:
         
         cursor = self.connection.cursor()
         cursor.execute("""
-            INSERT INTO facilities (name, latitude, longitude, address, created_at, updated_at)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO facilities (name, latitude, longitude, address, population_count, created_at, updated_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """, (
             facility.name,
             facility.latitude,
             facility.longitude,
             facility.address,
+            facility.population_count,
             facility.created_at or datetime.now(),
             facility.updated_at or datetime.now()
         ))
@@ -209,7 +211,7 @@ class DatabaseManager:
         
         cursor = self.connection.cursor()
         cursor.execute("""
-            SELECT id, name, latitude, longitude, address, created_at, updated_at
+            SELECT id, name, latitude, longitude, address, population_count, created_at, updated_at
             FROM facilities
             ORDER BY name
         """)
@@ -222,6 +224,7 @@ class DatabaseManager:
                 latitude=row['latitude'],
                 longitude=row['longitude'],
                 address=row['address'],
+                population_count=row['population_count'],
                 created_at=row['created_at'],
                 updated_at=row['updated_at']
             )
@@ -337,11 +340,11 @@ class DatabaseManager:
         
         cursor = self.connection.cursor()
         cursor.execute("""
-            SELECT f.id, f.name, f.latitude, f.longitude, f.address, COUNT(DISTINCT dlh.detainee_id) as detainee_count
+            SELECT f.id, f.name, f.latitude, f.longitude, f.address, f.population_count, COUNT(DISTINCT dlh.detainee_id) as detainee_count
             FROM facilities f
             LEFT JOIN detainee_location_history dlh ON f.id = dlh.facility_id 
             AND dlh.end_date IS NULL
-            GROUP BY f.id, f.name, f.latitude, f.longitude, f.address
+            GROUP BY f.id, f.name, f.latitude, f.longitude, f.address, f.population_count
             ORDER BY f.name
         """)
         
@@ -353,6 +356,7 @@ class DatabaseManager:
                 'latitude': row['latitude'],
                 'longitude': row['longitude'],
                 'address': row['address'],
+                'population_count': row['population_count'],
                 'detainee_count': row['detainee_count']
             })
         
@@ -371,7 +375,7 @@ class DatabaseManager:
         
         cursor = self.connection.cursor()
         cursor.execute("""
-            SELECT id, name, latitude, longitude, address, created_at, updated_at
+            SELECT id, name, latitude, longitude, address, population_count, created_at, updated_at
             FROM facilities
             WHERE latitude = 0.0 AND longitude = 0.0
             ORDER BY name
@@ -385,6 +389,7 @@ class DatabaseManager:
                 latitude=row['latitude'],
                 longitude=row['longitude'],
                 address=row['address'],
+                population_count=row['population_count'],
                 created_at=row['created_at'],
                 updated_at=row['updated_at']
             )
@@ -392,3 +397,34 @@ class DatabaseManager:
         
         cursor.close()
         return facilities
+    
+    def update_facility_population(self, facility_id: int, population_count: int) -> bool:
+        """
+        Update the population count for a facility.
+        
+        Args:
+            facility_id: ID of the facility to update
+            population_count: New population count
+            
+        Returns:
+            True if update was successful, False otherwise
+        """
+        if not self.connection:
+            raise Exception("Database not connected")
+        
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("""
+                UPDATE facilities 
+                SET population_count = %s, updated_at = CURRENT_TIMESTAMP
+                WHERE id = %s
+            """, (population_count, facility_id))
+            
+            self.connection.commit()
+            cursor.close()
+            return True
+        except Exception as e:
+            print(f"Error updating facility population: {e}")
+            self.connection.rollback()
+            cursor.close()
+            return False

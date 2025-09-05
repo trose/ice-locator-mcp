@@ -25,8 +25,9 @@ class Facility:
     latitude: float
     longitude: float
     address: Optional[str]
-    created_at: Optional[datetime]
-    updated_at: Optional[datetime]
+    population_count: Optional[int] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
 
 @dataclass
