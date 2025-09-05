@@ -10,6 +10,10 @@
 
 Connect your LLM applications to the U.S. Immigration and Customs Enforcement (ICE) Online Detainee Locator System through a standardized Model Context Protocol (MCP) interface.
 
+<p align="center">
+  <img src="assets/heatmap-screenshot.png" alt="ICE Locator Heatmap Visualization" width="800"/>
+</p>
+
 ## ✨ Features
 
 - 🔍 **Smart Search**: Natural language queries with fuzzy matching
@@ -213,7 +217,7 @@ This MCP server includes **optional** integration with [MCPcat](https://mcpcat.i
 - Sensitive case information
 
 #### **Privacy Controls** 🔐
-```
+```bash
 # Disable analytics completely
 export ICE_LOCATOR_ANALYTICS_ENABLED=false
 ```
@@ -289,7 +293,7 @@ security:
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/ice-locator-mcp.git
+git clone https://github.com/trose/ice-locator-mcp.git
 cd ice-locator-mcp
 
 # Install development dependencies
@@ -449,144 +453,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **⚠️ Important Notice**: This is an independent project not affiliated with ICE or any government agency. Use responsibly and in compliance with all applicable laws.
-
-# ICE Locator MCP - Heatmap View Implementation
-
-## Project Overview
-This repository contains the implementation of a heatmap view for the ICE Locator MCP system. The project adds visualization capabilities to show detainee locations across facilities through both web and mobile interfaces.
-
-## Implementation Summary
-
-### Phase 1: Database and Data Seeding ✅
-- Created PostgreSQL database schema with Detainee, Facility, and DetaineeLocationHistory tables
-- Implemented DatabaseManager with CRUD operations
-- Developed data seeding scripts with realistic sample data
-- Added comprehensive unit tests
-
-### Phase 2: API Layer Development ✅
-- Built FastAPI-based REST API for heatmap data
-- Created endpoints for facilities, facility details, and heatmap visualization
-- Implemented database integration with proper error handling
-- Added unit and integration tests
-
-### Phase 3: Web App Implementation ✅
-- Developed React + TypeScript web application with Vite
-- Integrated Leaflet.js for interactive map visualization
-- Created responsive design with Tailwind CSS
-- Implemented facility list with detainee counts
-
-### Phase 4: Mobile App Implementation ✅
-- Integrated heatmap view into React Native mobile app
-- Added tab navigation between search and heatmap views
-- Created map visualization using react-native-maps
-- Implemented facility list with color-coded detainee counts
-
-### Phase 5: Deployment 🚧
-- Preparing deployment configurations
-- Creating production deployment scripts
-- Setting up monitoring and logging
-
-## Key Features
-
-### Database Schema
-- **Detainee**: Personal information and identifiers
-- **Facility**: Location information with GPS coordinates
-- **DetaineeLocationHistory**: Timestamped location tracking
-
-### API Endpoints
-- `GET /api/facilities` - List all facilities
-- `GET /api/facility/{id}/current-detainees` - Facility details
-- `GET /api/heatmap-data` - Aggregated heatmap data
-
-### Web Application
-- Interactive map with zoom and pan
-- Color-coded markers based on detainee density
-- Facility information popups
-- Responsive design for all devices
-
-### Mobile Application
-- Tab-based navigation between search and heatmap
-- Interactive map with facility markers
-- Facility list with current detainee counts
-- Caching for improved performance
-
-## Technology Stack
-
-### Backend
-- Python 3.9+
-- FastAPI
-- PostgreSQL
-- Psycopg2
-
-### Frontend
-- React (Web)
-- React Native (Mobile)
-- TypeScript
-- Leaflet.js / react-leaflet
-- react-native-maps
-- Tailwind CSS
-
-### Development Tools
-- Vite (Web app build tool)
-- Expo (Mobile development platform)
-- Git (Version control)
-
-## Directory Structure
-```
-├── src/
-│   └── ice_locator_mcp/
-│       ├── api/          # Heatmap API implementation
-│       ├── database/     # Database models and manager
-│       └── core/         # Core application logic
-├── tests/                # Unit and integration tests
-├── web-app/              # React web application
-├── mobile-app/           # React Native mobile application
-├── docs/                 # Project documentation
-└── scripts/              # Utility scripts
-```
-
-## Getting Started
-
-### Prerequisites
-- Python 3.9+
-- Node.js 14+
-- PostgreSQL 12+
-- Git
-
-### Installation
-1. Clone the repository
-2. Set up Python virtual environment
-3. Install Python dependencies
-4. Install Node.js dependencies for web and mobile apps
-5. Set up PostgreSQL database
-6. Run database seeding scripts
-
-### Running the Applications
-1. Start the heatmap API server
-2. Start the web application (Vite dev server)
-3. Start the mobile application (Expo dev server)
-
-## Testing
-- Unit tests for database operations
-- API endpoint tests
-- Component tests for web and mobile interfaces
-- Integration tests for end-to-end functionality
-
-## Documentation
-- Detailed implementation summaries for each phase
-- API documentation
-- Deployment guides
-- User manuals
-
-## Contributing
-This project follows standard Git flow practices:
-1. Create feature branches from `develop`
-2. Submit pull requests for code review
-3. Merge to `develop` after approval
-4. Release to `main` for production deployments
-
-## License
-This project is proprietary and confidential.
-
-## Contact
-For questions about this implementation, please contact the development team.
