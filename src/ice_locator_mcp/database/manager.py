@@ -340,11 +340,8 @@ class DatabaseManager:
         
         cursor = self.connection.cursor()
         cursor.execute("""
-            SELECT f.id, f.name, f.latitude, f.longitude, f.address, f.population_count, COUNT(DISTINCT dlh.detainee_id) as detainee_count
+            SELECT f.id, f.name, f.latitude, f.longitude, f.address, f.population_count
             FROM facilities f
-            LEFT JOIN detainee_location_history dlh ON f.id = dlh.facility_id 
-            AND dlh.end_date IS NULL
-            GROUP BY f.id, f.name, f.latitude, f.longitude, f.address, f.population_count
             ORDER BY f.name
         """)
         
@@ -357,7 +354,7 @@ class DatabaseManager:
                 'longitude': row['longitude'],
                 'address': row['address'],
                 'population_count': row['population_count'],
-                'detainee_count': row['detainee_count']
+                'detainee_count': row['population_count'] if row['population_count'] is not None else 0
             })
         
         cursor.close()
