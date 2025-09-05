@@ -337,7 +337,7 @@ class DatabaseManager:
         
         cursor = self.connection.cursor()
         cursor.execute("""
-            SELECT f.id, f.name, f.latitude, f.longitude, f.address, COUNT(dlh.id) as detainee_count
+            SELECT f.id, f.name, f.latitude, f.longitude, f.address, COUNT(DISTINCT dlh.detainee_id) as detainee_count
             FROM facilities f
             LEFT JOIN detainee_location_history dlh ON f.id = dlh.facility_id 
             AND dlh.end_date IS NULL
