@@ -5,6 +5,7 @@ or by using geocoding services.
 """
 import os
 import json
+import csv
 from datetime import datetime
 from .models import Facility
 from .manager import DatabaseManager
@@ -31,109 +32,15 @@ def get_facility_list(csv_file_path: str = None) -> list:
     
     facilities = set()
     
-    # For now, we'll use a predefined list of common ICE facilities
-    # In a real implementation, this would extract from the CSV
-    common_facilities = [
-        "Adams County Correctional Center",
-        "Allen County Jail",
-        "Arizona State Prison Complex-EB Jordan",
-        "Baker County Correctional Facility",
-        "Baltimore Field Office",
-        "Barranquitas Correctional Facility",
-        "Bossier Deportation Facility",
-        "Broward Transitional Center",
-        "Butler County Jail",
-        "Calhoun County Correctional Center",
-        "Campbell County Correctional Facility",
-        "Caroline County Sheriff's Office",
-        "Chase County Detention Center",
-        "Chester County Prison",
-        "Chicago Field Office",
-        "Cibola County Correctional Center",
-        "Clay County Jail",
-        "Colfax County Correctional Facility",
-        "CoreCivic of Tennessee",
-        "Dallas County Jail",
-        "Dodge County Correctional Facility",
-        "Donley County Correctional Center",
-        "Edinburg Processing Center",
-        "El Paso Processing Center",
-        "El Reno Federal Correctional Institution",
-        "Emporia Correctional Facility",
-        "Eufaula Federal Correctional Institution",
-        "Fayette County Correctional Institution",
-        "Florence Correctional Facility",
-        "Florida County Jail",
-        "Folsom State Prison",
-        "Franklin County Jail",
-        "Georgia State Prison",
-        "Giles County Correctional Facility",
-        "Graham County Correctional Institution",
-        "Guayama Correctional Facility",
-        "Harnett County Correctional Institution",
-        "Henderson County Correctional Facility",
-        "Houston Contract Detention Facility",
-        "Hudson County Correctional Center",
-        "Imperial Regional Detention Facility",
-        "Iowa County Jail",
-        "Jackson County Correctional Facility",
-        "Karnes County Correctional Center",
-        "Kemper County Correctional Facility",
-        "Kootenai County Jail",
-        "La Palma Correctional Center",
-        "Las Brisas Academy Juvenile Correctional Facility",
-        "Lee County Correctional Institution",
-        "Leominster State Prison",
-        "Letcher County Correctional Complex",
-        "Liberty County Jail",
-        "Limestone County Correctional Center",
-        "Los Angeles Field Office",
-        "Mesa Verde Detention Facility",
-        "Miami Field Office",
-        "Minidoka County Jail",
-        "Monroe County Correctional Facility",
-        "Montgomery County Correctional Facility",
-        "Morgan County Correctional Complex",
-        "Nassau County Correctional Center",
-        "New Mexico State Penitentiary",
-        "New York City Field Office",
-        "Northwest Florida Reception Center",
-        "Otero County Processing Center",
-        "Palm Beach County Jail",
-        "Pendleton Correctional Facility",
-        "Philadelphia Field Office",
-        "Pike County Correctional Facility",
-        "Port Isabel Service Processing Center",
-        "Prairieland Detention Complex",
-        "Pulaski County Detention Center",
-        "Richmond County Correctional Center",
-        "Robert A. Deyton Correctional Institution",
-        "Rolling Plains Detention Center",
-        "Sacramento Field Office",
-        "San Antonio Field Office",
-        "San Diego Field Office",
-        "San Luis Detention Center",
-        "San Pedro Service Processing Center",
-        "Sandoval County Correctional Facility",
-        "Scott County Jail",
-        "Sherburne County Jail",
-        "Sierra Detention Center",
-        "South Bay Correctional Facility",
-        "South Georgia Regional Prison",
-        "Southwest Georgia Regional Prison",
-        "Stanton County Correctional Facility",
-        "Stewart Detention Center",
-        "Tallahatchie County Correctional Facility",
-        "Tallahassee Field Office",
-        "Tarrant County Jail",
-        "Tucson Field Office",
-        "Val Verde Correctional Facility",
-        "Washington County Detention Center",
-        "Winn Correctional Center",
-        "York County Prison"
-    ]
+    # Read facilities from CSV
+    with open(csv_file_path, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            facility = row.get('facility_name', '').strip()
+            if facility:
+                facilities.add(facility)
     
-    return common_facilities
+    return list(facilities)
 
 
 def seed_facility_locations(database_url: str):
@@ -180,6 +87,13 @@ def seed_facility_locations(database_url: str):
             "Stewart Detention Center": (32.0833, -84.7000),
             "Tallahassee Field Office": (30.4383, -84.2807),
             "Tucson Field Office": (32.2217, -110.9265),
+            # Add facilities from CSV with Florida locations since most are in Florida
+            "Florida State Prison": (29.9333, -82.2000),
+            "Miami Processing Center": (25.7617, -80.1918),
+            "Palm Beach County Jail": (26.7056, -80.0364),
+            "Alligator Alcatraz Detention Center": (25.8577, -81.3985),
+            "Orange County Jail": (28.5383, -81.3792),
+            "Broward Transitional Center": (26.1224, -80.1368)
         }
         
         for facility_name in facilities:
