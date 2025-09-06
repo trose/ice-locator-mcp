@@ -216,11 +216,26 @@ class BrowserSimulator:
                 get: () => undefined,
             });
             
-            // Mock chrome object
+            // Mock chrome object with more realistic properties
             window.chrome = {
-                runtime: {},
+                runtime: {
+                    connect: function() {
+                        return {
+                            onMessage: { addListener: function() {} },
+                            onDisconnect: { addListener: function() {} },
+                            postMessage: function() {},
+                            disconnect: function() {}
+                        };
+                    },
+                    sendMessage: function() {},
+                    onConnect: undefined,
+                    onMessage: undefined
+                },
                 csi: function() {},
-                loadTimes: function() {}
+                loadTimes: function() {},
+                app: {
+                    isInstalled: false
+                }
             };
             
             // Mock permissions
@@ -234,9 +249,21 @@ class BrowserSimulator:
             // Hide webdriver property
             delete navigator.__proto__.webdriver;
             
-            // Hide plugins
+            // Mock plugins with more realistic values
             Object.defineProperty(navigator, 'plugins', {
-                get: () => [1, 2, 3, 4, 5],
+                get: () => [
+                    { filename: "internal-pdf-viewer", name: "Chrome PDF Plugin", description: "Portable Document Format" },
+                    { filename: "mhjfbmdgcfjbbpaeojofohoefgiehjai", name: "Chrome PDF Viewer", description: "Portable Document Format" },
+                    { filename: "internal-nacl-plugin", name: "Native Client", description: "Native Client" }
+                ],
+            });
+            
+            // Mock mimeTypes
+            Object.defineProperty(navigator, 'mimeTypes', {
+                get: () => [
+                    { type: "application/pdf", suffixes: "pdf", description: "Portable Document Format" },
+                    { type: "text/pdf", suffixes: "pdf", description: "Portable Document Format" }
+                ],
             });
             
             // Hide languages
@@ -244,18 +271,18 @@ class BrowserSimulator:
                 get: () => ['en-US', 'en'],
             });
             
-            // Hide missing memory
+            // Hide memory with realistic values
             if (!window.performance.memory) {
               Object.defineProperty(window.performance, 'memory', {
                 get: () => ({
-                  usedJSHeapSize: 1000000,
-                  totalJSHeapSize: 2000000,
-                  jsHeapSizeLimit: 4000000
+                  usedJSHeapSize: Math.floor(Math.random() * 10000000) + 10000000,
+                  totalJSHeapSize: Math.floor(Math.random() * 20000000) + 20000000,
+                  jsHeapSizeLimit: Math.floor(Math.random() * 2000000000) + 2000000000
                 })
               });
             }
             
-            // Hide missing outerHeight and outerWidth
+            // Hide outerHeight and outerWidth
             Object.defineProperty(window, 'outerHeight', {
               get: () => window.innerHeight
             });
@@ -264,7 +291,7 @@ class BrowserSimulator:
               get: () => window.innerWidth
             });
             
-            // Hide missing screen properties
+            // Hide screen properties with realistic values
             Object.defineProperty(screen, 'availLeft', {
               get: () => 0
             });
@@ -289,22 +316,22 @@ class BrowserSimulator:
               get: () => 24
             });
             
-            // Hide missing devicePixelRatio
+            // Hide devicePixelRatio with realistic values
             if (!window.devicePixelRatio) {
-              window.devicePixelRatio = 1;
+              window.devicePixelRatio = Math.random() > 0.5 ? 1 : 1.5;
             }
             
-            // Hide missing onorientationchange
+            // Hide onorientationchange
             if (!window.onorientationchange) {
               window.onorientationchange = null;
             }
             
-            // Hide missing orientation
+            // Hide orientation
             if (!window.orientation) {
               window.orientation = 0;
             }
             
-            // Hide missing localStorage and sessionStorage
+            // Hide localStorage and sessionStorage
             if (!window.localStorage) {
               window.localStorage = {
                 getItem: function() { return null; },
@@ -327,14 +354,13 @@ class BrowserSimulator:
               };
             }
             
-            // Add missing toString methods
+            // Add toString methods
             if (window.chrome && window.chrome.runtime) {
               window.chrome.runtime.toString = function() {
                 return "[object Object]";
               };
             }
 
-            // Hide missing toString methods
             if (window.chrome && window.chrome.csi) {
               window.chrome.csi.toString = function() {
                 return "function csi() { [native code] }";
@@ -345,6 +371,30 @@ class BrowserSimulator:
               window.chrome.loadTimes.toString = function() {
                 return "function loadTimes() { [native code] }";
               };
+            }
+            
+            // Advanced hardware concurrency spoofing
+            Object.defineProperty(navigator, 'hardwareConcurrency', {
+              get: () => Math.floor(Math.random() * 8) + 2 // Random value between 2-10
+            });
+            
+            // Advanced device memory spoofing
+            if (!navigator.deviceMemory) {
+              Object.defineProperty(navigator, 'deviceMemory', {
+                get: () => Math.floor(Math.random() * 8) + 4 // Random value between 4-12 GB
+              });
+            }
+            
+            // Advanced connection information spoofing
+            if (!navigator.connection) {
+              Object.defineProperty(navigator, 'connection', {
+                get: () => ({
+                  downlink: Math.random() * 10 + 1, // 1-11 Mbps
+                  effectiveType: ['4g', '3g', '2g'][Math.floor(Math.random() * 3)],
+                  rtt: Math.floor(Math.random() * 100) + 50, // 50-150 ms
+                  saveData: false
+                })
+              });
             }
             """)
             
@@ -365,37 +415,135 @@ class BrowserSimulator:
         
         # Emulate realistic browser features
         await page.add_init_script("""
-            // Emulate WebGL vendor and renderer
+            // Emulate WebGL vendor and renderer with more realistic values
             const getParameter = WebGLRenderingContext.prototype.getParameter;
             WebGLRenderingContext.prototype.getParameter = function(parameter) {
                 if (parameter === 37445) {
                     return 'Intel Inc.';
                 }
                 if (parameter === 37446) {
-                    return 'Intel(R) Iris(TM) Plus Graphics 640';
+                    return 'Intel Iris OpenGL Engine';
                 }
                 return getParameter.apply(this, [parameter]);
             };
             
-            // Emulate missing Chrome properties
+            // Hide WebGL debug renderer info
+            const getExtension = WebGLRenderingContext.prototype.getExtension;
+            WebGLRenderingContext.prototype.getExtension = function(name) {
+                if (name === 'WEBGL_debug_renderer_info') {
+                    return null;
+                }
+                return getExtension.apply(this, [name]);
+            };
+            
+            // Advanced canvas fingerprinting protection
+            const originalGetContext = HTMLCanvasElement.prototype.getContext;
+            HTMLCanvasElement.prototype.getContext = function(contextType) {
+                const context = originalGetContext.apply(this, [contextType]);
+                
+                if (contextType === '2d' && context) {
+                    // Add slight noise to canvas operations to prevent fingerprinting
+                    const originalFillText = context.fillText;
+                    context.fillText = function() {
+                        // Add tiny random offset to prevent exact pixel matching
+                        const args = Array.from(arguments);
+                        if (args.length >= 3) {
+                            args[1] = parseFloat(args[1]) + (Math.random() * 0.0001 - 0.00005);
+                            args[2] = parseFloat(args[2]) + (Math.random() * 0.0001 - 0.00005);
+                        }
+                        return originalFillText.apply(this, args);
+                    };
+                    
+                    // Override toDataURL to add noise
+                    const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
+                    HTMLCanvasElement.prototype.toDataURL = function() {
+                        const context = this.getContext('2d');
+                        if (context) {
+                            // Add a tiny random colored pixel to prevent exact matching
+                            context.fillStyle = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.random() * 0.001})`;
+                            context.fillRect(Math.random() * this.width, Math.random() * this.height, 1, 1);
+                        }
+                        return originalToDataURL.apply(this, arguments);
+                    };
+                }
+                
+                return context;
+            };
+            
+            // Mock chrome object
             if (!window.chrome) {
                 window.chrome = {
-                    runtime: {}
+                    runtime: {
+                        connect: function() {
+                            return {
+                                onMessage: { addListener: function() {} },
+                                onDisconnect: { addListener: function() {} },
+                                postMessage: function() {},
+                                disconnect: function() {}
+                            };
+                        },
+                        sendMessage: function() {}
+                    }
                 };
             }
             
-            // Emulate permissions
+            // Mock permissions
             if (!window.Notification) {
                 window.Notification = {
                     permission: 'default'
                 };
             }
             
-            // Emulate plugins
+            // Mock plugins
             if (!navigator.plugins) {
                 navigator.plugins = {
-                    length: 5
+                    length: 3
                 };
+            }
+            
+            // Advanced audio context spoofing
+            if (!window.AudioContext) {
+                window.AudioContext = function() {
+                    return {
+                        sampleRate: 44100,
+                        destination: {
+                            maxChannelCount: 2
+                        },
+                        createOscillator: function() {
+                            return {
+                                frequency: { value: 0 },
+                                type: 'sine',
+                                connect: function() {},
+                                start: function() {},
+                                stop: function() {},
+                                disconnect: function() {}
+                            };
+                        },
+                        createAnalyser: function() {
+                            return {
+                                fftSize: 2048,
+                                frequencyBinCount: 1024,
+                                connect: function() {},
+                                disconnect: function() {}
+                            };
+                        },
+                        close: function() { return Promise.resolve(); }
+                    };
+                };
+            }
+            
+            // Advanced hardware concurrency spoofing
+            if (!navigator.hardwareConcurrency) {
+                Object.defineProperty(navigator, 'hardwareConcurrency', {
+                    get: () => Math.floor(Math.random() * 8) + 2 // Random value between 2-10
+                });
+            }
+            
+            // Advanced device memory spoofing
+            if (!navigator.deviceMemory) {
+                Object.defineProperty(navigator, 'deviceMemory', {
+                    get: () => Math.floor(Math.random() * 8) + 4 // Random value between 4-12 GB
+                });
             }
             """)
         
