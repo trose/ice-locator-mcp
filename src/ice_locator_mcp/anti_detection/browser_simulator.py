@@ -910,3 +910,431 @@ class BrowserSimulator:
                 error=str(e)
             )
             raise
+    
+    async def execute_javascript_with_timing(self, session_id: str, script: str, 
+                                          execution_context: str = "page",
+                                          complexity: str = "medium") -> Any:
+        """
+        Execute JavaScript with realistic timing control for anti-detection.
+        
+        Args:
+            session_id: The browser session ID
+            script: JavaScript code to execute
+            execution_context: Context to execute in ("page", "isolated", "background")
+            complexity: Complexity level ("simple", "medium", "complex") affecting execution time
+            
+        Returns:
+            Result of JavaScript execution
+        """
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"No session found with ID: {session_id}")
+        
+        try:
+            # Simulate realistic preparation time based on complexity
+            preparation_time = {
+                "simple": random.uniform(0.1, 0.5),
+                "medium": random.uniform(0.3, 1.0),
+                "complex": random.uniform(0.8, 2.0)
+            }.get(complexity, random.uniform(0.3, 1.0))
+            
+            await asyncio.sleep(preparation_time)
+            
+            # Add human-like delay before execution
+            await asyncio.sleep(random.uniform(0.1, 0.5))
+            
+            # Execute the JavaScript
+            if execution_context == "page":
+                result = await session.page.evaluate(script)
+            elif execution_context == "isolated":
+                result = await session.page.evaluate(script, force_expr=False)
+            else:  # background
+                result = await session.page.evaluate(script)
+            
+            # Simulate post-execution processing time
+            processing_time = {
+                "simple": random.uniform(0.05, 0.2),
+                "medium": random.uniform(0.2, 0.8),
+                "complex": random.uniform(0.5, 2.0)
+            }.get(complexity, random.uniform(0.2, 0.8))
+            
+            await asyncio.sleep(processing_time)
+            
+            session.actions_performed.append(f"js_execute:{execution_context}")
+            
+            self.logger.debug(
+                "JavaScript executed with timing control",
+                session_id=session_id,
+                context=execution_context,
+                complexity=complexity,
+                preparation_time=preparation_time,
+                processing_time=processing_time
+            )
+            
+            return result
+            
+        except Exception as e:
+            self.logger.error(
+                "Failed to execute JavaScript with timing control",
+                session_id=session_id,
+                error=str(e)
+            )
+            raise
+    
+    async def handle_client_side_challenge(self, session_id: str, 
+                                        challenge_type: str = "generic",
+                                        max_attempts: int = 3) -> Dict[str, Any]:
+        """
+        Handle complex client-side challenges with realistic behavior patterns.
+        
+        Args:
+            session_id: The browser session ID
+            challenge_type: Type of challenge ("captcha", "turnstile", "custom", "generic")
+            max_attempts: Maximum number of attempts to solve the challenge
+            
+        Returns:
+            Dictionary with challenge handling results
+        """
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"No session found with ID: {session_id}")
+        
+        results = {
+            "success": False,
+            "attempts": 0,
+            "challenge_type": challenge_type,
+            "solution_time": 0.0,
+            "error": None
+        }
+        
+        start_time = time.time()
+        
+        try:
+            for attempt in range(max_attempts):
+                results["attempts"] = attempt + 1
+                
+                # Simulate human-like thinking time before attempting challenge
+                thinking_time = random.uniform(1.0, 3.0) * (attempt + 1)  # Longer with each attempt
+                await asyncio.sleep(thinking_time)
+                
+                # Different challenge handling strategies
+                if challenge_type == "captcha":
+                    success = await self._handle_captcha_challenge(session, attempt)
+                elif challenge_type == "turnstile":
+                    success = await self._handle_turnstile_challenge(session, attempt)
+                elif challenge_type == "custom":
+                    success = await self._handle_custom_challenge(session, attempt)
+                else:  # generic
+                    success = await self._handle_generic_challenge(session, attempt)
+                
+                if success:
+                    results["success"] = True
+                    break
+                
+                # Simulate human-like frustration/pause between attempts
+                if attempt < max_attempts - 1:
+                    pause_time = random.uniform(2.0, 5.0) * (attempt + 1)
+                    await asyncio.sleep(pause_time)
+            
+            results["solution_time"] = time.time() - start_time
+            
+            session.actions_performed.append(f"challenge_handled:{challenge_type}")
+            
+            self.logger.debug(
+                "Client-side challenge handled",
+                session_id=session_id,
+                challenge_type=challenge_type,
+                attempts=results["attempts"],
+                success=results["success"],
+                solution_time=results["solution_time"]
+            )
+            
+            return results
+            
+        except Exception as e:
+            results["error"] = str(e)
+            self.logger.error(
+                "Failed to handle client-side challenge",
+                session_id=session_id,
+                challenge_type=challenge_type,
+                error=str(e)
+            )
+            raise
+    
+    async def simulate_realistic_js_execution_pattern(self, session_id: str, 
+                                                   scripts: List[str],
+                                                   pattern: str = "sequential") -> List[Any]:
+        """
+        Simulate realistic JavaScript execution patterns to avoid detection.
+        
+        Args:
+            session_id: The browser session ID
+            scripts: List of JavaScript scripts to execute
+            pattern: Execution pattern ("sequential", "interleaved", "burst", "random")
+            
+        Returns:
+            List of execution results
+        """
+        session = self.sessions.get(session_id)
+        if not session:
+            raise ValueError(f"No session found with ID: {session_id}")
+        
+        results = []
+        
+        try:
+            if pattern == "sequential":
+                # Execute scripts one after another with realistic delays
+                for i, script in enumerate(scripts):
+                    # Add delay between scripts
+                    if i > 0:
+                        delay = random.uniform(0.5, 2.0)
+                        await asyncio.sleep(delay)
+                    
+                    result = await self.execute_javascript_with_timing(
+                        session_id, script, complexity="medium"
+                    )
+                    results.append(result)
+                    
+            elif pattern == "interleaved":
+                # Interleave script execution with page interactions
+                for i, script in enumerate(scripts):
+                    # Execute script
+                    result = await self.execute_javascript_with_timing(
+                        session_id, script, complexity="medium"
+                    )
+                    results.append(result)
+                    
+                    # Interleave with human-like page interaction
+                    if i < len(scripts) - 1:
+                        await self._simulate_human_reading(session)
+                        await self.simulate_human_mouse_movement(session)
+                        
+            elif pattern == "burst":
+                # Execute multiple scripts in quick succession (but still with slight delays)
+                burst_size = min(3, len(scripts))
+                for i in range(0, len(scripts), burst_size):
+                    burst_scripts = scripts[i:i+burst_size]
+                    burst_results = []
+                    
+                    # Execute burst of scripts with minimal delays
+                    for j, script in enumerate(burst_scripts):
+                        if j > 0:
+                            # Very short delay between burst scripts
+                            await asyncio.sleep(random.uniform(0.05, 0.2))
+                        
+                        result = await self.execute_javascript_with_timing(
+                            session_id, script, complexity="simple"
+                        )
+                        burst_results.append(result)
+                    
+                    results.extend(burst_results)
+                    
+                    # Longer delay between bursts
+                    if i + burst_size < len(scripts):
+                        await asyncio.sleep(random.uniform(1.0, 3.0))
+                        
+            elif pattern == "random":
+                # Execute scripts in random order with random delays
+                script_indices = list(range(len(scripts)))
+                random.shuffle(script_indices)
+                
+                for i, idx in enumerate(script_indices):
+                    script = scripts[idx]
+                    
+                    # Random delay before execution
+                    if i > 0:
+                        delay = random.uniform(0.3, 2.5)
+                        await asyncio.sleep(delay)
+                    
+                    result = await self.execute_javascript_with_timing(
+                        session_id, script, complexity="medium"
+                    )
+                    # Insert result at the correct position to maintain order
+                    if len(results) <= idx:
+                        results.extend([None] * (idx - len(results) + 1))
+                    results[idx] = result
+            
+            session.actions_performed.append(f"js_pattern_executed:{pattern}")
+            
+            self.logger.debug(
+                "Realistic JavaScript execution pattern simulated",
+                session_id=session_id,
+                pattern=pattern,
+                scripts_count=len(scripts),
+                results_count=len(results)
+            )
+            
+            return results
+            
+        except Exception as e:
+            self.logger.error(
+                "Failed to simulate realistic JavaScript execution pattern",
+                session_id=session_id,
+                pattern=pattern,
+                error=str(e)
+            )
+            raise
+    
+    async def _handle_captcha_challenge(self, session: BrowserSession, attempt: int) -> bool:
+        """Handle CAPTCHA challenge with realistic behavior."""
+        try:
+            # Check if CAPTCHA is present
+            captcha_present = await session.page.evaluate("""
+                () => {
+                    // Look for common CAPTCHA elements
+                    const captchaSelectors = [
+                        '[id*="captcha"]',
+                        '[class*="captcha"]',
+                        '[src*="captcha"]',
+                        '[data-sitekey]',
+                        '.g-recaptcha',
+                        '#g-recaptcha-response'
+                    ];
+                    
+                    for (const selector of captchaSelectors) {
+                        if (document.querySelector(selector)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            """)
+            
+            if not captcha_present:
+                return True  # No CAPTCHA to handle
+            
+            # Simulate human-like CAPTCHA interaction time
+            interaction_time = random.uniform(2.0, 8.0) * (attempt + 1)
+            await asyncio.sleep(interaction_time)
+            
+            # Try to solve CAPTCHA (in a real implementation, this would integrate with a CAPTCHA solving service)
+            # For simulation purposes, we'll randomly succeed based on attempt number
+            success_probability = max(0.3, 1.0 - (attempt * 0.3))  # Decreases with each attempt
+            return random.random() < success_probability
+            
+        except Exception as e:
+            self.logger.debug("Error in CAPTCHA challenge handling", error=str(e))
+            return False
+    
+    async def _handle_turnstile_challenge(self, session: BrowserSession, attempt: int) -> bool:
+        """Handle Turnstile challenge with realistic behavior."""
+        try:
+            # Check if Turnstile is present
+            turnstile_present = await session.page.evaluate("""
+                () => {
+                    // Look for Cloudflare Turnstile elements
+                    const turnstileSelectors = [
+                        '[id*="turnstile"]',
+                        '[class*="turnstile"]',
+                        '[data-cfturnstile-sitekey]',
+                        '.cf-turnstile',
+                        '[src*="challenges.cloudflare.com"]'
+                    ];
+                    
+                    for (const selector of turnstileSelectors) {
+                        if (document.querySelector(selector)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            """)
+            
+            if not turnstile_present:
+                return True  # No Turnstile to handle
+            
+            # Simulate human-like interaction with Turnstile
+            interaction_time = random.uniform(1.5, 5.0) * (attempt + 1)
+            await asyncio.sleep(interaction_time)
+            
+            # Simulate mouse movements over the challenge widget
+            await self.simulate_human_mouse_movement(session)
+            
+            # Success probability decreases with attempts
+            success_probability = max(0.4, 1.0 - (attempt * 0.25))
+            return random.random() < success_probability
+            
+        except Exception as e:
+            self.logger.debug("Error in Turnstile challenge handling", error=str(e))
+            return False
+    
+    async def _handle_custom_challenge(self, session: BrowserSession, attempt: int) -> bool:
+        """Handle custom JavaScript challenges with realistic behavior."""
+        try:
+            # Simulate analysis time for custom challenges
+            analysis_time = random.uniform(3.0, 10.0) * (attempt + 1)
+            await asyncio.sleep(analysis_time)
+            
+            # Simulate executing various JavaScript snippets to interact with the challenge
+            challenge_scripts = [
+                "() => { return typeof window['challenge'] !== 'undefined'; }",
+                "() => { return document.querySelectorAll('.challenge-element').length > 0; }",
+                "() => { return typeof solveChallenge === 'function'; }"
+            ]
+            
+            for script in challenge_scripts:
+                try:
+                    await self.execute_javascript_with_timing(
+                        session.session_id, script, complexity="medium"
+                    )
+                    # Add delay between script executions
+                    await asyncio.sleep(random.uniform(0.5, 1.5))
+                except:
+                    pass  # Continue with next script even if one fails
+            
+            # Simulate human-like decision making
+            decision_time = random.uniform(1.0, 3.0)
+            await asyncio.sleep(decision_time)
+            
+            # Success probability based on attempt
+            success_probability = max(0.2, 1.0 - (attempt * 0.4))
+            return random.random() < success_probability
+            
+        except Exception as e:
+            self.logger.debug("Error in custom challenge handling", error=str(e))
+            return False
+    
+    async def _handle_generic_challenge(self, session: BrowserSession, attempt: int) -> bool:
+        """Handle generic JavaScript challenges with realistic behavior."""
+        try:
+            # Generic challenge handling - simulate various interactions
+            total_time = random.uniform(5.0, 15.0) * (attempt + 1)
+            
+            # Break down time into different activities
+            analysis_time = total_time * 0.4
+            interaction_time = total_time * 0.4
+            decision_time = total_time * 0.2
+            
+            # Analysis phase
+            await asyncio.sleep(analysis_time)
+            
+            # Interaction phase - simulate various JavaScript interactions
+            await self.simulate_human_mouse_movement(session)
+            await self._simulate_human_reading(session)
+            
+            # Execute some generic JavaScript to appear interactive
+            generic_scripts = [
+                "() => { return document.readyState; }",
+                "() => { return window.location.href; }",
+                "() => { return Object.keys(window).length; }"
+            ]
+            
+            for script in generic_scripts:
+                try:
+                    await self.execute_javascript_with_timing(
+                        session.session_id, script, complexity="simple"
+                    )
+                    await asyncio.sleep(random.uniform(0.3, 0.8))
+                except:
+                    pass
+            
+            # Decision phase
+            await asyncio.sleep(decision_time)
+            
+            # Success probability based on attempt
+            success_probability = max(0.25, 1.0 - (attempt * 0.35))
+            return random.random() < success_probability
+            
+        except Exception as e:
+            self.logger.debug("Error in generic challenge handling", error=str(e))
+            return False
