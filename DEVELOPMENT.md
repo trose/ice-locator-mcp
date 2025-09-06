@@ -22,6 +22,20 @@ To test if your connection is working without proxies, you can run:
 python scripts/test_proxies.py
 ```
 
+## Self-Hosted Reverse Proxy Considerations
+
+A self-hosted reverse proxy would not be beneficial for accessing the ICE website because:
+
+1. **Single IP Address**: A reverse proxy running on your server would still use a single IP address, which the ICE website could easily block.
+
+2. **No IP Rotation**: Unlike our external proxy system that rotates through multiple IPs, a self-hosted reverse proxy provides no rotation benefits.
+
+3. **No Residential IPs**: A self-hosted proxy would use your server's datacenter IP, not residential IPs that are less likely to be detected.
+
+4. **Detection**: The ICE website's anti-bot measures are designed to detect and block proxy traffic, including self-hosted proxies.
+
+Our current approach using external proxy providers (especially premium residential proxies) is the appropriate solution for accessing the ICE website without being blocked.
+
 ## Configuring Premium Proxies
 
 To use premium proxy services, set the appropriate environment variables:
