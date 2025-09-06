@@ -1,0 +1,105 @@
+# Top Hispanic Surnames from U.S. Census 2000
+# Source: probablyhelpful.com/data/hispanic.html
+
+# Rank	Surname		Occurrences
+# ----	-------		-----------
+ 1	GARCIA         	779412
+ 2	RODRIGUEZ      	745530
+ 3	MARTINEZ       	710896
+ 4	HERNANDEZ      	662648
+ 5	LOPEZ          	568768
+ 6	GONZALEZ       	561795
+ 7	PEREZ          	447729
+ 8	SANCHEZ        	404972
+ 9	RAMIREZ        	364364
+10	TORRES         	296424
+11	FLORES         	283979
+12	RIVERA         	270026
+13	GOMEZ          	240289
+14	DIAZ           	229666
+15	REYES          	202052
+16	MORALES        	199969
+17	CRUZ           	199270
+18	ORTIZ          	198260
+19	GUTIERREZ      	196703
+20	CHAVEZ         	170959
+21	RAMOS          	164943
+22	GONZALES       	163758
+23	RUIZ           	160868
+24	ALVAREZ        	153049
+25	MENDOZA        	149300
+26	VASQUEZ        	147926
+27	CASTILLO       	147023
+28	JIMENEZ        	146420
+29	MORENO         	132896
+30	ROMERO         	132444
+31	HERRERA        	129425
+32	MEDINA         	125557
+33	AGUILAR        	116527
+34	GARZA          	114783
+35	CASTRO         	113959
+36	VARGAS         	113763
+37	FERNANDEZ      	112417
+38	GUZMAN         	109736
+39	MUNOZ          	109071
+40	MENDEZ         	104394
+41	SALAZAR        	103131
+42	SOTO           	98388
+43	DELGADO        	90051
+44	PENA           	90035
+45	RIOS           	89828
+46	ALVARADO       	87697
+47	SANDOVAL       	87308
+48	CONTRERAS      	86869
+49	VALDEZ         	86599
+50	GUERRERO       	85980
+51	ORTEGA         	85522
+52	ESTRADA        	85080
+53	NUNEZ          	82279
+54	MALDONADO      	81811
+55	VEGA           	80306
+56	VAZQUEZ        	80272
+57	SANTIAGO       	79341
+58	DOMINGUEZ      	76555
+59	ESPINOZA       	74793
+60	SILVA          	73364
+61	PADILLA        	72798
+62	MARQUEZ        	71828
+63	CORTEZ         	68611
+64	ROJAS          	68183
+65	ACOSTA         	67292
+66	FIGUEROA       	66629
+67	LUNA           	65911
+68	JUAREZ         	65153
+69	NAVARRO        	64036
+70	CAMPOS         	62640
+71	MOLINA         	62579
+72	AVILA          	62461
+73	AYALA          	62198
+74	MEJIA          	62043
+75	CARRILLO       	61757
+76	DURAN          	57955
+77	SANTOS         	57733
+78	SALINAS        	56963
+79	ROBLES         	55814
+80	SOLIS          	54941
+81	LARA           	54534
+82	CERVANTES      	54507
+83	AGUIRRE        	53922
+84	DELEON         	53751
+85	OCHOA          	53303
+86	MIRANDA        	52899
+87	CARDENAS       	52632
+88	TRUJILLO       	52498
+89	VELASQUEZ      	52167
+90	FUENTES        	51655
+91	CABRERA        	51288
+92	LEON           	50651
+93	RIVAS          	50456
+94	MONTOYA        	50100
+95	CALDERON       	49824
+96	COLON          	49422
+97	SERRANO        	49160
+98	GALLEGOS       	49150
+99	ROSALES        	47347
+100	CASTANEDA      	47314

@@ -1,0 +1,189 @@
+Interval ADP
+A Method for Estimating Recent Populations at ICE Detention Facilities
+Adam Sawyer Austin Kocher
+2025-05-12
+Executive Summary
+Immigration and Customs Enforcement (ICE) regularly releases data on two key data points
+associated with immigrant detention: (1) the total number of immigrants currently in detention
+nationwide and (2) the average daily population (ADP) of individual detention facilities over
+the fiscal year to date (FYTD). ICE does not provide up-to-date data on the total currently
+detained population at individual detention facilities — an important yet missing data point.
+In this paper, Relevant Research outlines a method for estimating the recent daily average
+populations at individual detention facilities for the time interval between ICE’s previous
+detention spreadsheet and the current detention spreadsheet. W e refer to ICE’s facility-level
+ADP estimates as “Reported ADP” and we refer to our facility-level ADP estimates as “Interval
+ADP” . As we show in this paper, sudden spikes or dips in ICE’s detained population at specific
+facilities may result in significant differences between Reported ADP and Interval ADP . Thus,
+Interval ADP provides facility-level estimates that are closer to current reality than ICE’s
+Reported ADP .
+Understanding ICE’s Immigrant Detention Data: T otal Detained
+Population and Average Daily Population (ADP)
+Immigration and Customs Enforcement (ICE) releases immigrant detention data in an Excel
+spreadsheet about every two weeks as required by Congress. The spreadsheet is available
+online at https://www.ice.gov/detain/detention-management (URL is subject to change). The
+detention spreadsheet provides the most up-to-date data on ICE’s detained population, as well
+1
+as data on ICE’s Alternatives to Detention (A TD) program and ICE removals, thus making
+it an invaluable source of public information.
+ICE’s detention spreadsheet provides two distinct yet overlapping sources of data on ICE’s
+detained population.
+First, the ICE detention spreadsheet reports the total number of people in detention at a
+given point in time (aka “snapshot data”) on the spreadsheet tab currently named “Detention
+FY25” . ICE’s detention snapshot data is nationwide only and does not provide the current
+actually detained population at individual facilities as of each reporting date. The reporting
+date is documented in the “F ootnotes” tab of ICE’s detention spreadsheet as the day that the
+ICE National Docket data were current in the Enforcement Integrated Database (EID). The
+method below does not use this data point in the analysis.
+Second, the ICE detention spreadsheet reports the average daily population (ADP) for each
+facility in use at the time of reporting under the spreadsheet tab currently named “F acilities
+FY25” . This data provides fiscal-year-to-date averages, but does not provide the current
+actually detained population at individual facilities as of each reporting date. The reporting
+date, which will be used in the calculations below, is documented in the “F acilities FY25” tab
+above the table. ICE’s facility-level Reported ADP is the subject of this paper.
+Calculating Reported ADP
+ICE reports facility-level data using an average daily population (ADP) based on an un-
+weighted cumulative average starting at the beginning of every fiscal year (October 1) and
+ending with the reporting date.
+ICE’s description of the ADP calculation in the footnotes of its detention spreadsheet is as
+follows:
+“The A verage Daily Population (ADP) is based on MANDA Y Count. A MANDA Y
+is based on whether a SUBJECT is in an ERO detention facility for the midnight
+count. F or every SUBJECT in a facility for the midnight count, that corresponds
+to one MANDA Y. The ADP is the number of MANDA YS for a given time period,
+divided by the number of days in that time period. ”
+The following example illustrates ICE’s calculation. Suppose the following scenario at a given
+facility: 10 people are in detention at midnight on October 1, 12 on October 2, and 15 on
+October 3. The ADP would be calculated as 10 + 12 + 15, a total of 37 MANDA YS, divided
+by three (3) days, for an ADP of 12.3.1
+1ICE does not list the facility-by-facility total ADP in its detention spreadsheet, instead choosing to disaggre-
+gate detention counts by “threat level”, “male/female”, and “criminality” . W e determine the total reported
+ADP by facility by summing the various fields in the same category .
+2
+The cumulative average (CA) method that underlies ICE’s ADP calculation can be generalized
+as follows, with the xrepresenting the number of detainees at a facility at midnight (“one
+detention day” or one “MANDA Y”) and nrepresenting the total number of days from the
+start of the fiscal year on October 1 to the reporting date in the detention spreadsheet.
+𝐶 𝐴𝑛=𝑥1+ 𝑥2+ ⋯ + 𝑥𝑛
+𝑛
+ICE’s detention spreadsheet supplies the ADP in each data release and the reporting date.
+When combined, these two values allow us to derive the cumulative number of detention days
+(i.e., MANDA YS) over the fiscal year as:
+𝐶 𝐴𝑛⋅ 𝑛 = 𝑥1+ 𝑥2+ ⋯ + 𝑥𝑛
+In plain language, this can be described as:
+𝐴𝐷𝑃 =Cumulative Detention Days
+T otal Reporting Days
+and:
+𝐴𝐷𝑃 ⋅ T otal Reporting Days = Cumulative Detention Days
+Disadvantage of ICE’S Reported ADP
+While ICE’s Reported ADP may be useful for the agency , it suffers from severe shortcomings
+when considered from the perspective of the public, who has an interest in understanding what
+is happening currently at individual detention facilities.
+As a result of ICE’s method of calculating ADP , the facility-level ADP numbers released by
+ICE may diverge considerably from reality . The total currently detained population of any
+individual facility may be higher or lower than the average daily population over the current
+fiscal year. This divergence is especially true when numbers spike or dip suddenly , since it
+will take time for sudden recent changes in a facility’s real population to be reflected in the
+facility’s Reported ADP .
+F urthermore, the “smoothing” effect of ICE’s ADP calculation becomes increasingly pro-
+nounced over the duration of the fiscal year, so that sudden changes later in the fiscal year
+will take longer to register than sudden changes earlier in the fiscal year. Significant changes
+in a given facility’s detained population in November or December would be noticeable more
+quickly than significant changes in that same facility’s detained population in July or August.
+3
+W e emphasize that ICE’s method of calculating ADP is not a recent creation of the current
+administration, but has been used since ICE started producing detention data in the present
+format during the first T rump administration.
+A Halfway Solution: Interval ADP
+Despite the disadvantages of ICE’s Reported ADP outlined above, ICE’s detention data spread-
+sheet provides suﬀicient information for estimating the recent average daily population at any
+given facility using simple algebra. This is possible by comparing the change in average daily
+population between two reporting dates and comparing that to the total days between report-
+ing dates.
+Instead of using a cumulative approach to ADP over a fiscal year, we calculate the ADP for
+the interval between ICE data releases. T o put it simply , this method answers the question:
+“What must the average daily population have been over the recent reporting period (typically
+14 days) for the FYTD ADP to have fluctuated from the previous reported value to the current
+value?”
+Although this calculation does not answer the basic question of how many people are held in
+each facility at a given time, a data point that would be more consistent with ICE’s reporting
+for its total nationwide detained population, our calculation does provide a simple and defen-
+sible approach to estimating recent ADP at individual facilities over a more restricted time
+period.
+This “Interval A verage” can be represented by:
+𝐼 𝐴𝑛=(𝑥1+ 𝑥2+ ⋯ + 𝑥𝑛)1− (𝑥1+ 𝑥2+ ⋯ + 𝑥𝑛)2
+𝑛1− 𝑛2
+With xas the number of detainees at a facility at midnight (“one detention day”) within the
+interval and nas the number of days since the last data release by ICE . In plain language, this
+can be described as:
+Interval ADP =Cumulative Detainees Held Since Last Release
+Days Since Previous Release
+Unlike the cumulative average used by ICE, the Interval ADP presented here is based on a
+simple moving average (specifically a backward moving average), which has the advantage
+of highlighting recent changes in population. Whereas ICE’s reporting method smooths out
+facility increase or decrease that occur later in a given fiscal year, the Interval ADP method
+shows recent facility-level population estimates regardless of whether the change occurs in
+December or July .
+4
+Interval ADP Case Study: Adams County Detention Center
+W e now apply this method to a real case study of Adams County Detention Center, a facility
+with one of the largest detained populations in the country . As of March 17, 2025, ICE reported
+that Adams County Detention Center in Natchez, Mississippi, had a (rounded) ADP of 2,154
+detainees.
+First, let us apply the “Reported ADP” calculation to determine the number of cumulative
+detention nights on March 17, the 168th day in the fiscal year:
+2, 154 ADP =𝑥1+ 𝑥2+ ⋯ + 𝑥𝑛
+168 days in the fiscal year
+W e can determine that the number of cumulative detention days as of March 17 is:
+2, 154 ⋅ 168 = 361, 872 detention days
+In the subsequent detention spreadsheet, ICE reported that on March 31, 2025 — two weeks
+later — Adams County Detention Center had an (again, rounded) ADP of 2,161 detainees.
+Using the above calculation, we find that there were a total of 393,302 detention nights as of
+that date.
+W e now have two cumulative detention night estimates and the number of days between the
+two dates: 14 days. W e insert these values into the formula as follows:
+𝐼 𝐴𝑛=393, 302 − 361, 872
+14=31, 430
+14= 2, 245 Interval ADP
+Finding the difference between the “Reported ADP” from ICE and the “Interval ADP” devel-
+oped here, we can determine the divergence of ICE’s Reported ADP compared to the Interval
+ADP:
+2, 245 Interval ADP − 2, 161 Reported ADP = 84 more detainees than reported
+T o summarize, the Interval ADP shows that between March 17, 2025, and March 31, 2025,
+Adams County Detention Center had an ADP of 2,245 detainees. The Interval ADP for this
+period is 84 detainees per day higher than reported by ICE.
+5
+Assessing the Interval ADP Method
+The Interval ADP method has a distinct advantage over the ICE Reported ADP estimates: it
+provides more accurate recent estimates of the detained population at any given facility . In
+general, anyone seeking the most recent estimate of the detained population at a given facility
+will be well-served by applying this method.
+This method requires some prerequisite knowledge and skills. W e note that ICE does not
+maintain a public historical archive of its detention spreadsheets. However, the public may
+use the Internet Archive’s W ayback Machine and the URL provided above to find older spread-
+sheets. W e also warn against using ICE’s facilities data without proper validation first. ICE’s
+detention spreadsheet routinely contains obvious and unobvious errors that may corrupt the
+calculations described in this paper — unless those errors are identified first. (It is beyond the
+scope of this paper to describe the various validation techniques we use for this dataset.)
+The Interval ADP method, although useful, leaves important questions unanswered. Like any
+average daily population estimate, it still does not answer the question of how many people
+are in a given facility at a single point in time. The method is also agnostic as to the forces
+that determine increases and decreases in facility population; we cannot determine the full
+range of factors the drive population number up or down at a given facility .
+The method is also not the only way to calculate a moving average for ADP . The backward
+moving average shown here provides immediate estimations of current facility detainee popu-
+lations. However, a center moving average, one which calculates changes at an historical point
+in time using data forward and backward, may be preferable for certain projects, although
+it would not provide immediate estimates at the time of each of ICE’s detention spreadsheet
+releases.
+Despite the limitations of the method proposed in this paper, we believe that most people
+will find the Interval ADP calculation to be significantly more relevant than ICE’s Reported
+ADP .
+About Relevant Research
+Relevant Research is a research firm that specializes in transforming complex datasets into
+clear, actionable insights for academics, non-profit organizations, policy researchers, and the
+broader public. Our tailored data services empower our clients to focus on their research while
+we handle the technical challenges of data identification, cleaning, management, analysis, visu-
+alization, and report writing. Learn more about Relevant Research at relevant-research.com
+or contact Adam at adam@relevant-research.com for more information.
+Last Modified: 2025-07-02
+6
