@@ -119,6 +119,9 @@ class RequestObfuscator:
         # Add randomization
         headers.update(await self._add_header_randomization(headers))
         
+        # Randomize header order to avoid detection based on header sequence
+        randomized_headers = self._randomize_header_order(headers)
+        
         self.logger.debug(
             "Request obfuscated",
             session_id=session_id,
@@ -127,7 +130,7 @@ class RequestObfuscator:
             request_type=request_type
         )
         
-        return headers
+        return randomized_headers
     
     async def calculate_delay(self, 
                             session_id: str,
@@ -273,25 +276,41 @@ class RequestObfuscator:
         """Generate dynamic headers based on context and profile."""
         headers = {}
         
-        # Accept-Language with some variation
+        # Accept-Language with more natural variation
         if profile.languages:
+            # Randomly select 1-3 languages
+            selected_languages = random.sample(
+                profile.languages, 
+                min(random.randint(1, 3), len(profile.languages))
+            )
+            
+            # Generate weights with more natural variation
             lang_weights = []
-            for i, lang in enumerate(profile.languages[:3]):
-                weight = 1.0 - (i * 0.1) + random.uniform(-0.05, 0.05)
+            for i, lang in enumerate(selected_languages):
+                # Base weight decreases with position, with random variation
+                base_weight = max(0.1, 1.0 - (i * 0.2))
+                weight = base_weight + random.uniform(-0.1, 0.1)
+                weight = max(0.1, min(1.0, weight))  # Clamp between 0.1 and 1.0
                 lang_weights.append(f"{lang};q={weight:.1f}")
             
             headers['Accept-Language'] = ','.join(lang_weights)
         
-        # DNT (Do Not Track) - randomly set
-        if random.random() < 0.3:
+        # DNT (Do Not Track) - randomly set with more realistic probability
+        if random.random() < 0.2:  # More realistic ~20% of users have DNT enabled
             headers['DNT'] = '1'
         
-        # Referrer based on context
-        if context.referrer:
+        # Referrer based on context with more natural variation
+        if context.referrer and random.random() < 0.8:  # 80% chance to include referrer
             headers['Referer'] = context.referrer
-        elif context.request_count > 1:
-            # Generate plausible referrer
-            headers['Referer'] = 'https://locator.ice.gov/'
+        elif context.request_count > 1 and random.random() < 0.3:  # 30% chance for subsequent requests
+            # Generate plausible referrer with some variation
+            referrer_options = [
+                'https://locator.ice.gov/',
+                'https://www.google.com/',
+                'https://www.bing.com/',
+                'https://duckduckgo.com/'
+            ]
+            headers['Referer'] = random.choice(referrer_options)
         
         return headers
     
@@ -343,6 +362,15 @@ class RequestObfuscator:
             random_headers['Pragma'] = 'no-cache'
         
         return random_headers
+    
+    def _randomize_header_order(self, headers: Dict[str, str]) -> Dict[str, str]:
+        """Randomize the order of headers to avoid detection based on header sequence."""
+        # Convert to list of items and shuffle
+        header_items = list(headers.items())
+        random.shuffle(header_items)
+        
+        # Convert back to dictionary (Python 3.7+ maintains insertion order)
+        return dict(header_items)
     
     def _load_browser_profiles(self) -> List[BrowserProfile]:
         """Load predefined browser profiles."""
