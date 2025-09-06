@@ -23,7 +23,13 @@ class ProxyConfig:
         "ssl-proxies"
     ])
     residential_preferred: bool = True
-    geographic_distribution: bool = True
+    
+    def __post_init__(self):
+        # Allow disabling proxies through environment variable
+        import os
+        env_enabled = os.getenv("ICE_LOCATOR_PROXY_ENABLED")
+        if env_enabled is not None:
+            self.enabled = env_enabled.lower() in ("true", "1", "yes", "on")
     
     @property
     def proxy_list_file(self) -> Optional[Path]:
