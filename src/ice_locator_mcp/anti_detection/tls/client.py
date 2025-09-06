@@ -12,9 +12,9 @@ from typing import Any, Dict, Optional, Union
 import structlog
 import httpx
 from noble_tls import Client, Session
-from noble_tls.exceptions import TLSClientException
+from noble_tls.exceptions.exceptions import TLSClientException
 
-from ..config import SearchConfig
+from ...core.config import SearchConfig
 
 
 class TLSClient:
@@ -48,8 +48,17 @@ class TLSClient:
         
         try:
             # Create session with randomized JA3 fingerprint
+            from noble_tls.utils.identifiers import Client
+            # Convert profile string to Client enum
+            client_attr = profile.upper().replace("-", "_")
+            if hasattr(Client, client_attr):
+                client = getattr(Client, client_attr)
+            else:
+                # Fallback to a default client if profile not found
+                client = Client.CHROME_109
+            
             session = Session(
-                client_identifier=profile,
+                client=client,
                 random_tls_extension_order=True,
                 header_order=["accept", "user-agent", "accept-encoding", "content-length", "content-type", "accept-language"],
             )
