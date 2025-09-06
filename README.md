@@ -191,6 +191,12 @@ result = await generate_search_report(
 - Traffic pattern obfuscation
 - CAPTCHA handling strategies
 
+### TLS Fingerprint Randomization
+- JA3 fingerprint resistance to avoid detection based on SSL/TLS characteristics
+- Automatic TLS fingerprint randomization using noble-tls
+- Multiple browser TLS profiles for realistic fingerprinting
+- Fallback to standard HTTP client on TLS errors
+
 ## 🔒 Privacy-First Analytics & Monitoring
 
 ### MCPcat Analytics Integration
