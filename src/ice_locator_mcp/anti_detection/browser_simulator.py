@@ -17,6 +17,7 @@ from playwright.async_api import async_playwright, Browser, Page, BrowserContext
 from ..core.config import SearchConfig
 from .request_obfuscator import BrowserProfile
 from .cookie_manager import CookieManager, CookieProfile
+from .extension_manager import ExtensionManager, ExtensionProfile
 
 
 @dataclass
@@ -32,12 +33,15 @@ class BrowserSession:
     pages_visited: int = 0
     actions_performed: List[str] = None
     cookies: List[CookieProfile] = None
+    extensions: List[ExtensionProfile] = None
     
     def __post_init__(self):
         if self.actions_performed is None:
             self.actions_performed = []
         if self.cookies is None:
             self.cookies = []
+        if self.extensions is None:
+            self.extensions = []  # Initialize extensions list
 
 
 class BrowserSimulator:
@@ -50,6 +54,7 @@ class BrowserSimulator:
         self.playwright = None
         self.browser = None
         self.cookie_manager = CookieManager()
+        self.extension_manager = ExtensionManager()
         
         # Browser profiles matching the request obfuscator
         self.browser_profiles = [
@@ -402,7 +407,17 @@ class BrowserSimulator:
               });
             }
             """)
-            
+        
+        # Add extension simulation
+        extensions = self.extension_manager.get_random_extensions(5)
+        extension_fingerprints = self.extension_manager.generate_extension_fingerprints(extensions)
+        extension_js = await self.extension_manager.inject_extension_scripts(extensions)
+        behavior_js = await self.extension_manager.simulate_extension_behavior(extensions)
+        
+        # Add extension scripts to context
+        await context.add_init_script(extension_js)
+        await context.add_init_script(behavior_js)
+        
         # Add the stealth.js file for more comprehensive evasion
         import os
         stealth_path = os.path.join(os.path.dirname(__file__), "js", "stealth.js")
@@ -418,147 +433,14 @@ class BrowserSimulator:
             "height": random.randint(800, 1080)
         })
         
-        # Emulate realistic browser features
-        await page.add_init_script("""
-            // Emulate WebGL vendor and renderer with more realistic values
-            const getParameter = WebGLRenderingContext.prototype.getParameter;
-            WebGLRenderingContext.prototype.getParameter = function(parameter) {
-                if (parameter === 37445) {
-                    return 'Intel Inc.';
-                }
-                if (parameter === 37446) {
-                    return 'Intel Iris OpenGL Engine';
-                }
-                return getParameter.apply(this, [parameter]);
-            };
-            
-            // Hide WebGL debug renderer info
-            const getExtension = WebGLRenderingContext.prototype.getExtension;
-            WebGLRenderingContext.prototype.getExtension = function(name) {
-                if (name === 'WEBGL_debug_renderer_info') {
-                    return null;
-                }
-                return getExtension.apply(this, [name]);
-            };
-            
-            // Advanced canvas fingerprinting protection
-            const originalGetContext = HTMLCanvasElement.prototype.getContext;
-            HTMLCanvasElement.prototype.getContext = function(contextType) {
-                const context = originalGetContext.apply(this, [contextType]);
-                
-                if (contextType === '2d' && context) {
-                    // Add slight noise to canvas operations to prevent fingerprinting
-                    const originalFillText = context.fillText;
-                    context.fillText = function() {
-                        // Add tiny random offset to prevent exact pixel matching
-                        const args = Array.from(arguments);
-                        if (args.length >= 3) {
-                            args[1] = parseFloat(args[1]) + (Math.random() * 0.0001 - 0.00005);
-                            args[2] = parseFloat(args[2]) + (Math.random() * 0.0001 - 0.00005);
-                        }
-                        return originalFillText.apply(this, args);
-                    };
-                    
-                    // Override toDataURL to add noise
-                    const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
-                    HTMLCanvasElement.prototype.toDataURL = function() {
-                        const context = this.getContext('2d');
-                        if (context) {
-                            // Add a tiny random colored pixel to prevent exact matching
-                            context.fillStyle = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.random() * 0.001})`;
-                            context.fillRect(Math.random() * this.width, Math.random() * this.height, 1, 1);
-                        }
-                        return originalToDataURL.apply(this, arguments);
-                    };
-                }
-                
-                return context;
-            };
-            
-            // Mock chrome object
-            if (!window.chrome) {
-                window.chrome = {
-                    runtime: {
-                        connect: function() {
-                            return {
-                                onMessage: { addListener: function() {} },
-                                onDisconnect: { addListener: function() {} },
-                                postMessage: function() {},
-                                disconnect: function() {}
-                            };
-                        },
-                        sendMessage: function() {}
-                    }
-                };
-            }
-            
-            // Mock permissions
-            if (!window.Notification) {
-                window.Notification = {
-                    permission: 'default'
-                };
-            }
-            
-            // Mock plugins
-            if (!navigator.plugins) {
-                navigator.plugins = {
-                    length: 3
-                };
-            }
-            
-            // Advanced audio context spoofing
-            if (!window.AudioContext) {
-                window.AudioContext = function() {
-                    return {
-                        sampleRate: 44100,
-                        destination: {
-                            maxChannelCount: 2
-                        },
-                        createOscillator: function() {
-                            return {
-                                frequency: { value: 0 },
-                                type: 'sine',
-                                connect: function() {},
-                                start: function() {},
-                                stop: function() {},
-                                disconnect: function() {}
-                            };
-                        },
-                        createAnalyser: function() {
-                            return {
-                                fftSize: 2048,
-                                frequencyBinCount: 1024,
-                                connect: function() {},
-                                disconnect: function() {}
-                            };
-                        },
-                        close: function() { return Promise.resolve(); }
-                    };
-                };
-            }
-            
-            // Advanced hardware concurrency spoofing
-            if (!navigator.hardwareConcurrency) {
-                Object.defineProperty(navigator, 'hardwareConcurrency', {
-                    get: () => Math.floor(Math.random() * 8) + 2 // Random value between 2-10
-                });
-            }
-            
-            // Advanced device memory spoofing
-            if (!navigator.deviceMemory) {
-                Object.defineProperty(navigator, 'deviceMemory', {
-                    get: () => Math.floor(Math.random() * 8) + 4 // Random value between 4-12 GB
-                });
-            }
-            """)
-        
-        # Create session with cookie management
+        # Create session with extension information
         session = BrowserSession(
             session_id=session_id,
             browser=self.browser,
             context=context,
             page=page,
-            profile=profile
+            profile=profile,
+            extensions=extensions
         )
         
         self.sessions[session_id] = session
@@ -566,7 +448,8 @@ class BrowserSimulator:
         self.logger.info(
             "Created new browser session",
             session_id=session_id,
-            profile=profile.name
+            profile=profile.name,
+            extension_count=len(extensions)
         )
         
         return session
