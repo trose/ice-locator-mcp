@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock, Mock, patch
 
 from src.ice_locator_mcp.anti_detection.tls.client import TLSClient
 from src.ice_locator_mcp.core.config import SearchConfig
+from noble_tls.exceptions.exceptions import TLSClientException
 import httpx
 
 
@@ -128,6 +129,89 @@ class TestTLSClient:
         # Verify all sessions closed
         assert len(tls_client.sessions) == 0
 
+    @pytest.mark.asyncio
+    async def test_create_session_exception_handling(self, tls_client):
+        """Test exception handling in create_session."""
+        session_id = "test_session"
+        
+        # Mock Session to raise an exception
+        with patch('src.ice_locator_mcp.anti_detection.tls.client.Session') as mock_session:
+            mock_session.side_effect = Exception("Test exception")
+            
+            # Should raise the exception
+            with pytest.raises(Exception, match="Test exception"):
+                await tls_client.create_session(session_id)
 
-# Integration tests would require actual network access and are not included here
-# to avoid external dependencies in unit tests.
+    @pytest.mark.asyncio
+    async def test_request_tls_exception_handling(self, tls_client):
+        """Test TLSClientException handling in request method."""
+        session_id = "test_session"
+        url = "https://httpbin.org/get"
+        
+        # Mock session to raise TLSClientException
+        with patch.object(tls_client, 'get_session') as mock_get_session:
+            mock_session = AsyncMock()
+            mock_session.execute_request.side_effect = TLSClientException("TLS error")
+            mock_get_session.return_value = mock_session
+            
+            # Mock _fallback_request to return a response
+            mock_response = Mock(spec=httpx.Response)
+            mock_response.status_code = 200
+            with patch.object(tls_client, '_fallback_request', return_value=mock_response) as mock_fallback:
+                response = await tls_client.request(session_id, "GET", url)
+                
+                # Should call fallback and return its response
+                assert response == mock_response
+                mock_fallback.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_request_general_exception_handling(self, tls_client):
+        """Test general Exception handling in request method."""
+        session_id = "test_session"
+        url = "https://httpbin.org/get"
+        
+        # Mock session to raise a general exception
+        with patch.object(tls_client, 'get_session') as mock_get_session:
+            mock_session = AsyncMock()
+            mock_session.execute_request.side_effect = Exception("General error")
+            mock_get_session.return_value = mock_session
+            
+            # Should raise the exception
+            with pytest.raises(Exception, match="General error"):
+                await tls_client.request(session_id, "GET", url)
+
+    @pytest.mark.asyncio
+    async def test_fallback_request_other_method(self, tls_client):
+        """Test _fallback_request with non-GET/POST method."""
+        # Mock httpx.AsyncClient to return a response
+        mock_response = Mock(spec=httpx.Response)
+        mock_response.status_code = 200
+        
+        with patch('src.ice_locator_mcp.anti_detection.tls.client.httpx.AsyncClient') as mock_client:
+            mock_async_client = AsyncMock()
+            mock_client.return_value.__aenter__.return_value = mock_async_client
+            mock_async_client.request.return_value = mock_response
+            
+            # Call with PUT method (should go to else branch)
+            response = await tls_client._fallback_request("PUT", "https://httpbin.org/put")
+            
+            # Should return the response from the generic request method
+            assert response == mock_response
+            mock_async_client.request.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_close_session_exception_handling(self, tls_client):
+        """Test exception handling in close_session."""
+        session_id = "test_session"
+        
+        # Create a session first
+        await tls_client.create_session(session_id)
+        assert session_id in tls_client.sessions
+        
+        # Test normal close operation
+        await tls_client.close_session(session_id)
+        assert session_id not in tls_client.sessions
+        
+        # Test closing non-existent session (should not raise error)
+        await tls_client.close_session("non_existent_session")
+        # Should complete without error
