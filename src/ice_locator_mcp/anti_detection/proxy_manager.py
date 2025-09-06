@@ -23,7 +23,7 @@ class ProxyStatus(Enum):
     COOLING_DOWN = "cooling_down"
 
 
-@dataclass
+@dataclass 
 class ProxyMetrics:
     """Metrics for proxy performance tracking."""
     request_count: int = 0
@@ -34,6 +34,7 @@ class ProxyMetrics:
     last_failure: float = 0.0
     average_response_time: float = 0.0
     consecutive_failures: int = 0
+    reputation_score: float = 0.5  # Normalized score (0-1)
     
     @property
     def success_rate(self) -> float:
@@ -51,6 +52,10 @@ class ProxyMetrics:
         
         # Consider unhealthy if success rate below 70% with at least 5 requests
         if self.request_count >= 5 and self.success_rate < 0.7:
+            return False
+            
+        # Consider unhealthy if reputation score is too low
+        if self.reputation_score < 0.3:
             return False
             
         return True
@@ -108,7 +113,11 @@ class ProxyManager:
         self.logger.info("Initializing proxy manager")
         
         if not self.config.enabled:
-            self.logger.info("Proxy management disabled")
+            self.logger.warning(
+                "Proxy management DISABLED - Direct access to ICE website will likely fail with 403 errors. "
+                "The ICE website implements anti-bot measures that require proxy usage for bypassing. "
+                "To enable proxies, set ICE_LOCATOR_PROXY_ENABLED=true"
+            )
             return
         
         # Load initial proxy pool
@@ -251,25 +260,48 @@ class ProxyManager:
         def proxy_score(proxy: ProxyConfig) -> float:
             metrics = self.proxy_metrics.get(proxy.endpoint, ProxyMetrics())
             
-            # Base score from success rate
+            # Base score from success rate (0-1 scale)
             score = metrics.success_rate
             
-            # Bonus for residential proxies
+            # Bonus for residential proxies (0-0.1)
             if proxy.is_residential:
                 score += 0.1
             
-            # Bonus for faster response times (lower is better)
+            # Bonus for good reputation score (0-0.2)
+            if hasattr(metrics, 'reputation_score'):
+                score += metrics.reputation_score * 0.2
+            
+            # Bonus for faster response times (lower is better) (0-0.2)
             if metrics.average_response_time > 0:
                 # Normalize response time (assume 5s is very slow)
                 time_score = max(0, 1 - (metrics.average_response_time / 5.0))
                 score += time_score * 0.2
             
-            # Penalty for recent usage (load balancing)
+            # Penalty for recent usage (load balancing) (-0.1)
             time_since_use = time.time() - metrics.last_used
             if time_since_use < 60:  # Used within last minute
                 score -= 0.1
             
-            return score
+            # Bonus for geolocation verification (0-0.1)
+            if hasattr(metrics, 'geolocation_verified') and metrics.geolocation_verified:
+                score += 0.1
+            
+            # Bonus for anonymity verification (0-0.1)
+            if hasattr(metrics, 'anonymity_verified') and metrics.anonymity_verified:
+                score += 0.1
+            
+            # Bonus for consistent performance (0-0.15)
+            if hasattr(metrics, 'performance_history') and len(metrics.performance_history) > 3:
+                # Calculate consistency (lower variance = higher score)
+                import statistics
+                try:
+                    variance = statistics.variance(metrics.performance_history)
+                    consistency_score = max(0, 1 - (variance / 10))  # Normalize
+                    score += consistency_score * 0.15
+                except statistics.StatisticsError:
+                    pass  # Not enough data for variance calculation
+            
+            return max(0, score)  # Ensure non-negative score
         
         # Sort by score and add some randomness
         sorted_proxies = sorted(healthy_proxies, key=proxy_score, reverse=True)
@@ -524,6 +556,64 @@ class ProxyManager:
                     error=str(e)
                 )
         
+        # GeoSurf
+        geosurf_token = os.getenv("GEOSURF_TOKEN")
+        if geosurf_token:
+            try:
+                # GeoSurf residential proxy
+                proxy = ProxyConfig(
+                    endpoint="gw.geosurf.io:8000",
+                    proxy_type="http",
+                    username="token",
+                    password=geosurf_token,
+                    is_residential=True
+                )
+                proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to configure GeoSurf proxy",
+                    error=str(e)
+                )
+        
+        # Infatica
+        infatica_key = os.getenv("INFATICA_KEY")
+        if infatica_key:
+            try:
+                # Infatica residential proxy
+                proxy = ProxyConfig(
+                    endpoint="proxy.infatica.io:8080",
+                    proxy_type="http",
+                    username=infatica_key,
+                    password=infatica_key,
+                    is_residential=True
+                )
+                proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to configure Infatica proxy",
+                    error=str(e)
+                )
+        
+        # Storm Proxies
+        storm_username = os.getenv("STORM_USERNAME")
+        storm_password = os.getenv("STORM_PASSWORD")
+        if storm_username and storm_password:
+            try:
+                # Storm Proxies residential proxy
+                proxy = ProxyConfig(
+                    endpoint="proxy.stormproxies.com:1000",
+                    proxy_type="http",
+                    username=storm_username,
+                    password=storm_password,
+                    is_residential=True
+                )
+                proxies.append(proxy)
+            except Exception as e:
+                self.logger.debug(
+                    "Failed to configure Storm Proxies",
+                    error=str(e)
+                )
+        
         return proxies
     
     async def _validate_proxies(self, proxies: List[ProxyConfig]) -> List[ProxyConfig]:
@@ -651,17 +741,6 @@ class ProxyManager:
                     proxy=proxy.endpoint,
                     error=str(e)
                 )
-    
-    async def _health_check_proxy(self, proxy: ProxyConfig) -> None:
-        """Perform comprehensive health check on a single proxy."""
-        try:
-            await self._perform_basic_connectivity_check(proxy)
-            await self._perform_performance_check(proxy)
-            await self._perform_anonymity_check(proxy)
-            await self._perform_geolocation_check(proxy)
-            
-        except Exception as e:
-            await self.mark_proxy_failure(proxy, e)
     
     async def _perform_basic_connectivity_check(self, proxy: ProxyConfig) -> None:
         """Basic connectivity test."""
@@ -802,7 +881,155 @@ class ProxyManager:
                 proxy=proxy.endpoint,
                 error=str(e)
             )
-    
+
+    async def _perform_ip_reputation_check(self, proxy: ProxyConfig) -> None:
+        """Check IP reputation using multiple reputation services."""
+        try:
+            # Get the proxy's IP address
+            async with httpx.AsyncClient(
+                proxies={"http://": proxy.url, "https://": proxy.url},
+                timeout=15.0
+            ) as client:
+                response = await client.get("http://httpbin.org/ip")
+                if response.status_code == 200:
+                    proxy_ip = response.json().get('origin', '').split(',')[0].strip()
+                    
+                    if proxy_ip:
+                        # Check reputation using multiple services
+                        reputation_score = await self._check_ip_reputation(proxy_ip)
+                        
+                        metrics = self.proxy_metrics.get(proxy.endpoint, ProxyMetrics())
+                        metrics.reputation_score = reputation_score
+                        
+                        # Mark as failed if reputation is too low
+                        if reputation_score < 0.3:  # Below 30% is considered bad
+                            self.logger.warning(
+                                "Proxy has poor reputation",
+                                proxy=proxy.endpoint,
+                                ip=proxy_ip,
+                                reputation_score=reputation_score
+                            )
+                            await self.mark_proxy_failure(proxy, Exception("Poor IP reputation"))
+                        else:
+                            self.logger.debug(
+                                "Proxy reputation check completed",
+                                proxy=proxy.endpoint,
+                                ip=proxy_ip,
+                                reputation_score=reputation_score
+                            )
+                        
+                        self.proxy_metrics[proxy.endpoint] = metrics
+        except Exception as e:
+            self.logger.debug(
+                "IP reputation check failed",
+                proxy=proxy.endpoint,
+                error=str(e)
+            )
+
+    async def _check_ip_reputation(self, ip: str) -> float:
+        """Check IP reputation using multiple services and return normalized score (0-1)."""
+        scores = []
+        
+        # Check using ip-api.com for basic info
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(f"http://ip-api.com/json/{ip}")
+                if response.status_code == 200:
+                    data = response.json()
+                    # Simple heuristic: if ISP is known residential provider, higher score
+                    isp = data.get('isp', '').lower()
+                    org = data.get('org', '').lower()
+                    
+                    # Known residential ISPs get higher scores
+                    residential_isps = [
+                        'comcast', 'verizon', 'att', 'spectrum', 'xfinity', 
+                        'cox communications', 'centurylink', 'frontier communications',
+                        'charter communications', 'bt', 'virgin media', 'sky broadband',
+                        'telefonica', 'orange', 'free', 'sfr', 'bouygues', 'vodafone',
+                        'telekom', 't-mobile', 'o2', 'vodafone', 'three', 'ee',
+                        'rogers', 'bell', 'telus', 'shaw', 'videotron'
+                    ]
+                    
+                    if any(residential_isp in isp or residential_isp in org 
+                          for residential_isp in residential_isps):
+                        scores.append(0.9)
+                    elif data.get('hosting', False):
+                        # Hosting providers get lower scores
+                        scores.append(0.2)
+                    else:
+                        # Unknown gets medium score
+                        scores.append(0.5)
+        except Exception:
+            scores.append(0.5)  # Default score if check fails
+        
+        # Check using a simple heuristic based on IP ranges
+        try:
+            # Datacenter IPs often have specific patterns
+            octets = ip.split('.')
+            if len(octets) == 4:
+                first_octet = int(octets[0])
+                # Certain ranges are more likely to be residential
+                residential_ranges = [
+                    (1, 126),   # Class A except special ranges
+                    (128, 191), # Class B
+                    (192, 223)  # Class C
+                ]
+                
+                is_likely_residential = any(
+                    start <= first_octet <= end 
+                    for start, end in residential_ranges
+                )
+                
+                if is_likely_residential:
+                    scores.append(0.7)
+                else:
+                    scores.append(0.3)
+        except Exception:
+            scores.append(0.5)
+        
+        # Add more sophisticated checks for known datacenter IP ranges
+        try:
+            # Known datacenter IP ranges get lower scores
+            datacenter_ranges = [
+                ('172.16.0.0', '172.31.255.255'),  # AWS
+                ('10.0.0.0', '10.255.255.255'),     # Private networks
+                ('192.168.0.0', '192.168.255.255'), # Private networks
+                ('100.64.0.0', '100.127.255.255'),   # Carrier-grade NAT
+            ]
+            
+            def ip_to_int(ip_str):
+                """Convert IP string to integer for comparison."""
+                parts = ip_str.split('.')
+                return (int(parts[0]) << 24) + (int(parts[1]) << 16) + (int(parts[2]) << 8) + int(parts[3])
+            
+            ip_int = ip_to_int(ip)
+            is_datacenter = any(
+                ip_to_int(start) <= ip_int <= ip_to_int(end)
+                for start, end in datacenter_ranges
+            )
+            
+            if is_datacenter:
+                scores.append(0.2)
+            else:
+                scores.append(0.6)
+        except Exception:
+            scores.append(0.5)
+        
+        # Return average score
+        return sum(scores) / len(scores) if scores else 0.5
+
+    async def _health_check_proxy(self, proxy: ProxyConfig) -> None:
+        """Perform comprehensive health check on a single proxy."""
+        try:
+            await self._perform_basic_connectivity_check(proxy)
+            await self._perform_performance_check(proxy)
+            await self._perform_anonymity_check(proxy)
+            await self._perform_geolocation_check(proxy)
+            await self._perform_ip_reputation_check(proxy)  # Add reputation check
+            
+        except Exception as e:
+            await self.mark_proxy_failure(proxy, e)
+
     async def get_proxy_analytics(self) -> Dict[str, Any]:
         """Get comprehensive proxy pool analytics."""
         current_time = time.time()
