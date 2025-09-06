@@ -16,6 +16,7 @@ from playwright.async_api import async_playwright, Browser, Page, BrowserContext
 
 from ..core.config import SearchConfig
 from .request_obfuscator import BrowserProfile
+from .cookie_manager import CookieManager, CookieProfile
 
 
 @dataclass
@@ -30,10 +31,13 @@ class BrowserSession:
     last_activity: float = time.time()
     pages_visited: int = 0
     actions_performed: List[str] = None
+    cookies: List[CookieProfile] = None
     
     def __post_init__(self):
         if self.actions_performed is None:
             self.actions_performed = []
+        if self.cookies is None:
+            self.cookies = []
 
 
 class BrowserSimulator:
@@ -45,6 +49,7 @@ class BrowserSimulator:
         self.sessions: Dict[str, BrowserSession] = {}
         self.playwright = None
         self.browser = None
+        self.cookie_manager = CookieManager()
         
         # Browser profiles matching the request obfuscator
         self.browser_profiles = [
@@ -547,7 +552,7 @@ class BrowserSimulator:
             }
             """)
         
-        # Create session
+        # Create session with cookie management
         session = BrowserSession(
             session_id=session_id,
             browser=self.browser,
@@ -583,6 +588,9 @@ class BrowserSimulator:
             session.pages_visited += 1
             session.last_activity = time.time()
             session.actions_performed.append(f"navigate_to:{url}")
+            
+            # Update cookies after navigation
+            await self._update_session_cookies(session)
             
             # Simulate human reading time
             await self._simulate_human_reading(session)
@@ -1174,6 +1182,20 @@ class BrowserSimulator:
                 error=str(e)
             )
             raise
+    
+    async def _update_session_cookies(self, session: BrowserSession) -> None:
+        """Update session cookies from browser context."""
+        try:
+            if session.context:
+                # Extract cookies from context
+                cookies = await self.cookie_manager.extract_cookies_from_context(session.context)
+                # Validate and process cookies
+                cookies = await self.cookie_manager.validate_cookies(cookies)
+                # Update session
+                session.cookies = cookies
+                self.logger.debug("Updated session cookies", session_id=session.session_id, count=len(cookies))
+        except Exception as e:
+            self.logger.debug("Failed to update session cookies", session_id=session.session_id, error=str(e))
     
     async def _handle_captcha_challenge(self, session: BrowserSession, attempt: int) -> bool:
         """Handle CAPTCHA challenge with realistic behavior."""
