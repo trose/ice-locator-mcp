@@ -5,11 +5,58 @@ Object.defineProperty(navigator, 'webdriver', {
   get: () => undefined
 });
 
-// Mock chrome object
+// Mock chrome object with more realistic properties
 window.chrome = {
-  runtime: {},
+  runtime: {
+    connect: function() {
+      return {
+        onMessage: { addListener: function() {} },
+        onDisconnect: { addListener: function() {} },
+        postMessage: function() {},
+        disconnect: function() {}
+      };
+    },
+    sendMessage: function() {},
+    onConnect: undefined,
+    onMessage: undefined
+  },
   csi: function() {},
-  loadTimes: function() {}
+  loadTimes: function() {},
+  app: {
+    isInstalled: false
+  },
+  cast: undefined,
+  crash: undefined,
+  extensions: undefined,
+  gcm: undefined,
+  identity: undefined,
+  idltest: undefined,
+  languageSettings: undefined,
+  management: undefined,
+  mdns: undefined,
+  mediaGalleries: undefined,
+  networking: undefined,
+  notifications: undefined,
+  permissions: undefined,
+  platformKeys: undefined,
+  power: undefined,
+  printerProvider: undefined,
+  privacy: undefined,
+  processes: undefined,
+  proxy: undefined,
+  pushMessaging: undefined,
+  runtime: undefined,
+  serial: undefined,
+  socket: undefined,
+  sockets: undefined,
+  storage: undefined,
+  system: undefined,
+  tabs: undefined,
+  topSites: undefined,
+  tts: undefined,
+  ttsEngine: undefined,
+  usb: undefined,
+  webstore: undefined
 };
 
 // Mock permissions
@@ -25,13 +72,13 @@ if (navigator.webdriver === false) {
   // Remove automation indicators from navigator
   delete navigator.__proto__.webdriver;
   
-  // Mock plugins and mimeTypes
+  // Mock plugins and mimeTypes with more realistic values
   if (!navigator.plugins.length) {
     Object.defineProperty(navigator, 'plugins', {
       get: () => [
-        { filename: "internal-pdf-viewer", name: "Chrome PDF Plugin" },
-        { filename: "mhjfbmdgcfjbbpaeojofohoefgiehjai", name: "Chrome PDF Viewer" },
-        { filename: "internal-nacl-plugin", name: "Native Client" }
+        { filename: "internal-pdf-viewer", name: "Chrome PDF Plugin", description: "Portable Document Format" },
+        { filename: "mhjfbmdgcfjbbpaeojofohoefgiehjai", name: "Chrome PDF Viewer", description: "Portable Document Format" },
+        { filename: "internal-nacl-plugin", name: "Native Client", description: "Native Client" }
       ]
     });
     
@@ -79,13 +126,13 @@ Object.defineProperty(navigator, 'languages', {
   get: () => ['en-US', 'en']
 });
 
-// Hide missing memory
+// Hide missing memory with more realistic values
 if (!window.performance.memory) {
   Object.defineProperty(window.performance, 'memory', {
     get: () => ({
-      usedJSHeapSize: 1000000,
-      totalJSHeapSize: 2000000,
-      jsHeapSizeLimit: 4000000
+      usedJSHeapSize: Math.floor(Math.random() * 10000000) + 10000000,
+      totalJSHeapSize: Math.floor(Math.random() * 20000000) + 20000000,
+      jsHeapSizeLimit: Math.floor(Math.random() * 2000000000) + 2000000000
     })
   });
 }
@@ -121,18 +168,18 @@ if (!console.error) {
 // Hide missing console.memory
 if (!console.memory) {
   console.memory = {
-    usedJSHeapSize: 1000000,
-    totalJSHeapSize: 2000000,
-    jsHeapSizeLimit: 4000000
+    usedJSHeapSize: Math.floor(Math.random() * 10000000) + 10000000,
+    totalJSHeapSize: Math.floor(Math.random() * 20000000) + 20000000,
+    jsHeapSizeLimit: Math.floor(Math.random() * 2000000000) + 2000000000
   };
 }
 
 // Hide missing console.memory
 Object.defineProperty(console, 'memory', {
   get: () => ({
-    usedJSHeapSize: 1000000,
-    totalJSHeapSize: 2000000,
-    jsHeapSizeLimit: 4000000
+    usedJSHeapSize: Math.floor(Math.random() * 10000000) + 10000000,
+    totalJSHeapSize: Math.floor(Math.random() * 20000000) + 20000000,
+    jsHeapSizeLimit: Math.floor(Math.random() * 2000000000) + 2000000000
   })
 });
 
@@ -154,7 +201,7 @@ if (!window.outerWidth) {
   window.outerWidth = window.innerWidth;
 }
 
-// Hide missing screen properties
+// Hide missing screen properties with more realistic values
 Object.defineProperty(screen, 'availLeft', {
   get: () => 0
 });
@@ -179,9 +226,9 @@ Object.defineProperty(screen, 'pixelDepth', {
   get: () => 24
 });
 
-// Hide missing devicePixelRatio
+// Hide missing devicePixelRatio with realistic values
 if (!window.devicePixelRatio) {
-  window.devicePixelRatio = 1;
+  window.devicePixelRatio = Math.random() > 0.5 ? 1 : 1.5;
 }
 
 // Hide missing onorientationchange
@@ -227,23 +274,132 @@ if (!window.indexedDB) {
   };
 }
 
-// Hide missing webgl
+// Hide missing webgl with more advanced spoofing
 if (!window.WebGLRenderingContext) {
   window.WebGLRenderingContext = function() {};
 }
 
-// Hide missing canvas
-if (!window.HTMLCanvasElement) {
-  window.HTMLCanvasElement = function() {};
+// Advanced WebGL fingerprinting protection
+if (window.WebGLRenderingContext) {
+  const getParameter = WebGLRenderingContext.prototype.getParameter;
+  WebGLRenderingContext.prototype.getParameter = function(parameter) {
+    // UNMASKED_VENDOR_WEBGL
+    if (parameter === 37445) {
+      return 'Intel Inc.';
+    }
+    // UNMASKED_RENDERER_WEBGL
+    if (parameter === 37446) {
+      return 'Intel Iris OpenGL Engine';
+    }
+    
+    return getParameter.apply(this, [parameter]);
+  };
+  
+  // Hide WebGL debug renderer info
+  const extension = WebGLRenderingContext.prototype.getExtension;
+  WebGLRenderingContext.prototype.getExtension = function(name) {
+    if (name === 'WEBGL_debug_renderer_info') {
+      return null;
+    }
+    return extension.apply(this, [name]);
+  };
 }
 
-// Hide missing audio
+// Advanced canvas fingerprinting protection
+if (window.HTMLCanvasElement) {
+  const originalGetContext = HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext = function(contextType) {
+    const context = originalGetContext.apply(this, [contextType]);
+    
+    if (contextType === '2d' && context) {
+      // Add slight noise to canvas operations to prevent fingerprinting
+      const originalFillText = context.fillText;
+      context.fillText = function() {
+        // Add tiny random offset to prevent exact pixel matching
+        const args = Array.from(arguments);
+        if (args.length >= 3) {
+          args[1] = parseFloat(args[1]) + (Math.random() * 0.0001 - 0.00005);
+          args[2] = parseFloat(args[2]) + (Math.random() * 0.0001 - 0.00005);
+        }
+        return originalFillText.apply(this, args);
+      };
+      
+      // Override toDataURL to add noise
+      const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
+      HTMLCanvasElement.prototype.toDataURL = function() {
+        const context = this.getContext('2d');
+        if (context) {
+          // Add a tiny random colored pixel to prevent exact matching
+          context.fillStyle = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.random() * 0.001})`;
+          context.fillRect(Math.random() * this.width, Math.random() * this.height, 1, 1);
+        }
+        return originalToDataURL.apply(this, arguments);
+      };
+    }
+    
+    return context;
+  };
+}
+
+// Hide missing audio with advanced spoofing
 if (!window.AudioContext) {
-  window.AudioContext = function() {};
+  window.AudioContext = function() {
+    return {
+      sampleRate: 44100,
+      destination: {
+        maxChannelCount: 2
+      },
+      createOscillator: function() {
+        return {
+          frequency: { value: 0 },
+          type: 'sine',
+          connect: function() {},
+          start: function() {},
+          stop: function() {},
+          disconnect: function() {}
+        };
+      },
+      createAnalyser: function() {
+        return {
+          fftSize: 2048,
+          frequencyBinCount: 1024,
+          connect: function() {},
+          disconnect: function() {}
+        };
+      },
+      close: function() { return Promise.resolve(); }
+    };
+  };
 }
 
 if (!window.webkitAudioContext) {
-  window.webkitAudioContext = function() {};
+  window.webkitAudioContext = window.AudioContext;
+}
+
+// Advanced audio fingerprinting protection
+if (window.OfflineAudioContext || window.webkitOfflineAudioContext) {
+  const originalOfflineAudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  window.OfflineAudioContext = function() {
+    // Return a modified context that produces consistent results
+    const context = new originalOfflineAudioContext(...arguments);
+    
+    // Override startRendering to return consistent results
+    const originalStartRendering = context.startRendering;
+    context.startRendering = function() {
+      return new Promise((resolve) => {
+        // Create a consistent audio buffer
+        const buffer = context.createBuffer(1, 44100, 44100);
+        const channelData = buffer.getChannelData(0);
+        for (let i = 0; i < channelData.length; i++) {
+          // Use a deterministic pattern instead of random values
+          channelData[i] = Math.sin(i * 0.01) * 0.5;
+        }
+        resolve(buffer);
+      });
+    };
+    
+    return context;
+  };
 }
 
 // Hide missing speech recognition
@@ -377,3 +533,41 @@ if (window.navigator.mediaDevices) {
     return "[object MediaDevices]";
   };
 }
+
+// Advanced hardware concurrency spoofing
+Object.defineProperty(navigator, 'hardwareConcurrency', {
+  get: () => Math.floor(Math.random() * 8) + 2 // Random value between 2-10
+});
+
+// Advanced device memory spoofing
+if (!navigator.deviceMemory) {
+  Object.defineProperty(navigator, 'deviceMemory', {
+    get: () => Math.floor(Math.random() * 8) + 4 // Random value between 4-12 GB
+  });
+}
+
+// Advanced connection information spoofing
+if (!navigator.connection) {
+  Object.defineProperty(navigator, 'connection', {
+    get: () => ({
+      downlink: Math.random() * 10 + 1, // 1-11 Mbps
+      effectiveType: ['4g', '3g', '2g'][Math.floor(Math.random() * 3)],
+      rtt: Math.floor(Math.random() * 100) + 50, // 50-150 ms
+      saveData: false
+    })
+  });
+}
+
+// Advanced timezone spoofing
+Object.defineProperty(Intl, 'DateTimeFormat', {
+  value: function() {
+    const original = new Intl.DateTimeFormat(...arguments);
+    const originalResolvedOptions = original.resolvedOptions;
+    original.resolvedOptions = function() {
+      const options = originalResolvedOptions.call(this);
+      options.timeZone = 'America/New_York'; // Fixed timezone
+      return options;
+    };
+    return original;
+  }
+});
