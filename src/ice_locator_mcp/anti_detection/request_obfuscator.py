@@ -12,6 +12,8 @@ from typing import Any, Dict, List, Optional
 import structlog
 from fake_useragent import UserAgent
 
+from .behavioral_simulator import BehavioralSimulator
+
 
 @dataclass
 class BrowserProfile:
@@ -45,6 +47,8 @@ class RequestContext:
     current_page: str = ""
     referrer: str = ""
     user_actions: List[str] = None
+    viewport_width: int = 1920
+    viewport_height: int = 1080
     
     def __post_init__(self):
         if self.user_actions is None:
@@ -57,6 +61,7 @@ class RequestObfuscator:
     def __init__(self):
         self.logger = structlog.get_logger(__name__)
         self.user_agent_generator = UserAgent()
+        self.behavioral_simulator = BehavioralSimulator()
         
         # Browser profiles
         self.browser_profiles = self._load_browser_profiles()
@@ -197,6 +202,32 @@ class RequestObfuscator:
         
         elif action == "navigation":
             await self._simulate_navigation(kwargs.get('nav_type', 'click'))
+        
+        elif action == "mouse_movement":
+            # Simulate realistic mouse movement
+            start_x = kwargs.get('start_x', 0)
+            start_y = kwargs.get('start_y', 0)
+            end_x = kwargs.get('end_x', context.viewport_width // 2)
+            end_y = kwargs.get('end_y', context.viewport_height // 2)
+            await self.behavioral_simulator.simulate_mouse_movement(
+                session_id, start_x, start_y, end_x, end_y
+            )
+        
+        elif action == "scrolling":
+            # Simulate realistic scrolling
+            total_height = kwargs.get('total_height', 2000)
+            viewport_height = kwargs.get('viewport_height', context.viewport_height)
+            await self.behavioral_simulator.simulate_scrolling(
+                session_id, total_height, viewport_height
+            )
+        
+        elif action == "decision_making":
+            # Simulate human decision-making process
+            complexity = kwargs.get('complexity', 'medium')
+            time_pressure = kwargs.get('time_pressure', False)
+            await self.behavioral_simulator.simulate_decision_making(
+                session_id, complexity, time_pressure
+            )
         
         elif action == "thinking":
             await self._simulate_thinking_pause()

@@ -62,6 +62,115 @@ class BehaviorMetrics:
 
 
 @dataclass
+class MouseMovementPattern:
+    """Represents a realistic mouse movement pattern."""
+    start_x: int
+    start_y: int
+    end_x: int
+    end_y: int
+    duration: float
+    waypoints: List[Tuple[float, float, float]] = field(default_factory=list)  # (x, y, time)
+    
+    def generate_waypoints(self) -> None:
+        """Generate realistic waypoints for mouse movement."""
+        # Calculate distance
+        distance = math.sqrt((self.end_x - self.start_x) ** 2 + (self.end_y - self.start_y) ** 2)
+        
+        # Determine number of waypoints based on distance
+        waypoint_count = max(2, min(20, int(distance / 50)))
+        
+        # Generate waypoints with slight deviations for realism
+        for i in range(waypoint_count + 1):
+            t = i / waypoint_count  # Progress from 0 to 1
+            
+            # Linear interpolation
+            x = self.start_x + (self.end_x - self.start_x) * t
+            y = self.start_y + (self.end_y - self.start_y) * t
+            
+            # Add slight deviation for realism (except for start and end points)
+            if 0 < i < waypoint_count:
+                deviation = min(20, distance * 0.1)
+                x += random.uniform(-deviation, deviation)
+                y += random.uniform(-deviation, deviation)
+            
+            # Time with slight variation
+            time_point = self.duration * t * random.uniform(0.9, 1.1)
+            
+            self.waypoints.append((x, y, time_point))
+
+
+@dataclass
+class ScrollingPattern:
+    """Represents a realistic scrolling pattern."""
+    total_height: int
+    viewport_height: int
+    scroll_events: List[Tuple[int, float]] = field(default_factory=list)  # (scroll_position, time)
+    
+    def generate_scroll_pattern(self) -> None:
+        """Generate realistic scrolling pattern."""
+        max_scroll = max(0, self.total_height - self.viewport_height)
+        if max_scroll <= 0:
+            return
+        
+        # Determine reading pattern
+        if max_scroll < 500:
+            # Short page - quick scan
+            self._generate_quick_scan_pattern(max_scroll)
+        elif max_scroll < 2000:
+            # Medium page - thorough reading
+            self._generate_thorough_reading_pattern(max_scroll)
+        else:
+            # Long page - selective reading
+            self._generate_selective_reading_pattern(max_scroll)
+    
+    def _generate_quick_scan_pattern(self, max_scroll: int) -> None:
+        """Generate quick scan pattern for short pages."""
+        # Scroll to bottom with a few stops
+        stops = random.randint(2, 4)
+        for i in range(stops):
+            position = int(max_scroll * (i + 1) / stops)
+            time_point = random.uniform(0.5, 2.0) * (i + 1)
+            self.scroll_events.append((position, time_point))
+    
+    def _generate_thorough_reading_pattern(self, max_scroll: int) -> None:
+        """Generate thorough reading pattern for medium pages."""
+        # Scroll in chunks with pauses for reading
+        chunk_size = self.viewport_height // 2
+        position = 0
+        
+        while position < max_scroll:
+            # Scroll down a chunk
+            position = min(position + chunk_size, max_scroll)
+            time_point = len(self.scroll_events) * random.uniform(2.0, 5.0)
+            self.scroll_events.append((position, time_point))
+            
+            # Add pause for reading (skip some chunks)
+            if random.random() < 0.7:  # 70% chance of pause
+                pause_time = random.uniform(3.0, 10.0)
+                # Add a small scroll during pause to simulate reading
+                if len(self.scroll_events) > 0:
+                    current_pos = self.scroll_events[-1][0]
+                    small_scroll = current_pos + random.randint(-50, 50)
+                    small_scroll = max(0, min(small_scroll, max_scroll))
+                    if small_scroll != current_pos:
+                        self.scroll_events.append((small_scroll, time_point + pause_time * 0.3))
+    
+    def _generate_selective_reading_pattern(self, max_scroll: int) -> None:
+        """Generate selective reading pattern for long pages."""
+        # Scroll to interesting sections only
+        sections = random.randint(3, 7)
+        for _ in range(sections):
+            position = random.randint(0, max_scroll)
+            time_point = random.uniform(1.0, 3.0) * len(self.scroll_events)
+            self.scroll_events.append((position, time_point))
+            
+            # Add reading pause
+            if random.random() < 0.8:
+                pause_time = random.uniform(5.0, 15.0)
+                self.scroll_events.append((position, time_point + pause_time))
+
+
+@dataclass
 class BrowsingSession:
     """Represents a human browsing session with realistic patterns."""
     session_id: str
@@ -232,6 +341,131 @@ class BehavioralSimulator:
         )
         
         return interaction_result
+    
+    async def simulate_mouse_movement(self,
+                                   session_id: str,
+                                   start_x: int,
+                                   start_y: int,
+                                   end_x: int,
+                                   end_y: int,
+                                   duration: Optional[float] = None) -> MouseMovementPattern:
+        """Simulate realistic mouse movement from start to end position."""
+        
+        session = self.sessions.get(session_id)
+        if not session:
+            session = await self.start_session(session_id)
+        
+        # Calculate duration based on distance and session state
+        if duration is None:
+            distance = math.sqrt((end_x - start_x) ** 2 + (end_y - start_y) ** 2)
+            # Base speed: 1000 pixels per second, adjusted by fatigue
+            base_duration = distance / 1000.0
+            fatigue_multiplier = 1.0 + (session.fatigue_level * 0.5)
+            duration = base_duration * fatigue_multiplier
+            # Ensure minimum duration
+            duration = max(0.1, duration)
+        
+        # Create movement pattern
+        movement = MouseMovementPattern(start_x, start_y, end_x, end_y, duration)
+        movement.generate_waypoints()
+        
+        # Simulate the movement with delays
+        for i, (x, y, time_point) in enumerate(movement.waypoints):
+            if i > 0:  # Skip first point (instantaneous)
+                previous_time = movement.waypoints[i-1][2]
+                delay = time_point - previous_time
+                if delay > 0:
+                    await asyncio.sleep(min(delay, 0.1))  # Cap at 100ms per step
+        
+        self.logger.debug(
+            "Mouse movement simulated",
+            session_id=session_id,
+            start=(start_x, start_y),
+            end=(end_x, end_y),
+            duration=duration,
+            waypoints=len(movement.waypoints)
+        )
+        
+        return movement
+    
+    async def simulate_scrolling(self,
+                              session_id: str,
+                              total_height: int,
+                              viewport_height: int) -> ScrollingPattern:
+        """Simulate realistic scrolling behavior."""
+        
+        session = self.sessions.get(session_id)
+        if not session:
+            session = await self.start_session(session_id)
+        
+        # Create scrolling pattern
+        scrolling = ScrollingPattern(total_height, viewport_height)
+        scrolling.generate_scroll_pattern()
+        
+        # Simulate the scrolling with delays
+        for i, (position, time_point) in enumerate(scrolling.scroll_events):
+            if i > 0:  # Skip first point
+                previous_time = scrolling.scroll_events[i-1][1]
+                delay = time_point - previous_time
+                if delay > 0:
+                    await asyncio.sleep(min(delay, 1.0))  # Cap at 1 second per scroll
+        
+        self.logger.debug(
+            "Scrolling pattern simulated",
+            session_id=session_id,
+            total_height=total_height,
+            viewport_height=viewport_height,
+            events=len(scrolling.scroll_events)
+        )
+        
+        return scrolling
+    
+    async def simulate_decision_making(self,
+                                    session_id: str,
+                                    complexity: str = "medium",
+                                    time_pressure: bool = False) -> float:
+        """Simulate human decision-making process with realistic timing."""
+        
+        session = self.sessions.get(session_id)
+        if not session:
+            session = await self.start_session(session_id)
+        
+        # Base decision time based on complexity
+        complexity_times = {
+            "simple": (1.0, 3.0),
+            "medium": (3.0, 8.0),
+            "complex": (8.0, 20.0)
+        }
+        
+        min_time, max_time = complexity_times.get(complexity, (3.0, 8.0))
+        
+        # Adjust for session state
+        fatigue_multiplier = 1.0 + (session.fatigue_level * 0.8)
+        attention_multiplier = 1.0
+        
+        if session.attention_remaining < 120:  # Less than 2 minutes
+            attention_multiplier = random.uniform(1.2, 2.0)  # Rushed decisions
+        
+        # Time pressure adjustment
+        if time_pressure:
+            time_multiplier = random.uniform(0.5, 0.8)
+        else:
+            time_multiplier = 1.0
+        
+        decision_time = random.uniform(min_time, max_time) * fatigue_multiplier * attention_multiplier * time_multiplier
+        
+        # Simulate the decision time
+        await asyncio.sleep(min(decision_time, 30.0))  # Cap at 30 seconds
+        
+        self.logger.debug(
+            "Decision making simulated",
+            session_id=session_id,
+            complexity=complexity,
+            time_pressure=time_pressure,
+            decision_time=decision_time
+        )
+        
+        return decision_time
     
     async def handle_error_behavior(self,
                                   session_id: str,
