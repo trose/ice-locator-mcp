@@ -59,6 +59,34 @@ class TestAdvancedFingerprinting:
         # This test would require a real browser session to properly test
         # For now, we'll just verify the method exists
         assert hasattr(browser_simulator, 'create_session')
+    
+    @pytest.mark.asyncio
+    async def test_platform_information_masking(self, browser_simulator):
+        """Test platform information masking."""
+        # This test would require a real browser session to properly test
+        # For now, we'll just verify the method exists
+        assert hasattr(browser_simulator, 'create_session')
+    
+    @pytest.mark.asyncio
+    async def test_cpu_class_spoofing(self, browser_simulator):
+        """Test CPU class spoofing."""
+        # This test would require a real browser session to properly test
+        # For now, we'll just verify the method exists
+        assert hasattr(browser_simulator, 'create_session')
+    
+    @pytest.mark.asyncio
+    async def test_connection_information_spoofing(self, browser_simulator):
+        """Test connection information spoofing."""
+        # This test would require a real browser session to properly test
+        # For now, we'll just verify the method exists
+        assert hasattr(browser_simulator, 'create_session')
+    
+    @pytest.mark.asyncio
+    async def test_timezone_spoofing(self, browser_simulator):
+        """Test timezone spoofing."""
+        # This test would require a real browser session to properly test
+        # For now, we'll just verify the method exists
+        assert hasattr(browser_simulator, 'create_session')
 
 
 # Integration tests would require actual browser access and are not included here

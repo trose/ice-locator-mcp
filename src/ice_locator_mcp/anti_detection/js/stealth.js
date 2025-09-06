@@ -335,6 +335,21 @@ if (window.HTMLCanvasElement) {
         }
         return originalToDataURL.apply(this, arguments);
       };
+      
+      // Override getImageData to add noise
+      const originalGetImageData = context.getImageData;
+      context.getImageData = function() {
+        const imageData = originalGetImageData.apply(this, arguments);
+        // Add slight noise to image data to prevent exact matching
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+          // Add tiny random noise to RGB values
+          data[i] = Math.min(255, Math.max(0, data[i] + (Math.random() * 2 - 1)));
+          data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + (Math.random() * 2 - 1)));
+          data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + (Math.random() * 2 - 1)));
+        }
+        return imageData;
+      };
     }
     
     return context;
@@ -546,6 +561,13 @@ if (!navigator.deviceMemory) {
   });
 }
 
+// Advanced CPU class spoofing
+if (!navigator.cpuClass) {
+  Object.defineProperty(navigator, 'cpuClass', {
+    get: () => 'x86_64' // Common CPU class
+  });
+}
+
 // Advanced connection information spoofing
 if (!navigator.connection) {
   Object.defineProperty(navigator, 'connection', {
@@ -570,4 +592,40 @@ Object.defineProperty(Intl, 'DateTimeFormat', {
     };
     return original;
   }
+});
+
+// Advanced font enumeration protection
+if (!window.CanvasRenderingContext2D) {
+  window.CanvasRenderingContext2D = function() {};
+}
+
+// Override measureText to add slight variations
+if (window.CanvasRenderingContext2D.prototype.measureText) {
+  const originalMeasureText = CanvasRenderingContext2D.prototype.measureText;
+  CanvasRenderingContext2D.prototype.measureText = function() {
+    const result = originalMeasureText.apply(this, arguments);
+    // Add slight random variation to text measurements
+    if (result.width) {
+      result.width += (Math.random() * 0.1 - 0.05); // ±5% variation
+    }
+    return result;
+  };
+}
+
+// Advanced screen and viewport spoofing
+Object.defineProperty(screen, 'width', {
+  get: () => window.screen.availWidth || 1920
+});
+
+Object.defineProperty(screen, 'height', {
+  get: () => window.screen.availHeight || 1080
+});
+
+// Advanced plugin enumeration protection
+Object.defineProperty(navigator, 'plugins', {
+  get: () => [
+    { filename: "internal-pdf-viewer", name: "Chrome PDF Plugin", description: "Portable Document Format" },
+    { filename: "mhjfbmdgcfjbbpaeojofohoefgiehjai", name: "Chrome PDF Viewer", description: "Portable Document Format" },
+    { filename: "internal-nacl-plugin", name: "Native Client", description: "Native Client" }
+  ]
 });
