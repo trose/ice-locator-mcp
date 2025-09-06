@@ -8,6 +8,7 @@ capabilities including automated solving strategies and fallback mechanisms.
 import asyncio
 import base64
 import hashlib
+import re
 import time
 from dataclasses import dataclass
 from enum import Enum
