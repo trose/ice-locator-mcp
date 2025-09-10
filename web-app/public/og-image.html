@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(circle at 20% 20%, #f59e0b 2px, transparent 2px),
+                radial-gradient(circle at 80% 80%, #ef4444 2px, transparent 2px),
+                radial-gradient(circle at 40% 60%, #10b981 2px, transparent 2px),
+                radial-gradient(circle at 60% 40%, #8b5cf6 2px, transparent 2px);
+            background-size: 100px 100px, 80px 80px, 120px 120px, 90px 90px;
+        }
+        
+        .content {
+            text-align: center;
+            z-index: 1;
+            max-width: 800px;
+            padding: 40px;
+        }
+        
+        .title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .description {
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 1.4;
+            opacity: 0.8;
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 40px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-pattern"></div>
+    <div class="content">
+        <div class="icon">🗺️</div>
+        <h1 class="title">ICE Facility Heatmap</h1>
+        <h2 class="subtitle">Immigration Detention Centers</h2>
+        <p class="description">
+            Interactive visualization of detention facilities across the United States<br>
+            with population data and facility information
+        </p>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number">186</span>
+                <span class="stat-label">Facilities</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">62K+</span>
+                <span class="stat-label">Population</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">50</span>
+                <span class="stat-label">States</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
