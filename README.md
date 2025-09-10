@@ -119,7 +119,7 @@ result = await bulk_search_detainees(
             "country_of_birth": "Mexico"
         },
         {
-            "alien_number": "A123456789"
+            "alien_number": "A000000000"
         }
     ],
     max_concurrent=3
@@ -351,7 +351,7 @@ safety check
   "status": "found|not_found|error|partial",
   "results": [
     {
-      "alien_number": "A123456789",
+      "alien_number": "A000000000",
       "name": "John Doe",
       "date_of_birth": "1990-01-15",
       "country_of_birth": "Mexico",

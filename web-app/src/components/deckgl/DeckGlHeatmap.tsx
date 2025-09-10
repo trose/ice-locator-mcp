@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-// Import DeckGL components
-import DeckGL from '@deck.gl/react';
-import { MapView } from '@deck.gl/core';
 // Import MapboxOverlay for proper MapLibre integration
 import { MapboxOverlay } from '@deck.gl/mapbox';
 // Import MapLibre
@@ -11,18 +8,19 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { HeatmapLayer } from '@deck.gl/aggregation-layers';
 import { ScatterplotLayer } from '@deck.gl/layers';
 import type { Color } from '@deck.gl/core';
+// Import embedded data
+import facilitiesData from '../../data/facilities.json';
 
 // Using a free style from CartoCDN
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
 // Types for our data
 interface Facility {
-  id: number;
   name: string;
   latitude: number;
   longitude: number;
   address: string;
-  detainee_count: number;
+  population_count: number;
 }
 
 interface HeatmapPoint {
@@ -62,37 +60,20 @@ const DeckGlHeatmap: React.FC = () => {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
 
-  // Fetch heatmap data from our API
+  // Load embedded facilities data
   useEffect(() => {
-    const fetchHeatmapData = async () => {
-      try {
-        console.log('Fetching heatmap data from API...');
-        // Use the real API endpoint
-        const response = await fetch('http://localhost:8082/api/heatmap-data');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        console.log('Fetched facilities data:', data.length, 'facilities');
-        console.log('Sample facilities data:', data.slice(0, 3));
-        
-        // Log facilities with non-zero detainee counts
-        const facilitiesWithDetainees = data.filter((f: Facility) => f.detainee_count > 0);
-        console.log('Facilities with detainees:', facilitiesWithDetainees.length);
-        console.log('Sample facilities with detainees:', facilitiesWithDetainees.slice(0, 3));
-        
-        setFacilities(data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Failed to fetch heatmap data:', err);
-        setError('Failed to load heatmap data: ' + (err as Error).message);
-        setLoading(false);
-      }
-    };
-
-    fetchHeatmapData();
+    try {
+      console.log('Loading embedded facilities data...');
+      console.log('Data metadata:', facilitiesData.metadata);
+      console.log('Sample facilities data:', facilitiesData.facilities.slice(0, 3));
+      
+      setFacilities(facilitiesData.facilities);
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to load embedded data:', err);
+      setError('Failed to load facilities data: ' + (err as Error).message);
+      setLoading(false);
+    }
   }, []);
 
   // Initialize MapLibre map and DeckGL overlay
@@ -126,11 +107,11 @@ const DeckGlHeatmap: React.FC = () => {
     });
 
     // Update layers when facilities change
-    const updateLayers = () => {
-      if (overlayRef.current) {
-        overlayRef.current.setProps({ layers: getLayers() });
-      }
-    };
+    // const updateLayers = () => {
+    //   if (overlayRef.current) {
+    //     overlayRef.current.setProps({ layers: getLayers() });
+    //   }
+    // };
 
     // Cleanup
     return () => {
@@ -149,11 +130,11 @@ const DeckGlHeatmap: React.FC = () => {
         facility.longitude !== 0 &&
         !isNaN(facility.latitude) &&
         !isNaN(facility.longitude) &&
-        facility.detainee_count > 0 // Only include facilities with detainees
+        facility.population_count > 0 // Only include facilities with population
       )
       .map(facility => ({
         position: [facility.longitude, facility.latitude],
-        weight: facility.detainee_count,
+        weight: facility.population_count,
         facility: facility
       }));
 
@@ -224,11 +205,11 @@ const DeckGlHeatmap: React.FC = () => {
       facility.longitude !== 0 &&
       !isNaN(facility.latitude) &&
       !isNaN(facility.longitude) &&
-      facility.detainee_count > 0 // Only include facilities with detainees
+      facility.population_count > 0 // Only include facilities with population
     )
     .map(facility => ({
       position: [facility.longitude, facility.latitude],
-      weight: facility.detainee_count,
+      weight: facility.population_count,
       facility: facility
     }));
 
@@ -237,7 +218,7 @@ const DeckGlHeatmap: React.FC = () => {
       <div className="flex items-center justify-center h-full">
         <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
           <strong className="font-bold">Warning! </strong>
-          <span className="block sm:inline">No facilities with detainees found</span>
+          <span className="block sm:inline">No facilities with population data found</span>
         </div>
       </div>
     );
@@ -249,8 +230,8 @@ const DeckGlHeatmap: React.FC = () => {
     <div className="relative h-full w-full">
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-20 bg-white shadow-md p-4">
-        <h1 className="text-2xl font-bold text-gray-900">ICE Detainee Locator</h1>
-        <p className="text-sm text-gray-500">Heatmap view of detainee locations</p>
+        <h1 className="text-2xl font-bold text-gray-900">ICE Detention Facilities</h1>
+        <p className="text-sm text-gray-500">Heatmap view of facility populations</p>
       </div>
 
       {/* Map container */}
@@ -261,26 +242,26 @@ const DeckGlHeatmap: React.FC = () => {
         <h3 className="text-lg font-medium text-gray-900 mb-2">Legend</h3>
         <div className="flex items-center mb-1">
           <div className="w-4 h-4 bg-gray-200 rounded-full mr-2"></div>
-          <span className="text-sm">0 detainees</span>
+          <span className="text-sm">0 population</span>
         </div>
         <div className="flex items-center mb-1">
           <div className="w-4 h-4 bg-yellow-200 rounded-full mr-2"></div>
-          <span className="text-sm">1-5 detainees</span>
+          <span className="text-sm">1-200 population</span>
         </div>
         <div className="flex items-center mb-1">
           <div className="w-4 h-4 bg-orange-300 rounded-full mr-2"></div>
-          <span className="text-sm">6-10 detainees</span>
+          <span className="text-sm">201-500 population</span>
         </div>
         <div className="flex items-center mb-1">
           <div className="w-4 h-4 bg-orange-500 rounded-full mr-2"></div>
-          <span className="text-sm">11-20 detainees</span>
+          <span className="text-sm">501-1000 population</span>
         </div>
         <div className="flex items-center">
           <div className="w-4 h-4 bg-red-600 rounded-full mr-2"></div>
-          <span className="text-sm">21+ detainees</span>
+          <span className="text-sm">1000+ population</span>
         </div>
         <div className="mt-3 text-xs text-gray-500">
-          Showing {heatmapData.length} facilities with detainees
+          Showing {heatmapData.length} facilities with population data
         </div>
       </div>
 
@@ -302,7 +283,7 @@ const DeckGlHeatmap: React.FC = () => {
         >
           <div className="font-semibold">{hoverInfo.object.facility.name}</div>
           <div>{hoverInfo.object.facility.address || 'No address available'}</div>
-          <div>{hoverInfo.object.facility.detainee_count} detainees</div>
+          <div>{hoverInfo.object.facility.population_count} population</div>
         </div>
       )}
       
@@ -325,7 +306,7 @@ const DeckGlHeatmap: React.FC = () => {
           <div className="text-gray-600">{clickInfo.object.facility.address || 'No address available'}</div>
           <div className="mt-2">
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-              {clickInfo.object.facility.detainee_count} detainees
+              {clickInfo.object.facility.population_count} population
             </span>
           </div>
           <button 

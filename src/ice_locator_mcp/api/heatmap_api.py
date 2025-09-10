@@ -16,33 +16,45 @@ from typing import List, Dict, Optional
 # Import database modules using the correct package structure
 from ice_locator_mcp.database.manager import DatabaseManager
 from ice_locator_mcp.database.mock_manager import MockDatabaseManager
+from ice_locator_mcp.database.sqlite_manager import SQLiteDatabaseManager
 from ice_locator_mcp.database.models import Facility
 
 
 class HeatmapAPI:
     """API layer for heatmap data."""
     
-    def __init__(self, database_url: str = None):
+    def __init__(self, database_url: str = None, use_sqlite: bool = True):
         """
         Initialize the heatmap API.
         
         Args:
-            database_url: PostgreSQL connection string
+            database_url: PostgreSQL connection string (if not using SQLite)
+            use_sqlite: If True, use SQLite database for local development
         """
-        # Default to environment variable or local database
-        self.database_url = database_url or os.environ.get(
-            "DATABASE_URL", 
-            "postgresql://localhost/ice_locator"
-        )
-        self.db_manager = None
+        self.use_sqlite = use_sqlite
+        if use_sqlite:
+            self.database_path = os.environ.get("SQLITE_DATABASE_PATH", "ice_locator_facilities.db")
+            self.db_manager = None
+        else:
+            # Default to environment variable or local database
+            self.database_url = database_url or os.environ.get(
+                "DATABASE_URL", 
+                "postgresql://localhost/ice_locator"
+            )
+            self.db_manager = None
         self.use_mock = False
     
     def connect_database(self):
         """Connect to the database."""
         try:
-            self.db_manager = DatabaseManager(self.database_url)
-            self.db_manager.connect()
-            self.use_mock = False
+            if self.use_sqlite:
+                self.db_manager = SQLiteDatabaseManager(self.database_path)
+                self.db_manager.connect()
+                self.use_mock = False
+            else:
+                self.db_manager = DatabaseManager(self.database_url)
+                self.db_manager.connect()
+                self.use_mock = False
         except Exception as e:
             print(f"Database connection failed: {e}")
             print("Using mock database manager for testing")
@@ -56,10 +68,10 @@ class HeatmapAPI:
     
     def get_facilities(self) -> List[Dict]:
         """
-        Get all facilities with their GPS coordinates.
+        Get all facilities with their GPS coordinates and population counts.
         
         Returns:
-            List of facilities with id, name, latitude, longitude, and address
+            List of facilities with id, name, latitude, longitude, address, and population_count
         """
         try:
             self.connect_database()
@@ -72,7 +84,8 @@ class HeatmapAPI:
                     "name": facility.name,
                     "latitude": facility.latitude,
                     "longitude": facility.longitude,
-                    "address": facility.address
+                    "address": facility.address,
+                    "population_count": facility.population_count
                 })
             
             return result
@@ -150,6 +163,76 @@ class HeatmapAPI:
             )
         finally:
             self.disconnect_database()
+    
+    def get_facilities_with_population(self) -> List[Dict]:
+        """
+        Get all facilities with their population counts for heatmap visualization.
+        
+        Returns:
+            List of facilities with coordinates and population counts
+        """
+        try:
+            self.connect_database()
+            if hasattr(self.db_manager, 'get_facilities_with_population'):
+                facilities = self.db_manager.get_facilities_with_population()
+            else:
+                # Fallback to regular facilities if method doesn't exist
+                facilities = self.db_manager.get_all_facilities()
+                facilities = [
+                    {
+                        "id": f.id,
+                        "name": f.name,
+                        "latitude": f.latitude,
+                        "longitude": f.longitude,
+                        "address": f.address,
+                        "population_count": f.population_count,
+                        "created_at": f.created_at.isoformat() if f.created_at else None,
+                        "updated_at": f.updated_at.isoformat() if f.updated_at else None
+                    }
+                    for f in facilities
+                    if f.population_count is not None and f.population_count > 0
+                ]
+            return facilities
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to retrieve facilities with population: {str(e)}"
+            )
+        finally:
+            self.disconnect_database()
+    
+    def get_facility_statistics(self) -> Dict:
+        """
+        Get overall facility statistics.
+        
+        Returns:
+            Dictionary with facility statistics
+        """
+        try:
+            self.connect_database()
+            if hasattr(self.db_manager, 'get_facility_statistics'):
+                stats = self.db_manager.get_facility_statistics()
+            else:
+                # Fallback statistics
+                facilities = self.db_manager.get_all_facilities()
+                total_facilities = len(facilities)
+                total_population = sum(f.population_count or 0 for f in facilities)
+                avg_population = total_population / total_facilities if total_facilities > 0 else 0
+                
+                stats = {
+                    "total_facilities": total_facilities,
+                    "total_population": total_population,
+                    "average_population": round(avg_population, 1),
+                    "facilities_by_state": []
+                }
+            return stats
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to retrieve facility statistics: {str(e)}"
+            )
+        finally:
+            self.disconnect_database()
 
 
 # Create FastAPI app
@@ -196,7 +279,9 @@ async def root():
         "endpoints": [
             "/api/facilities",
             "/api/facility/{id}/current-detainees",
-            "/api/heatmap-data"
+            "/api/heatmap-data",
+            "/api/facilities-with-population",
+            "/api/facility-statistics"
         ]
     }
 
@@ -238,3 +323,25 @@ async def get_heatmap_data(api: HeatmapAPI = Depends(get_heatmap_api)):
         List of facilities with coordinates and detainee counts
     """
     return api.get_heatmap_data()
+
+
+@app.get("/api/facilities-with-population")
+async def get_facilities_with_population(api: HeatmapAPI = Depends(get_heatmap_api)):
+    """
+    Get all facilities with their population counts for heatmap visualization.
+    
+    Returns:
+        List of facilities with coordinates and population counts
+    """
+    return api.get_facilities_with_population()
+
+
+@app.get("/api/facility-statistics")
+async def get_facility_statistics(api: HeatmapAPI = Depends(get_heatmap_api)):
+    """
+    Get overall facility statistics.
+    
+    Returns:
+        Dictionary with facility statistics including total facilities, population, and breakdown by state
+    """
+    return api.get_facility_statistics()

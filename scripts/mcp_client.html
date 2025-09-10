@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICE Locator MCP Client</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .status {
+            background-color: #E3F2FD;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007AFF;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ICE Locator MCP Client</h1>
+        
+        <div class="status">
+            <p><strong>Server Status:</strong> <span id="serverStatus">Checking...</span></p>
+            <p><strong>Server URL:</strong> http://localhost:8081/mcp</p>
+        </div>
+        
+        <div class="form-group">
+            <label for="toolName">Select Tool:</label>
+            <select id="toolName">
+                <option value="search_detainee_by_name">Search by Name</option>
+                <option value="search_detainee_by_alien_number">Search by Alien Number</option>
+                <option value="smart_detainee_search">Smart Search</option>
+            </select>
+        </div>
+        
+        <div id="nameSearchForm">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+                <label for="dateOfBirth">Date of Birth (YYYY-MM-DD):</label>
+                <input type="text" id="dateOfBirth" placeholder="Date of Birth">
+            </div>
+            <div class="form-group">
+                <label for="countryOfBirth">Country of Birth:</label>
+                <input type="text" id="countryOfBirth" placeholder="Country of Birth">
+            </div>
+        </div>
+        
+        <div id="alienSearchForm" style="display: none;">
+            <div class="form-group">
+                <label for="alienNumber">Alien Number:</label>
+                <input type="text" id="alienNumber" placeholder="A000000000">
+            </div>
+        </div>
+        
+        <div id="smartSearchForm" style="display: none;">
+            <div class="form-group">
+                <label for="searchQuery">Search Query:</label>
+                <textarea id="searchQuery" placeholder="Enter your search query in natural language" rows="3"></textarea>
+            </div>
+        </div>
+        
+        <button id="searchButton" onclick="performSearch()">Search</button>
+        
+        <div id="resultContainer" style="display: none;">
+            <h3>Result:</h3>
+            <div id="result" class="result"></div>
+        </div>
+        
+        <div id="errorContainer" style="display: none;" class="error">
+            <h3>Error:</h3>
+            <div id="error"></div>
+        </div>
+    </div>
+
+    <script>
+        // Check server status on page load
+        window.onload = function() {
+            checkServerStatus();
+            setupFormHandlers();
+        };
+        
+        function checkServerStatus() {
+            fetch('http://localhost:8081/mcp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json, text/event-stream'
+                },
+                body: JSON.stringify({
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "method": "ping",
+                    "params": {}
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('serverStatus').textContent = 'Connected';
+                    document.getElementById('serverStatus').style.color = 'green';
+                } else {
+                    document.getElementById('serverStatus').textContent = 'Server Running (but not responding to ping)';
+                    document.getElementById('serverStatus').style.color = 'orange';
+                }
+            })
+            .catch(error => {
+                document.getElementById('serverStatus').textContent = 'Not Connected';
+                document.getElementById('serverStatus').style.color = 'red';
+            });
+        }
+        
+        function setupFormHandlers() {
+            document.getElementById('toolName').addEventListener('change', function() {
+                const tool = this.value;
+                document.getElementById('nameSearchForm').style.display = 'none';
+                document.getElementById('alienSearchForm').style.display = 'none';
+                document.getElementById('smartSearchForm').style.display = 'none';
+                
+                switch(tool) {
+                    case 'search_detainee_by_name':
+                        document.getElementById('nameSearchForm').style.display = 'block';
+                        break;
+                    case 'search_detainee_by_alien_number':
+                        document.getElementById('alienSearchForm').style.display = 'block';
+                        break;
+                    case 'smart_detainee_search':
+                        document.getElementById('smartSearchForm').style.display = 'block';
+                        break;
+                }
+            });
+        }
+        
+        function performSearch() {
+            const tool = document.getElementById('toolName').value;
+            let params = {};
+            
+            // Hide previous results
+            document.getElementById('resultContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'none';
+            
+            // Disable search button
+            const searchButton = document.getElementById('searchButton');
+            searchButton.disabled = true;
+            searchButton.textContent = 'Searching...';
+            
+            // Prepare parameters based on selected tool
+            switch(tool) {
+                case 'search_detainee_by_name':
+                    params = {
+                        first_name: document.getElementById('firstName').value,
+                        last_name: document.getElementById('lastName').value,
+                        date_of_birth: document.getElementById('dateOfBirth').value,
+                        country_of_birth: document.getElementById('countryOfBirth').value
+                    };
+                    break;
+                case 'search_detainee_by_alien_number':
+                    params = {
+                        alien_number: document.getElementById('alienNumber').value
+                    };
+                    break;
+                case 'smart_detainee_search':
+                    params = {
+                        query: document.getElementById('searchQuery').value
+                    };
+                    break;
+            }
+            
+            // Make the request
+            fetch('http://localhost:8081/mcp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json, text/event-stream'
+                },
+                body: JSON.stringify({
+                    "jsonrpc": "2.0",
+                    "id": Date.now(),
+                    "method": "tools/call",
+                    "params": {
+                        "name": tool,
+                        "arguments": params
+                    }
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Re-enable search button
+                searchButton.disabled = false;
+                searchButton.textContent = 'Search';
+                
+                if (data.error) {
+                    document.getElementById('error').textContent = JSON.stringify(data.error, null, 2);
+                    document.getElementById('errorContainer').style.display = 'block';
+                } else {
+                    document.getElementById('result').textContent = JSON.stringify(data.result, null, 2);
+                    document.getElementById('resultContainer').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                // Re-enable search button
+                searchButton.disabled = false;
+                searchButton.textContent = 'Search';
+                
+                document.getElementById('error').textContent = error.toString();
+                document.getElementById('errorContainer').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

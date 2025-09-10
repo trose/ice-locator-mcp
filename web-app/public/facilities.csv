@@ -1,0 +1,187 @@
+name,latitude,longitude,address,population_count
+"Dilley Family Residential Center",28.6695971,-99.1672017,"Dilley, TX, 78017",2000
+"Adelanto ICE Processing Center",34.5599467,-117.4421505,"Adelanto ICE Processing Center, Adelanto, CA, 92301",1847
+"South Texas Family Residential Center",28.6564798,-99.2021906,"South Texas Family Residential Center, Dilley, TX, 78017",1800
+"Stewart Detention Center",32.0356341,-84.7719795,"Stewart Detention Center, Lumpkin, GA, 31815",1800
+"Otay Mesa Detention Center",32.5765248,-116.9154777,"Otay Mesa Detention Center, San Diego, CA, 92154",1500
+"Eloy Detention Center",32.8166837,-111.5200433,"Eloy Detention Center, Eloy, AZ, 85131",1500
+"Northwest Detention Center",47.2492053,-122.4211756,"Northwest Detention Center, Tacoma, WA, 98421",1500
+"Calexico ICE Processing Center",32.6668134,-115.4963754,"Calexico, CA, 92231",1200
+"Big Spring Correctional Center",32.2590164,-101.5030409,"Big Spring Correctional Center, Big Spring, TX, 79720",1200
+"Karnes County Residential Center",28.8849772,-97.9008356,"Karnes City, TX, 78118",1200
+"La Palma Correctional Center",32.7551703,-111.553493,"Eloy, AZ, 85131",1200
+"Port Isabel Service Processing Center",26.0714502,-97.4770792,"Los Fresnos, TX, 78566",1100
+"El Paso Service Processing Center",31.7955926,-106.3696348,"El Paso Service Processing Center, El Paso, TX, 79925",1000
+"Laredo Processing Center",27.4168043,-99.4514344,"Laredo Processing Center, Laredo, TX, 78040",900
+"El Centro Service Processing Center",32.792,-115.563051,"El Centro, CA, 92243",800
+"Conroe Processing Center",30.3118769,-95.4560512,"Conroe, TX, 77301",800
+"Rio Grande Detention Center",27.5075005,-99.5069922,"Laredo, TX, 78040",800
+"Florence Service Processing Center",33.0640298,-111.3825565,"Florence Service Processing Center, Florence, AZ, 85132",800
+"Cibola County Correctional Center",35.1796636,-107.9078742,"Cibola County Correctional Center, Milan, NM, 87021",800
+"LaSalle Detention Facility",31.6832271,-92.1337448,"Jena, LA, 71342",800
+"Houston Contract Detention Facility",29.7589382,-95.3676974,"Houston, TX, 77002",700
+"Broward Transitional Center",26.2772767,-80.1509053,"Broward Transitional Center, Pompano Beach, FL, 33069",700
+"Imperial Regional Detention Facility",32.6668134,-115.4963754,"Calexico, CA, 92231",600
+"Corrections Corporation of America",29.7589382,-95.3676974,"Houston, TX, 77002",600
+"Winn Correctional Center",31.7630345,-106.04638,"Winnfield, TX, 71483",600
+"Krome Service Processing Center",25.7546881,-80.4896527,"Krome Service Processing Center, Miami, FL, 33194",600
+"Otero County Processing Center",32.0786798,-106.2779169,"Otero County Processing Center, Chaparral, NM, 88081",600
+"Caroline Detention Facility",38.0498524,-77.3469994,"Bowling Green, VA, 22427",600
+"Winn Correctional Center",31.8502693,-92.7792943,"Winn Correctional Center, Winnfield, LA, 71483",600
+"Trousdale Turner Correctional Center",36.3521745,-86.0915632,"Trousdale Turner Correctional Center, Hartsville, TN, 37074",600
+"Buffalo Federal Detention Facility",43.0203148,-78.2016158,"Buffalo Federal Detention Facility, Batavia, NY, 14020",600
+"Hamilton County Jail",39.1014537,-84.5124602,"Cincinnati, OH, 45202",600
+"Aurora Contract Detention Facility",39.7405111,-104.830994,"Aurora, CO, 80011",532
+"Bluebonnet Detention Center",32.7680198,-99.8881024,"Bluebonnet Detention Center, Anson, TX, 79501",500
+"T. Don Hutto Residential Center",30.5647288,-97.4194342,"T. Don Hutto Residential Center, Taylor, TX, 76574",500
+"Adams County Correctional Center",31.5576334,-91.2211771,"Adams County Correctional Center, Natchez, MS, 39120",500
+"Franklin County Jail",39.9622601,-83.0007065,"Columbus, OH, 43215",500
+"Montgomery County Jail",39.7596657,-84.1977416,"Montgomery County Jail, Dayton, OH, 45402",500
+"Mesa Verde ICE Processing Facility",35.3738712,-119.019463,"Bakersfield, CA, 93308",400
+"Brooks County Detention Center",27.2482748,-98.1258468,"Brooks County Detention Center, Falfurrias, TX, 78355",400
+"West Texas Detention Facility",31.1662348,-105.3515233,"West Texas Detention Facility, Sierra Blanca, TX, 79851",400
+"Polk County Jail",27.8824098,-81.8196765,"Polk County Jail, Bartow, FL, 33830",400
+"Pinal County Jail",33.0398533,-111.3756957,"Pinal County Jail, Florence, AZ, 85132",400
+"Denver Contract Detention Facility",39.7392364,-104.984862,"Denver, CO, 80202",400
+"Calhoun County Correctional Center",42.3192548,-85.1824269,"Battle Creek, MI, 49015",400
+"Farmville Detention Center",37.3213468,-78.4415853,"Farmville Detention Center, Farmville, VA, 23901",400
+"Irwin County Detention Center",31.5802816,-83.2552781,"Irwin County Detention Center, Ocilla, GA, 31774",400
+"Hardeman County Correctional Center",35.3262451,-89.1505724,"Whiteville, TN, 38075",400
+"Sheridan Federal Correctional Institution",45.083863,-123.3815878,"Sheridan Federal Correctional Institution, Sheridan, OR, 97378",400
+"Cuyahoga County Jail",41.4996574,-81.6936772,"Cleveland, OH, 44113",400
+"Lucas County Jail",41.6566804,-83.5364672,"Lucas County Jail, Toledo, OH, 43604",400
+"Summit County Jail",41.0603905,-81.5211716,"Summit County Jail, Akron, OH, 44308",400
+"Theo Lacy Facility",33.7811502,-117.8875303,"Theo Lacy Facility, Orange, CA, 92868",300
+"Willacy County Processing Center",26.4814565,-97.783051,"Raymondville, TX, 78580",300
+"Baker County Detention Center",30.2968674,-82.1215872,"Baker County Detention Center, Macclenny, FL, 32063",300
+"Seminole County Jail",28.8117345,-81.2680223,"Sanford, FL, 32773",300
+"Elizabeth Contract Detention Facility",40.6639916,-74.2107006,"Elizabeth, NJ, 07201",300
+"Folkston ICE Processing Center",30.8717749,-81.981524,"Folkston ICE Processing Center, Folkston, GA, 31537",300
+"Etowah County Detention Center",34.0128323,-86.0030251,"Gadsden, AL, 35901",300
+"Tallahatchie County Correctional Facility",34.0260769,-90.4450243,"Tallahatchie County Correctional Facility, Tutwiler, MS, 38963",300
+"Butler County Jail",39.399223,-84.56328,"Butler County Jail, Hamilton, OH, 45011",300
+"Orange County Jail",41.4021497,-74.3242129,"Goshen, NY, 10924",300
+"Henderson Detention Center",36.0299427,-114.9823566,"Henderson, NV, 89015",300
+"McHenry County Jail",42.3147529,-88.4474302,"Woodstock, IL, 60098",300
+"Butler County Jail",39.399223,-84.56328,"Butler County Jail, Hamilton, OH, 45011",300
+"Mahoning County Jail",41.1035786,-80.6520161,"Youngstown, OH, 44503",300
+"Stark County Jail",40.8387953,-81.3087739,"Stark County Jail, Canton, OH, 44702",300
+"Glades County Detention Center",26.8331174,-81.0931234,"Moore Haven, FL, 33471",250
+"Richmond County Jail",37.9587465,-76.7580211,"Warsaw, VA, 22572",250
+"Boone County Jail",39.0365965,-84.728322,"Boone County Jail, Burlington, KY, 41005",250
+"Weber County Correctional Facility",41.240367,-111.9935488,"Weber County Correctional Facility, Ogden, UT, 84401",250
+"Porter County Jail",41.466405,-87.0595192,"Porter County Jail, Valparaiso, IN, 46383",250
+"Lorain County Jail",41.3673191,-82.1073583,"Elyria, OH, 44035",250
+"Trumbull County Jail",41.2367955,-80.8190423,"Warren, OH, 44481",250
+"St. Louis County Jail",38.6485039,-90.3378037,"St. Louis County Jail, Clayton, MO, 63105",220
+"Allen County Jail",40.7399785,-84.105006,"Lima, OH, 45801",220
+"Monroe County Detention Center",24.5770255,-81.7514791,"Monroe County Detention Center, Key West, FL, 33040",200
+"Hudson County Correctional Center",40.7278297,-74.1077874,"Hudson County Correctional Center, Kearny, NJ, 07032",200
+"Pike County Jail",31.8087678,-85.969951,"Troy, AL, 36081",200
+"Grayson County Detention Center",37.4890391,-86.2702303,"Grayson County Detention Center, Leitchfield, KY, 42754",200
+"Clinton County Correctional Facility",41.1511182,-77.3493663,"Clinton County Correctional Facility, McElhattan, PA, 17748",200
+"Yakima County Jail",46.601557,-120.510842,"Yakima, WA, 98902",200
+"Butler County Jail",37.8173015,-96.8537388,"El Dorado, KS, 67042",200
+"Sherburne County Jail",45.3038538,-93.5671825,"Elk River, MN, 55330",200
+"Alamance County Jail",36.0690258,-79.4005756,"Graham, NC, 27253",200
+"Suffolk County House of Correction",42.3341589,-71.068675,"Suffolk County House of Correction, Boston, MA, 02118",200
+"Clark County Jail",39.9234046,-83.810138,"Springfield, OH, 45501",200
+"Lake County Jail",41.726471,-81.2449057,"Lake County Jail, Painesville, OH, 44077",200
+"Richland County Jail",40.7574585,-82.512842,"Richland County Jail, Mansfield, OH, 44902",200
+"Hall County Detention Center",40.924271,-98.338685,"Grand Island, NE, 68801",180
+"Phelps County Jail",37.9509324,-91.7708076,"Rolla, MO, 65401",180
+"Berkeley County Detention Center",33.2007396,-80.0182187,"Berkeley County Detention Center, Moncks Corner, SC, 29461",180
+"Hartford Correctional Center",41.7934056,-72.6613292,"Hartford Correctional Center, Hartford, CT, 06103",180
+"Adams County Jail",39.9356016,-91.4098727,"Quincy, IL, 62301",180
+"Clermont County Jail",39.0919866,-84.1850705,"Clermont County Jail, Batavia, OH, 45103",180
+"Fairfield County Jail",39.7132527,-82.59836,"Fairfield County Jail, Lancaster, OH, 43130",180
+"Licking County Jail",40.056199,-82.4014328,"Licking County Jail, Newark, OH, 43055",180
+"Muskingum County Jail",39.9408474,-82.0070985,"Muskingum County Jail, Zanesville, OH, 43701",180
+"Warren County Jail",39.4353373,-84.2029922,"Lebanon, OH, 45036",180
+"Greene County Jail",39.6859955,-83.9283174,"Greene County Jail, Xenia, OH, 45385",170
+"Anderson County Jail",34.5334395,-82.6831902,"Anderson County Jail, Anderson, SC, 29621",160
+"Delaware County Jail",40.3122836,-83.0479642,"Delaware County Jail, Delaware, OH, 43015",160
+"Medina County Jail",41.127946,-81.8909634,"Medina County Jail, Medina, OH, 44256",160
+"Portage County Jail",41.2147834,-81.2575551,"Portage County Jail, Ravenna, OH, 44266",160
+"Wayne County Jail",40.7980976,-81.9397733,"Wooster, OH, 44691",160
+"Bergen County Jail",40.8738731,-74.0390422,"Bergen County Jail, Hackensack, NJ, 07601",150
+"Chippewa County Correctional Facility",46.497309,-84.3454755,"Chippewa County Correctional Facility, Sault Ste. Marie, MI, 49783",150
+"Geauga County Safety Center",41.5824944,-81.2034066,"Chardon, OH, 44024",150
+"Cascade County Detention Center",47.5048851,-111.29189,"Great Falls, MT, 59401",150
+"Grady County Jail",35.0512159,-97.9370036,"Chickasha, OK, 73018",150
+"Dodge County Jail",43.4055504,-88.7051037,"Juneau, WI, 53039",150
+"Adult Correctional Institutions",41.779588,-71.4366813,"Cranston, RI, 02920",150
+"Champaign County Jail",40.1083912,-83.7524298,"Urbana, OH, 43078",150
+"Erie County Jail",41.4530769,-82.7111132,"Erie County Jail, Sandusky, OH, 44870",150
+"Geauga County Jail",41.5824944,-81.2034066,"Chardon, OH, 44024",150
+"Marion County Jail",40.5886259,-83.1287349,"Marion, OH, 43302",150
+"Ross County Jail",39.3331197,-82.9824019,"Chillicothe, OH, 45601",150
+"Ashtabula County Jail",41.7392218,-80.7700844,"Ashtabula County Jail, Jefferson, OH, 44047",140
+"Columbiana County Jail",40.7720044,-80.7681336,"Lisbon, OH, 44432",140
+"Hancock County Jail",41.038313,-83.6521917,"Hancock County Jail, Findlay, OH, 45840",140
+"Jefferson County Jail",40.3600714,-80.6151034,"Steubenville, OH, 43952",140
+"Miami County Jail",40.0394982,-84.2032767,"Troy, OH, 45373",140
+"Scioto County Jail",38.7345374,-82.9962742,"Portsmouth, OH, 45662",140
+"Tuscarawas County Jail",40.4908982,-81.4426149,"Tuscarawas County Jail, New Philadelphia, OH, 44663",140
+"Wood County Jail",41.3768671,-83.6482732,"Wood County Jail, Bowling Green, OH, 43402",140
+"Belmont County Jail",40.0806266,-80.9000916,"St. Clairsville, OH, 43950",130
+"Darke County Jail",40.1003265,-84.6313447,"Darke County Jail, Greenville, OH, 45331",130
+"Huron County Jail",41.2424219,-82.6155745,"Norwalk, OH, 44857",130
+"Sandusky County Jail",41.3575283,-83.0837256,"Sandusky County Jail, Fremont, OH, 43420",130
+"Washington County Jail",39.4282793,-81.4759425,"Washington County Jail, Marietta, OH, 45750",130
+"Minnehaha County Jail",43.5476008,-96.7293629,"Sioux Falls, SD, 57104",120
+"Baxter County Jail",36.3361391,-92.3801187,"Mountain Home, AR, 72653",120
+"Berkeley County Jail",39.4562528,-77.9639604,"Martinsburg, WV, 25401",120
+"Hillsborough County House of Corrections",42.9956397,-71.4547891,"Manchester, NH, 03103",120
+"Worcester County Jail",38.1770634,-75.3926959,"Snow Hill, MD, 21863",120
+"Athens County Jail",39.3289242,-82.1012479,"Athens, OH, 45701",120
+"Clinton County Jail",39.4453393,-83.8285375,"Wilmington, OH, 45177",120
+"Defiance County Jail",41.2844933,-84.3557802,"Defiance, OH, 43512",120
+"Guernsey County Jail",40.031183,-81.5884561,"Cambridge, OH, 43725",120
+"Highland County Jail",39.2022866,-83.611587,"Hillsboro, OH, 45133",120
+"Knox County Jail",40.3933956,-82.4857181,"Mount Vernon, OH, 43050",120
+"Logan County Jail",40.3611643,-83.7596557,"Bellefontaine, OH, 43311",120
+"Mercer County Jail",40.5463487,-84.6152944,"Mercer County Jail, Celina, OH, 45822",120
+"Pickaway County Jail",39.600618,-82.9460133,"Circleville, OH, 43113",120
+"Seneca County Jail",41.114485,-83.1779537,"Tiffin, OH, 44883",120
+"Union County Jail",40.2364486,-83.3671432,"Marysville, OH, 43040",120
+"Brown County Jail",38.8645138,-83.9040944,"Georgetown, OH, 45121",110
+"Crawford County Jail",40.8092243,-82.9743537,"Crawford County Jail, Bucyrus, OH, 44820",110
+"Fulton County Jail",41.546069,-84.1362047,"Wauseon, OH, 43567",110
+"Henry County Jail",41.3911444,-84.1237918,"Henry County Jail, Napoleon, OH, 43545",110
+"Jackson County Jail",39.0522947,-82.6368314,"Jackson County Jail, Jackson, OH, 45640",110
+"Madison County Jail",39.8864493,-83.448253,"London, OH, 43140",110
+"Ottawa County Jail",41.5119954,-82.9376919,"Port Clinton, OH, 43452",110
+"Preble County Jail",39.7439398,-84.6364891,"Eaton, OH, 45320",110
+"Shelby County Jail",40.284241,-84.1555267,"Sidney, OH, 45365",110
+"Williams County Jail",41.4758844,-84.553562,"Williams County Jail, Bryan, OH, 43506",110
+"Burleigh County Detention Center",46.808327,-100.783739,"Bismarck, ND, 58501",100
+"Hardin County Jail",42.3606883,-93.099609,"Eldora, IA, 50627",100
+"Cumberland County Jail",43.6508623,-70.2816197,"Cumberland County Jail, Portland, ME, 04101",100
+"Sussex Correctional Institution",38.6900507,-75.3858753,"Georgetown, DE, 19947",100
+"Oahu Community Correctional Center",21.3300829,-157.8849773,"Oahu Community Correctional Center, Honolulu, HI, 96817",100
+"Auglaize County Jail",40.5678265,-84.1935594,"Wapakoneta, OH, 45895",100
+"Coshocton County Jail",40.2753484,-81.8662428,"Coshocton County Jail, Coshocton, OH, 43812",100
+"Fayette County Jail",39.5364511,-83.4390843,"Washington Court House, OH, 43160",100
+"Hardin County Jail",40.6478171,-83.6089968,"Kenton, OH, 43326",100
+"Holmes County Jail",40.5545071,-81.9179198,"Millersburg, OH, 44654",100
+"Lawrence County Jail",38.5367471,-82.6829406,"Ironton, OH, 45638",100
+"Morrow County Jail",40.5492438,-82.8263126,"Morrow County Jail, Mount Gilead, OH, 43338",100
+"Perry County Jail",39.713978,-82.2084975,"Perry County Jail, New Lexington, OH, 43764",100
+"Putnam County Jail",41.0059283,-84.0390043,"Putnam County Jail, Ottawa, OH, 45875",100
+"Van Wert County Jail",40.8696461,-84.5829261,"Van Wert, OH, 45891",100
+"Berks County Residential Center",40.3795408,-76.0158335,"Berks County Residential Center, Leesport, PA, 19533",96
+"Carroll County Jail",40.5728404,-81.0856532,"Carrollton, OH, 44615",90
+"Gallia County Jail",38.809803,-82.2023691,"Gallipolis, OH, 45631",90
+"Hocking County Jail",39.5395981,-82.4065106,"Hocking County Jail, Logan, OH, 43138",90
+"Monroe County Jail",39.7625729,-81.1153842,"Woodsfield, OH, 43793",90
+"Paulding County Jail",41.1628401,-84.5902954,"Paulding, OH, 45879",90
+"Pike County Jail",39.126735,-82.9854553,"Waverly, OH, 45690",90
+"Wyandot County Jail",40.8272785,-83.2813089,"Upper Sandusky, OH, 43351",90
+"Chittenden County Correctional Facility",44.4671635,-73.1715669,"South Burlington, VT, 05403",80
+"Anchorage Correctional Complex",61.2183804,-149.857649,"Anchorage Correctional Complex, Anchorage, AK, 99501",80
+"Harrison County Jail",40.2728452,-80.9967628,"Cadiz, OH, 43907",80
+"Meigs County Jail",39.0280514,-82.0342217,"Pomeroy, OH, 45769",80
+"Morgan County Jail",39.6491005,-81.852712,"Morgan County Jail, McConnelsville, OH, 43756",80
+"Vinton County Jail",39.2464596,-82.4784898,"McArthur, OH, 45651",80
+"Noble County Jail",39.7478508,-81.5165127,"Caldwell, OH, 43724",70

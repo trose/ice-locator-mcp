@@ -91,7 +91,7 @@ describe('ICEClient Integration Tests', () => {
         return Promise.reject(new Error('Not connected to server'));
       }
 
-      const result = await iceClient.searchDetaineeByAlienNumber('A12345678');
+      const result = await iceClient.searchDetaineeByAlienNumber('A00000000');
 
       expect(result).toBeDefined();
       expect(result.content).toBeDefined();

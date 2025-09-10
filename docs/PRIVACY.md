@@ -32,7 +32,7 @@ The ICE Locator MCP Server is designed with **privacy-first principles**. We und
 #### Redaction Process:
 ```python
 # Example of automatic redaction
-Original Query: "Find Maria Rodriguez, A123456789, born 1985-03-15"
+Original Query: "Find Example Name, A000000000, born 1985-03-15"
 Redacted Query: "Find [NAME], [A_NUMBER], born [DATE]"
 
 Original Result: "Found at Houston Processing Center"

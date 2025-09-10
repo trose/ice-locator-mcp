@@ -8,6 +8,7 @@ Main server implementation that provides MCP tools for accessing ICE detainee in
 import asyncio
 import logging
 import json
+import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Sequence
 
@@ -37,7 +38,11 @@ class ICELocatorServer:
         # Initialize comprehensive monitoring system
         self.comprehensive_monitor = None
         
-        if self.config.monitoring_config.mcpcat_enabled:
+        # Check if monitoring is disabled via environment variable
+        monitoring_enabled = os.getenv("ICE_LOCATOR_ANALYTICS_ENABLED", "true").lower() == "true"
+        mcpcat_enabled = os.getenv("ICE_LOCATOR_MCPCAT_ENABLED", "true").lower() == "true"
+        
+        if self.config.monitoring_config.mcpcat_enabled and monitoring_enabled and mcpcat_enabled:
             try:
                 # Initialize comprehensive monitoring system
                 self.comprehensive_monitor = ComprehensiveMonitor(
@@ -56,6 +61,12 @@ class ICELocatorServer:
                     "Failed to initialize comprehensive monitoring - continuing without analytics",
                     error=str(e)
                 )
+        else:
+            self.logger.info(
+                "Monitoring disabled via configuration",
+                monitoring_enabled=monitoring_enabled,
+                mcpcat_enabled=mcpcat_enabled
+            )
         
         # Initialize core components
         self.proxy_manager = ProxyManager(self.config.proxy_config)
@@ -353,22 +364,36 @@ async def main() -> None:
         
         # Run server with stdio transport
         async with mcp.server.stdio.stdio_server() as (read_stream, write_stream):
-            await server.server.run(
-                read_stream,
-                write_stream,
-                InitializationOptions(
-                    server_name="ice-locator",
-                    server_version="0.1.0",
-                    capabilities=server.server.get_capabilities()
+            try:
+                await server.server.run(
+                    read_stream,
+                    write_stream,
+                    InitializationOptions(
+                        server_name="ice-locator",
+                        server_version="0.1.0",
+                        capabilities=types.ServerCapabilities(
+                            tools=types.ToolsCapability(listChanged=False),
+                            logging=types.LoggingCapability()
+                        )
+                    )
                 )
-            )
+            except Exception as stdio_error:
+                logging.error(f"Stdio server error: {stdio_error}")
+                import traceback
+                traceback.print_exc()
+                raise
             
     except KeyboardInterrupt:
         logging.info("Received interrupt signal")
     except Exception as e:
         logging.error(f"Server error: {e}")
+        import traceback
+        traceback.print_exc()
     finally:
-        await server.stop()
+        try:
+            await server.stop()
+        except Exception as stop_error:
+            logging.error(f"Error stopping server: {stop_error}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,487 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-manifest.json",
+  "name": "ice-locator-mcp",
+  "displayName": "ICE Locator MCP Server",
+  "description": "Advanced Model Context Protocol server for ICE detention facility searches with comprehensive anti-detection capabilities, bilingual support, and privacy-first design",
+  "version": "1.0.0",
+  "author": {
+    "name": "trose",
+    "email": "contact@ice-locator-mcp.org",
+    "url": "https://github.com/trose"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trose/ice-locator-mcp.git"
+  },
+  "homepage": "https://trose.github.io/ice-locator-mcp",
+  "documentation": "https://trose.github.io/ice-locator-mcp/api/",
+  "bugs": {
+    "url": "https://github.com/trose/ice-locator-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "ice", 
+    "detention",
+    "search",
+    "immigration",
+    "privacy",
+    "spanish",
+    "bilingual",
+    "anti-detection",
+    "fuzzy-matching",
+    "human-rights"
+  ],
+  "categories": [
+    "search",
+    "government",
+    "privacy",
+    "accessibility",
+    "human-rights"
+  ],
+  "installation": {
+    "pip": {
+      "package": "ice-locator-mcp",
+      "version": "1.0.0",
+      "command": "pip install ice-locator-mcp==1.0.0"
+    },
+    "docker": {
+      "image": "trose/ice-locator-mcp:1.0.0",
+      "command": "docker run -p 8000:8000 trose/ice-locator-mcp:1.0.0"
+    },
+    "source": {
+      "url": "https://github.com/trose/ice-locator-mcp",
+      "command": "git clone https://github.com/trose/ice-locator-mcp && cd ice-locator-mcp && pip install -e ."
+    }
+  },
+  "configuration": {
+    "mcpServers": {
+      "ice-locator": {
+        "command": "ice-locator-mcp",
+        "args": [],
+        "env": {
+          "ICE_LOCATOR_CONFIG": {
+            "description": "Path to configuration file",
+            "type": "string",
+            "required": false,
+            "default": "~/.config/ice-locator-mcp/config.json"
+          },
+          "ICE_LOCATOR_RATE_LIMIT": {
+            "description": "Rate limit (requests per minute)",
+            "type": "integer",
+            "required": false,
+            "default": 10,
+            "minimum": 1,
+            "maximum": 100
+          },
+          "ICE_LOCATOR_CACHE_ENABLED": {
+            "description": "Enable result caching",
+            "type": "boolean",
+            "required": false,
+            "default": true
+          },
+          "ICE_LOCATOR_PROXY_ENABLED": {
+            "description": "Enable proxy rotation for anti-detection",
+            "type": "boolean",
+            "required": false,
+            "default": false
+          },
+          "ICE_LOCATOR_LANGUAGE": {
+            "description": "Default interface language",
+            "type": "string",
+            "required": false,
+            "default": "en",
+            "enum": ["en", "es", "auto"]
+          }
+        }
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "search_by_name",
+      "displayName": "Search by Name", 
+      "description": "Search ICE detention facilities by detainee name with advanced fuzzy matching and cultural name support",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "description": "First name of the person to search for",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "last_name": {
+            "type": "string", 
+            "description": "Last name of the person to search for",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "middle_name": {
+            "type": "string",
+            "description": "Middle name or initial (optional)",
+            "maxLength": 50
+          },
+          "fuzzy_match": {
+            "type": "boolean",
+            "description": "Enable fuzzy matching for names with potential spelling variations",
+            "default": true
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "description": "Minimum confidence score for fuzzy matches (0.0-1.0)",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "default": 0.8
+          },
+          "cultural_matching": {
+            "type": "boolean",
+            "description": "Enable cultural name matching for Hispanic/Latino names",
+            "default": true
+          }
+        },
+        "required": ["first_name", "last_name"]
+      },
+      "examples": [
+        {
+          "description": "Basic name search",
+          "parameters": {
+            "first_name": "John",
+            "last_name": "Doe"
+          }
+        },
+        {
+          "description": "Spanish name with cultural matching",
+          "parameters": {
+            "first_name": "José Luis",
+            "last_name": "García Rodríguez",
+            "fuzzy_match": true,
+            "cultural_matching": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "search_by_alien_number",
+      "displayName": "Search by A-Number",
+      "description": "Search by Alien Registration Number (A-Number) with format validation",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "alien_number": {
+            "type": "string",
+            "description": "Alien Registration Number (with or without 'A' prefix)",
+            "pattern": "^(A)?[0-9]{8,9}$"
+          },
+          "validate_format": {
+            "type": "boolean", 
+            "description": "Validate A-Number format before search",
+            "default": true
+          }
+        },
+        "required": ["alien_number"]
+      },
+      "examples": [
+        {
+          "description": "A-Number with prefix",
+          "parameters": {
+            "alien_number": "A000000000"
+          }
+        },
+        {
+          "description": "A-Number without prefix",
+          "parameters": {
+            "alien_number": "123456789",
+            "validate_format": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "search_by_facility",
+      "displayName": "Search by Facility",
+      "description": "Search for detainees by facility name or location with flexible matching",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "facility_name": {
+            "type": "string",
+            "description": "Name of the detention facility",
+            "maxLength": 100
+          },
+          "city": {
+            "type": "string",
+            "description": "City where facility is located",
+            "maxLength": 50
+          },
+          "state": {
+            "type": "string",
+            "description": "State where facility is located (2-letter code or full name)",
+            "maxLength": 20
+          },
+          "zip_code": {
+            "type": "string",
+            "description": "ZIP code of facility location",
+            "pattern": "^[0-9]{5}(-[0-9]{4})?$"
+          }
+        },
+        "anyOf": [
+          {"required": ["facility_name"]},
+          {"required": ["city"]},
+          {"required": ["state"]}
+        ]
+      },
+      "examples": [
+        {
+          "description": "Search by facility name",
+          "parameters": {
+            "facility_name": "Example Detention Center"
+          }
+        },
+        {
+          "description": "Search by location",
+          "parameters": {
+            "city": "Houston",
+            "state": "TX"
+          }
+        }
+      ]
+    },
+    {
+      "name": "parse_natural_query", 
+      "displayName": "Natural Language Query",
+      "description": "Parse natural language queries in English and Spanish with intelligent extraction",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Natural language search query",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "auto_execute": {
+            "type": "boolean",
+            "description": "Automatically execute the parsed search",
+            "default": false
+          },
+          "language": {
+            "type": "string",
+            "description": "Query language (auto-detected if not specified)",
+            "enum": ["en", "es", "auto"],
+            "default": "auto"
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "description": "Minimum confidence for auto-execution",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "default": 0.7
+          }
+        },
+        "required": ["query"]
+      },
+      "examples": [
+        {
+          "description": "English natural language query",
+          "parameters": {
+            "query": "Find John Doe at Houston detention center",
+            "auto_execute": false
+          }
+        },
+        {
+          "description": "Spanish natural language query",
+          "parameters": {
+            "query": "Buscar a María González en Miami",
+            "language": "es",
+            "auto_execute": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "bulk_search",
+      "displayName": "Bulk Search Operations",
+      "description": "Execute multiple search queries efficiently with concurrent processing",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "searches": {
+            "type": "array",
+            "description": "Array of search queries to execute",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["name", "alien_number", "facility"]
+                }
+              },
+              "required": ["type"]
+            },
+            "minItems": 1,
+            "maxItems": 10
+          },
+          "max_concurrent": {
+            "type": "integer",
+            "description": "Maximum concurrent searches",
+            "minimum": 1,
+            "maximum": 5,
+            "default": 3
+          },
+          "include_summary": {
+            "type": "boolean",
+            "description": "Include summary statistics in results",
+            "default": true
+          }
+        },
+        "required": ["searches"]
+      },
+      "examples": [
+        {
+          "description": "Multiple search types",
+          "parameters": {
+            "searches": [
+              {
+                "type": "name",
+                "first_name": "John",
+                "last_name": "Doe"
+              },
+              {
+                "type": "alien_number", 
+                "alien_number": "A000000000"
+              }
+            ],
+            "max_concurrent": 2
+          }
+        }
+      ]
+    },
+    {
+      "name": "get_facility_info",
+      "displayName": "Get Facility Information",
+      "description": "Retrieve detailed information about ICE detention facilities",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "facility_name": {
+            "type": "string",
+            "description": "Exact facility name"
+          },
+          "facility_id": {
+            "type": "string", 
+            "description": "Facility identifier"
+          },
+          "include_capacity": {
+            "type": "boolean",
+            "description": "Include capacity information",
+            "default": true
+          },
+          "include_contact": {
+            "type": "boolean",
+            "description": "Include contact information",
+            "default": true
+          }
+        },
+        "anyOf": [
+          {"required": ["facility_name"]},
+          {"required": ["facility_id"]}
+        ]
+      }
+    }
+  ],
+  "features": [
+    {
+      "name": "Anti-Detection Capabilities",
+      "description": "Advanced behavioral simulation, traffic distribution, and proxy management to avoid detection and blocking"
+    },
+    {
+      "name": "Bilingual Support",
+      "description": "Complete English and Spanish language support with cultural name matching for Hispanic/Latino communities"
+    },
+    {
+      "name": "Privacy-First Design", 
+      "description": "Data minimization, configurable retention policies, and privacy protection built into every component"
+    },
+    {
+      "name": "High-Performance Caching",
+      "description": "Intelligent caching system with automatic invalidation and performance optimization"
+    },
+    {
+      "name": "Fuzzy Matching Engine",
+      "description": "Advanced phonetic and similarity matching using Soundex, Metaphone, and Levenshtein algorithms"
+    },
+    {
+      "name": "Real-Time Monitoring",
+      "description": "Comprehensive status monitoring with health metrics, performance tracking, and alerting"
+    },
+    {
+      "name": "Cultural Name Processing",
+      "description": "Specialized handling of Hispanic/Latino naming conventions including compound names and maternal surnames"
+    },
+    {
+      "name": "Rate Limiting Protection",
+      "description": "Adaptive rate limiting with CAPTCHA handling and abuse prevention mechanisms"
+    }
+  ],
+  "privacy": {
+    "data_collection": {
+      "type": "minimal",
+      "description": "Only collects search parameters necessary for ICE website queries"
+    },
+    "data_retention": {
+      "type": "configurable", 
+      "description": "Configurable data retention with automatic cleanup and secure deletion"
+    },
+    "data_sharing": {
+      "type": "none",
+      "description": "No data sharing with third parties"
+    },
+    "data_storage": {
+      "type": "local",
+      "description": "All data stored locally with optional encryption"
+    },
+    "privacy_policy": "https://trose.github.io/ice-locator-mcp/privacy/",
+    "compliance": ["GDPR", "CCPA", "Privacy Act"]
+  },
+  "security": {
+    "input_validation": "Comprehensive input validation and sanitization",
+    "rate_limiting": "Adaptive rate limiting with abuse prevention",
+    "secure_communication": "HTTPS enforcement with certificate validation",
+    "vulnerability_scanning": "Regular dependency and code vulnerability scanning",
+    "security_policy": "https://trose.github.io/ice-locator-mcp/security/"
+  },
+  "performance": {
+    "startup_time": "<5 seconds",
+    "response_time": "<2 seconds average",
+    "throughput": ">5 requests/second",
+    "memory_usage": "<200MB under normal load",
+    "cache_hit_ratio": ">80% for repeated queries"
+  },
+  "platform_support": {
+    "operating_systems": ["Linux", "macOS", "Windows"],
+    "python_versions": ["3.10", "3.11", "3.12"],
+    "architectures": ["x86_64", "arm64"],
+    "containers": ["Docker", "Podman", "Kubernetes"]
+  },
+  "support": {
+    "issues": "https://github.com/trose/ice-locator-mcp/issues",
+    "discussions": "https://github.com/trose/ice-locator-mcp/discussions", 
+    "documentation": "https://trose.github.io/ice-locator-mcp",
+    "community": "https://github.com/trose/ice-locator-mcp/community",
+    "security": "https://github.com/trose/ice-locator-mcp/security"
+  },
+  "legal": {
+    "license": "MIT",
+    "license_url": "https://github.com/trose/ice-locator-mcp/blob/main/LICENSE",
+    "terms_of_service": "https://trose.github.io/ice-locator-mcp/terms/",
+    "disclaimer": "https://trose.github.io/ice-locator-mcp/disclaimer/",
+    "ethical_use": "https://trose.github.io/ice-locator-mcp/ethics/"
+  },
+  "changelog": "https://github.com/trose/ice-locator-mcp/blob/main/CHANGELOG.md",
+  "roadmap": "https://github.com/trose/ice-locator-mcp/projects",
+  "funding": {
+    "github": ["trose"],
+    "type": "github"
+  }
+}

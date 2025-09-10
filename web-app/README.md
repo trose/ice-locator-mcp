@@ -1,69 +1,55 @@
-# React + TypeScript + Vite
+# ICE Detention Facilities Heatmap
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based heatmap visualization of ICE detention facilities across the United States.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Interactive heatmap showing facility populations
+- 186 facilities with comprehensive population data
+- Built with DeckGL and MapLibre GL
+- Self-contained (no backend required)
+- Optimized for Vercel deployment
 
-## Expanding the ESLint configuration
+## Data
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The app includes embedded data for 186 ICE detention facilities with:
+- Facility names and addresses
+- GPS coordinates (latitude/longitude)
+- Population counts
+- Total population: 62,005 detainees
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Development
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+```bash
+# Install dependencies
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Deployment
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This app is optimized for Vercel deployment:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Connect your GitHub repository to Vercel
+2. Set build command: `npm run build`
+3. Set output directory: `dist`
+4. Deploy!
+
+## Data Updates
+
+To update the facility data:
+
+1. Run the data export script: `python export_facilities_for_frontend.py`
+2. Commit the updated `src/data/facilities.json` file
+3. Redeploy to Vercel
+
+## Cost
+
+- **Vercel**: Free tier (100GB bandwidth, unlimited static sites)
+- **No database costs**: Data is embedded in the frontend
+- **No API costs**: Self-contained application

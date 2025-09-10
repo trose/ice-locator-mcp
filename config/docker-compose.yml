@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: ice_locator_postgres
+    environment:
+      POSTGRES_DB: ice_locator
+      POSTGRES_USER: ice_user
+      POSTGRES_PASSWORD: ice_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ice_user -d ice_locator"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  heatmap-api:
+    build: .
+    container_name: ice_locator_heatmap_api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://ice_user:ice_password@postgres:5432/ice_locator
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+    command: python -m uvicorn src.ice_locator_mcp.api.heatmap_api:app --host 0.0.0.0 --port 8000
+
+volumes:
+  postgres_data:
+

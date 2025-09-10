@@ -1,0 +1,2606 @@
+[
+  {
+    "name": "Adelanto ICE Processing Center",
+    "city": "Adelanto",
+    "state": "CA",
+    "zip": "92301",
+    "population": 1847,
+    "raw_data": [
+      "Adelanto ICE Processing Center",
+      "Adelanto",
+      "CA",
+      "92301",
+      "1847"
+    ]
+  },
+  {
+    "name": "Calexico ICE Processing Center",
+    "city": "Calexico",
+    "state": "CA",
+    "zip": "92231",
+    "population": 1200,
+    "raw_data": [
+      "Calexico ICE Processing Center",
+      "Calexico",
+      "CA",
+      "92231",
+      "1200"
+    ]
+  },
+  {
+    "name": "El Centro Service Processing Center",
+    "city": "El Centro",
+    "state": "CA",
+    "zip": "92243",
+    "population": 800,
+    "raw_data": [
+      "El Centro Service Processing Center",
+      "El Centro",
+      "CA",
+      "92243",
+      "800"
+    ]
+  },
+  {
+    "name": "Imperial Regional Detention Facility",
+    "city": "Calexico",
+    "state": "CA",
+    "zip": "92231",
+    "population": 600,
+    "raw_data": [
+      "Imperial Regional Detention Facility",
+      "Calexico",
+      "CA",
+      "92231",
+      "600"
+    ]
+  },
+  {
+    "name": "Mesa Verde ICE Processing Facility",
+    "city": "Bakersfield",
+    "state": "CA",
+    "zip": "93308",
+    "population": 400,
+    "raw_data": [
+      "Mesa Verde ICE Processing Facility",
+      "Bakersfield",
+      "CA",
+      "93308",
+      "400"
+    ]
+  },
+  {
+    "name": "Otay Mesa Detention Center",
+    "city": "San Diego",
+    "state": "CA",
+    "zip": "92154",
+    "population": 1500,
+    "raw_data": [
+      "Otay Mesa Detention Center",
+      "San Diego",
+      "CA",
+      "92154",
+      "1500"
+    ]
+  },
+  {
+    "name": "Theo Lacy Facility",
+    "city": "Orange",
+    "state": "CA",
+    "zip": "92868",
+    "population": 300,
+    "raw_data": [
+      "Theo Lacy Facility",
+      "Orange",
+      "CA",
+      "92868",
+      "300"
+    ]
+  },
+  {
+    "name": "Big Spring Correctional Center",
+    "city": "Big Spring",
+    "state": "TX",
+    "zip": "79720",
+    "population": 1200,
+    "raw_data": [
+      "Big Spring Correctional Center",
+      "Big Spring",
+      "TX",
+      "79720",
+      "1200"
+    ]
+  },
+  {
+    "name": "Bluebonnet Detention Center",
+    "city": "Anson",
+    "state": "TX",
+    "zip": "79501",
+    "population": 500,
+    "raw_data": [
+      "Bluebonnet Detention Center",
+      "Anson",
+      "TX",
+      "79501",
+      "500"
+    ]
+  },
+  {
+    "name": "Brooks County Detention Center",
+    "city": "Falfurrias",
+    "state": "TX",
+    "zip": "78355",
+    "population": 400,
+    "raw_data": [
+      "Brooks County Detention Center",
+      "Falfurrias",
+      "TX",
+      "78355",
+      "400"
+    ]
+  },
+  {
+    "name": "Conroe Processing Center",
+    "city": "Conroe",
+    "state": "TX",
+    "zip": "77301",
+    "population": 800,
+    "raw_data": [
+      "Conroe Processing Center",
+      "Conroe",
+      "TX",
+      "77301",
+      "800"
+    ]
+  },
+  {
+    "name": "Corrections Corporation of America",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77002",
+    "population": 600,
+    "raw_data": [
+      "Corrections Corporation of America",
+      "Houston",
+      "TX",
+      "77002",
+      "600"
+    ]
+  },
+  {
+    "name": "Dilley Family Residential Center",
+    "city": "Dilley",
+    "state": "TX",
+    "zip": "78017",
+    "population": 2000,
+    "raw_data": [
+      "Dilley Family Residential Center",
+      "Dilley",
+      "TX",
+      "78017",
+      "2000"
+    ]
+  },
+  {
+    "name": "El Paso Service Processing Center",
+    "city": "El Paso",
+    "state": "TX",
+    "zip": "79925",
+    "population": 1000,
+    "raw_data": [
+      "El Paso Service Processing Center",
+      "El Paso",
+      "TX",
+      "79925",
+      "1000"
+    ]
+  },
+  {
+    "name": "Houston Contract Detention Facility",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77002",
+    "population": 700,
+    "raw_data": [
+      "Houston Contract Detention Facility",
+      "Houston",
+      "TX",
+      "77002",
+      "700"
+    ]
+  },
+  {
+    "name": "Karnes County Residential Center",
+    "city": "Karnes City",
+    "state": "TX",
+    "zip": "78118",
+    "population": 1200,
+    "raw_data": [
+      "Karnes County Residential Center",
+      "Karnes City",
+      "TX",
+      "78118",
+      "1200"
+    ]
+  },
+  {
+    "name": "Laredo Processing Center",
+    "city": "Laredo",
+    "state": "TX",
+    "zip": "78040",
+    "population": 900,
+    "raw_data": [
+      "Laredo Processing Center",
+      "Laredo",
+      "TX",
+      "78040",
+      "900"
+    ]
+  },
+  {
+    "name": "Port Isabel Service Processing Center",
+    "city": "Los Fresnos",
+    "state": "TX",
+    "zip": "78566",
+    "population": 1100,
+    "raw_data": [
+      "Port Isabel Service Processing Center",
+      "Los Fresnos",
+      "TX",
+      "78566",
+      "1100"
+    ]
+  },
+  {
+    "name": "Rio Grande Detention Center",
+    "city": "Laredo",
+    "state": "TX",
+    "zip": "78040",
+    "population": 800,
+    "raw_data": [
+      "Rio Grande Detention Center",
+      "Laredo",
+      "TX",
+      "78040",
+      "800"
+    ]
+  },
+  {
+    "name": "South Texas Family Residential Center",
+    "city": "Dilley",
+    "state": "TX",
+    "zip": "78017",
+    "population": 1800,
+    "raw_data": [
+      "South Texas Family Residential Center",
+      "Dilley",
+      "TX",
+      "78017",
+      "1800"
+    ]
+  },
+  {
+    "name": "T. Don Hutto Residential Center",
+    "city": "Taylor",
+    "state": "TX",
+    "zip": "76574",
+    "population": 500,
+    "raw_data": [
+      "T. Don Hutto Residential Center",
+      "Taylor",
+      "TX",
+      "76574",
+      "500"
+    ]
+  },
+  {
+    "name": "West Texas Detention Facility",
+    "city": "Sierra Blanca",
+    "state": "TX",
+    "zip": "79851",
+    "population": 400,
+    "raw_data": [
+      "West Texas Detention Facility",
+      "Sierra Blanca",
+      "TX",
+      "79851",
+      "400"
+    ]
+  },
+  {
+    "name": "Willacy County Processing Center",
+    "city": "Raymondville",
+    "state": "TX",
+    "zip": "78580",
+    "population": 300,
+    "raw_data": [
+      "Willacy County Processing Center",
+      "Raymondville",
+      "TX",
+      "78580",
+      "300"
+    ]
+  },
+  {
+    "name": "Winn Correctional Center",
+    "city": "Winnfield",
+    "state": "TX",
+    "zip": "71483",
+    "population": 600,
+    "raw_data": [
+      "Winn Correctional Center",
+      "Winnfield",
+      "TX",
+      "71483",
+      "600"
+    ]
+  },
+  {
+    "name": "Baker County Detention Center",
+    "city": "Macclenny",
+    "state": "FL",
+    "zip": "32063",
+    "population": 300,
+    "raw_data": [
+      "Baker County Detention Center",
+      "Macclenny",
+      "FL",
+      "32063",
+      "300"
+    ]
+  },
+  {
+    "name": "Broward Transitional Center",
+    "city": "Pompano Beach",
+    "state": "FL",
+    "zip": "33069",
+    "population": 700,
+    "raw_data": [
+      "Broward Transitional Center",
+      "Pompano Beach",
+      "FL",
+      "33069",
+      "700"
+    ]
+  },
+  {
+    "name": "Glades County Detention Center",
+    "city": "Moore Haven",
+    "state": "FL",
+    "zip": "33471",
+    "population": 250,
+    "raw_data": [
+      "Glades County Detention Center",
+      "Moore Haven",
+      "FL",
+      "33471",
+      "250"
+    ]
+  },
+  {
+    "name": "Krome Service Processing Center",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33194",
+    "population": 600,
+    "raw_data": [
+      "Krome Service Processing Center",
+      "Miami",
+      "FL",
+      "33194",
+      "600"
+    ]
+  },
+  {
+    "name": "Monroe County Detention Center",
+    "city": "Key West",
+    "state": "FL",
+    "zip": "33040",
+    "population": 200,
+    "raw_data": [
+      "Monroe County Detention Center",
+      "Key West",
+      "FL",
+      "33040",
+      "200"
+    ]
+  },
+  {
+    "name": "Polk County Jail",
+    "city": "Bartow",
+    "state": "FL",
+    "zip": "33830",
+    "population": 400,
+    "raw_data": [
+      "Polk County Jail",
+      "Bartow",
+      "FL",
+      "33830",
+      "400"
+    ]
+  },
+  {
+    "name": "Seminole County Jail",
+    "city": "Sanford",
+    "state": "FL",
+    "zip": "32773",
+    "population": 300,
+    "raw_data": [
+      "Seminole County Jail",
+      "Sanford",
+      "FL",
+      "32773",
+      "300"
+    ]
+  },
+  {
+    "name": "Eloy Detention Center",
+    "city": "Eloy",
+    "state": "AZ",
+    "zip": "85131",
+    "population": 1500,
+    "raw_data": [
+      "Eloy Detention Center",
+      "Eloy",
+      "AZ",
+      "85131",
+      "1500"
+    ]
+  },
+  {
+    "name": "Florence Service Processing Center",
+    "city": "Florence",
+    "state": "AZ",
+    "zip": "85132",
+    "population": 800,
+    "raw_data": [
+      "Florence Service Processing Center",
+      "Florence",
+      "AZ",
+      "85132",
+      "800"
+    ]
+  },
+  {
+    "name": "La Palma Correctional Center",
+    "city": "Eloy",
+    "state": "AZ",
+    "zip": "85131",
+    "population": 1200,
+    "raw_data": [
+      "La Palma Correctional Center",
+      "Eloy",
+      "AZ",
+      "85131",
+      "1200"
+    ]
+  },
+  {
+    "name": "Pinal County Jail",
+    "city": "Florence",
+    "state": "AZ",
+    "zip": "85132",
+    "population": 400,
+    "raw_data": [
+      "Pinal County Jail",
+      "Florence",
+      "AZ",
+      "85132",
+      "400"
+    ]
+  },
+  {
+    "name": "Cibola County Correctional Center",
+    "city": "Milan",
+    "state": "NM",
+    "zip": "87021",
+    "population": 800,
+    "raw_data": [
+      "Cibola County Correctional Center",
+      "Milan",
+      "NM",
+      "87021",
+      "800"
+    ]
+  },
+  {
+    "name": "Otero County Processing Center",
+    "city": "Chaparral",
+    "state": "NM",
+    "zip": "88081",
+    "population": 600,
+    "raw_data": [
+      "Otero County Processing Center",
+      "Chaparral",
+      "NM",
+      "88081",
+      "600"
+    ]
+  },
+  {
+    "name": "Aurora Contract Detention Facility",
+    "city": "Aurora",
+    "state": "CO",
+    "zip": "80011",
+    "population": 532,
+    "raw_data": [
+      "Aurora Contract Detention Facility",
+      "Aurora",
+      "CO",
+      "80011",
+      "532"
+    ]
+  },
+  {
+    "name": "Denver Contract Detention Facility",
+    "city": "Denver",
+    "state": "CO",
+    "zip": "80202",
+    "population": 400,
+    "raw_data": [
+      "Denver Contract Detention Facility",
+      "Denver",
+      "CO",
+      "80202",
+      "400"
+    ]
+  },
+  {
+    "name": "Bergen County Jail",
+    "city": "Hackensack",
+    "state": "NJ",
+    "zip": "07601",
+    "population": 150,
+    "raw_data": [
+      "Bergen County Jail",
+      "Hackensack",
+      "NJ",
+      "07601",
+      "150"
+    ]
+  },
+  {
+    "name": "Elizabeth Contract Detention Facility",
+    "city": "Elizabeth",
+    "state": "NJ",
+    "zip": "07201",
+    "population": 300,
+    "raw_data": [
+      "Elizabeth Contract Detention Facility",
+      "Elizabeth",
+      "NJ",
+      "07201",
+      "300"
+    ]
+  },
+  {
+    "name": "Hudson County Correctional Center",
+    "city": "Kearny",
+    "state": "NJ",
+    "zip": "07032",
+    "population": 200,
+    "raw_data": [
+      "Hudson County Correctional Center",
+      "Kearny",
+      "NJ",
+      "07032",
+      "200"
+    ]
+  },
+  {
+    "name": "Calhoun County Correctional Center",
+    "city": "Battle Creek",
+    "state": "MI",
+    "zip": "49015",
+    "population": 400,
+    "raw_data": [
+      "Calhoun County Correctional Center",
+      "Battle Creek",
+      "MI",
+      "49015",
+      "400"
+    ]
+  },
+  {
+    "name": "Chippewa County Correctional Facility",
+    "city": "Sault Ste. Marie",
+    "state": "MI",
+    "zip": "49783",
+    "population": 150,
+    "raw_data": [
+      "Chippewa County Correctional Facility",
+      "Sault Ste. Marie",
+      "MI",
+      "49783",
+      "150"
+    ]
+  },
+  {
+    "name": "Caroline Detention Facility",
+    "city": "Bowling Green",
+    "state": "VA",
+    "zip": "22427",
+    "population": 600,
+    "raw_data": [
+      "Caroline Detention Facility",
+      "Bowling Green",
+      "VA",
+      "22427",
+      "600"
+    ]
+  },
+  {
+    "name": "Farmville Detention Center",
+    "city": "Farmville",
+    "state": "VA",
+    "zip": "23901",
+    "population": 400,
+    "raw_data": [
+      "Farmville Detention Center",
+      "Farmville",
+      "VA",
+      "23901",
+      "400"
+    ]
+  },
+  {
+    "name": "Richmond County Jail",
+    "city": "Warsaw",
+    "state": "VA",
+    "zip": "22572",
+    "population": 250,
+    "raw_data": [
+      "Richmond County Jail",
+      "Warsaw",
+      "VA",
+      "22572",
+      "250"
+    ]
+  },
+  {
+    "name": "LaSalle Detention Facility",
+    "city": "Jena",
+    "state": "LA",
+    "zip": "71342",
+    "population": 800,
+    "raw_data": [
+      "LaSalle Detention Facility",
+      "Jena",
+      "LA",
+      "71342",
+      "800"
+    ]
+  },
+  {
+    "name": "Winn Correctional Center",
+    "city": "Winnfield",
+    "state": "LA",
+    "zip": "71483",
+    "population": 600,
+    "raw_data": [
+      "Winn Correctional Center",
+      "Winnfield",
+      "LA",
+      "71483",
+      "600"
+    ]
+  },
+  {
+    "name": "Stewart Detention Center",
+    "city": "Lumpkin",
+    "state": "GA",
+    "zip": "31815",
+    "population": 1800,
+    "raw_data": [
+      "Stewart Detention Center",
+      "Lumpkin",
+      "GA",
+      "31815",
+      "1800"
+    ]
+  },
+  {
+    "name": "Irwin County Detention Center",
+    "city": "Ocilla",
+    "state": "GA",
+    "zip": "31774",
+    "population": 400,
+    "raw_data": [
+      "Irwin County Detention Center",
+      "Ocilla",
+      "GA",
+      "31774",
+      "400"
+    ]
+  },
+  {
+    "name": "Folkston ICE Processing Center",
+    "city": "Folkston",
+    "state": "GA",
+    "zip": "31537",
+    "population": 300,
+    "raw_data": [
+      "Folkston ICE Processing Center",
+      "Folkston",
+      "GA",
+      "31537",
+      "300"
+    ]
+  },
+  {
+    "name": "Etowah County Detention Center",
+    "city": "Gadsden",
+    "state": "AL",
+    "zip": "35901",
+    "population": 300,
+    "raw_data": [
+      "Etowah County Detention Center",
+      "Gadsden",
+      "AL",
+      "35901",
+      "300"
+    ]
+  },
+  {
+    "name": "Pike County Jail",
+    "city": "Troy",
+    "state": "AL",
+    "zip": "36081",
+    "population": 200,
+    "raw_data": [
+      "Pike County Jail",
+      "Troy",
+      "AL",
+      "36081",
+      "200"
+    ]
+  },
+  {
+    "name": "Adams County Correctional Center",
+    "city": "Natchez",
+    "state": "MS",
+    "zip": "39120",
+    "population": 500,
+    "raw_data": [
+      "Adams County Correctional Center",
+      "Natchez",
+      "MS",
+      "39120",
+      "500"
+    ]
+  },
+  {
+    "name": "Tallahatchie County Correctional Facility",
+    "city": "Tutwiler",
+    "state": "MS",
+    "zip": "38963",
+    "population": 300,
+    "raw_data": [
+      "Tallahatchie County Correctional Facility",
+      "Tutwiler",
+      "MS",
+      "38963",
+      "300"
+    ]
+  },
+  {
+    "name": "Hardeman County Correctional Center",
+    "city": "Whiteville",
+    "state": "TN",
+    "zip": "38075",
+    "population": 400,
+    "raw_data": [
+      "Hardeman County Correctional Center",
+      "Whiteville",
+      "TN",
+      "38075",
+      "400"
+    ]
+  },
+  {
+    "name": "Trousdale Turner Correctional Center",
+    "city": "Hartsville",
+    "state": "TN",
+    "zip": "37074",
+    "population": 600,
+    "raw_data": [
+      "Trousdale Turner Correctional Center",
+      "Hartsville",
+      "TN",
+      "37074",
+      "600"
+    ]
+  },
+  {
+    "name": "Boone County Jail",
+    "city": "Burlington",
+    "state": "KY",
+    "zip": "41005",
+    "population": 250,
+    "raw_data": [
+      "Boone County Jail",
+      "Burlington",
+      "KY",
+      "41005",
+      "250"
+    ]
+  },
+  {
+    "name": "Grayson County Detention Center",
+    "city": "Leitchfield",
+    "state": "KY",
+    "zip": "42754",
+    "population": 200,
+    "raw_data": [
+      "Grayson County Detention Center",
+      "Leitchfield",
+      "KY",
+      "42754",
+      "200"
+    ]
+  },
+  {
+    "name": "Butler County Jail",
+    "city": "Hamilton",
+    "state": "OH",
+    "zip": "45011",
+    "population": 300,
+    "raw_data": [
+      "Butler County Jail",
+      "Hamilton",
+      "OH",
+      "45011",
+      "300"
+    ]
+  },
+  {
+    "name": "Geauga County Safety Center",
+    "city": "Chardon",
+    "state": "OH",
+    "zip": "44024",
+    "population": 150,
+    "raw_data": [
+      "Geauga County Safety Center",
+      "Chardon",
+      "OH",
+      "44024",
+      "150"
+    ]
+  },
+  {
+    "name": "Berks County Residential Center",
+    "city": "Leesport",
+    "state": "PA",
+    "zip": "19533",
+    "population": 96,
+    "raw_data": [
+      "Berks County Residential Center",
+      "Leesport",
+      "PA",
+      "19533",
+      "96"
+    ]
+  },
+  {
+    "name": "Clinton County Correctional Facility",
+    "city": "McElhattan",
+    "state": "PA",
+    "zip": "17748",
+    "population": 200,
+    "raw_data": [
+      "Clinton County Correctional Facility",
+      "McElhattan",
+      "PA",
+      "17748",
+      "200"
+    ]
+  },
+  {
+    "name": "Buffalo Federal Detention Facility",
+    "city": "Batavia",
+    "state": "NY",
+    "zip": "14020",
+    "population": 600,
+    "raw_data": [
+      "Buffalo Federal Detention Facility",
+      "Batavia",
+      "NY",
+      "14020",
+      "600"
+    ]
+  },
+  {
+    "name": "Orange County Jail",
+    "city": "Goshen",
+    "state": "NY",
+    "zip": "10924",
+    "population": 300,
+    "raw_data": [
+      "Orange County Jail",
+      "Goshen",
+      "NY",
+      "10924",
+      "300"
+    ]
+  },
+  {
+    "name": "Northwest Detention Center",
+    "city": "Tacoma",
+    "state": "WA",
+    "zip": "98421",
+    "population": 1500,
+    "raw_data": [
+      "Northwest Detention Center",
+      "Tacoma",
+      "WA",
+      "98421",
+      "1500"
+    ]
+  },
+  {
+    "name": "Yakima County Jail",
+    "city": "Yakima",
+    "state": "WA",
+    "zip": "98902",
+    "population": 200,
+    "raw_data": [
+      "Yakima County Jail",
+      "Yakima",
+      "WA",
+      "98902",
+      "200"
+    ]
+  },
+  {
+    "name": "Sheridan Federal Correctional Institution",
+    "city": "Sheridan",
+    "state": "OR",
+    "zip": "97378",
+    "population": 400,
+    "raw_data": [
+      "Sheridan Federal Correctional Institution",
+      "Sheridan",
+      "OR",
+      "97378",
+      "400"
+    ]
+  },
+  {
+    "name": "Henderson Detention Center",
+    "city": "Henderson",
+    "state": "NV",
+    "zip": "89015",
+    "population": 300,
+    "raw_data": [
+      "Henderson Detention Center",
+      "Henderson",
+      "NV",
+      "89015",
+      "300"
+    ]
+  },
+  {
+    "name": "Weber County Correctional Facility",
+    "city": "Ogden",
+    "state": "UT",
+    "zip": "84401",
+    "population": 250,
+    "raw_data": [
+      "Weber County Correctional Facility",
+      "Ogden",
+      "UT",
+      "84401",
+      "250"
+    ]
+  },
+  {
+    "name": "Cascade County Detention Center",
+    "city": "Great Falls",
+    "state": "MT",
+    "zip": "59401",
+    "population": 150,
+    "raw_data": [
+      "Cascade County Detention Center",
+      "Great Falls",
+      "MT",
+      "59401",
+      "150"
+    ]
+  },
+  {
+    "name": "Burleigh County Detention Center",
+    "city": "Bismarck",
+    "state": "ND",
+    "zip": "58501",
+    "population": 100,
+    "raw_data": [
+      "Burleigh County Detention Center",
+      "Bismarck",
+      "ND",
+      "58501",
+      "100"
+    ]
+  },
+  {
+    "name": "Minnehaha County Jail",
+    "city": "Sioux Falls",
+    "state": "SD",
+    "zip": "57104",
+    "population": 120,
+    "raw_data": [
+      "Minnehaha County Jail",
+      "Sioux Falls",
+      "SD",
+      "57104",
+      "120"
+    ]
+  },
+  {
+    "name": "Hall County Detention Center",
+    "city": "Grand Island",
+    "state": "NE",
+    "zip": "68801",
+    "population": 180,
+    "raw_data": [
+      "Hall County Detention Center",
+      "Grand Island",
+      "NE",
+      "68801",
+      "180"
+    ]
+  },
+  {
+    "name": "Butler County Jail",
+    "city": "El Dorado",
+    "state": "KS",
+    "zip": "67042",
+    "population": 200,
+    "raw_data": [
+      "Butler County Jail",
+      "El Dorado",
+      "KS",
+      "67042",
+      "200"
+    ]
+  },
+  {
+    "name": "Grady County Jail",
+    "city": "Chickasha",
+    "state": "OK",
+    "zip": "73018",
+    "population": 150,
+    "raw_data": [
+      "Grady County Jail",
+      "Chickasha",
+      "OK",
+      "73018",
+      "150"
+    ]
+  },
+  {
+    "name": "Baxter County Jail",
+    "city": "Mountain Home",
+    "state": "AR",
+    "zip": "72653",
+    "population": 120,
+    "raw_data": [
+      "Baxter County Jail",
+      "Mountain Home",
+      "AR",
+      "72653",
+      "120"
+    ]
+  },
+  {
+    "name": "Phelps County Jail",
+    "city": "Rolla",
+    "state": "MO",
+    "zip": "65401",
+    "population": 180,
+    "raw_data": [
+      "Phelps County Jail",
+      "Rolla",
+      "MO",
+      "65401",
+      "180"
+    ]
+  },
+  {
+    "name": "St. Louis County Jail",
+    "city": "Clayton",
+    "state": "MO",
+    "zip": "63105",
+    "population": 220,
+    "raw_data": [
+      "St. Louis County Jail",
+      "Clayton",
+      "MO",
+      "63105",
+      "220"
+    ]
+  },
+  {
+    "name": "Hardin County Jail",
+    "city": "Eldora",
+    "state": "IA",
+    "zip": "50627",
+    "population": 100,
+    "raw_data": [
+      "Hardin County Jail",
+      "Eldora",
+      "IA",
+      "50627",
+      "100"
+    ]
+  },
+  {
+    "name": "Sherburne County Jail",
+    "city": "Elk River",
+    "state": "MN",
+    "zip": "55330",
+    "population": 200,
+    "raw_data": [
+      "Sherburne County Jail",
+      "Elk River",
+      "MN",
+      "55330",
+      "200"
+    ]
+  },
+  {
+    "name": "Dodge County Jail",
+    "city": "Juneau",
+    "state": "WI",
+    "zip": "53039",
+    "population": 150,
+    "raw_data": [
+      "Dodge County Jail",
+      "Juneau",
+      "WI",
+      "53039",
+      "150"
+    ]
+  },
+  {
+    "name": "McHenry County Jail",
+    "city": "Woodstock",
+    "state": "IL",
+    "zip": "60098",
+    "population": 300,
+    "raw_data": [
+      "McHenry County Jail",
+      "Woodstock",
+      "IL",
+      "60098",
+      "300"
+    ]
+  },
+  {
+    "name": "Porter County Jail",
+    "city": "Valparaiso",
+    "state": "IN",
+    "zip": "46383",
+    "population": 250,
+    "raw_data": [
+      "Porter County Jail",
+      "Valparaiso",
+      "IN",
+      "46383",
+      "250"
+    ]
+  },
+  {
+    "name": "Berkeley County Jail",
+    "city": "Martinsburg",
+    "state": "WV",
+    "zip": "25401",
+    "population": 120,
+    "raw_data": [
+      "Berkeley County Jail",
+      "Martinsburg",
+      "WV",
+      "25401",
+      "120"
+    ]
+  },
+  {
+    "name": "Alamance County Jail",
+    "city": "Graham",
+    "state": "NC",
+    "zip": "27253",
+    "population": 200,
+    "raw_data": [
+      "Alamance County Jail",
+      "Graham",
+      "NC",
+      "27253",
+      "200"
+    ]
+  },
+  {
+    "name": "Berkeley County Detention Center",
+    "city": "Moncks Corner",
+    "state": "SC",
+    "zip": "29461",
+    "population": 180,
+    "raw_data": [
+      "Berkeley County Detention Center",
+      "Moncks Corner",
+      "SC",
+      "29461",
+      "180"
+    ]
+  },
+  {
+    "name": "Cumberland County Jail",
+    "city": "Portland",
+    "state": "ME",
+    "zip": "04101",
+    "population": 100,
+    "raw_data": [
+      "Cumberland County Jail",
+      "Portland",
+      "ME",
+      "04101",
+      "100"
+    ]
+  },
+  {
+    "name": "Chittenden County Correctional Facility",
+    "city": "South Burlington",
+    "state": "VT",
+    "zip": "05403",
+    "population": 80,
+    "raw_data": [
+      "Chittenden County Correctional Facility",
+      "South Burlington",
+      "VT",
+      "05403",
+      "80"
+    ]
+  },
+  {
+    "name": "Hillsborough County House of Corrections",
+    "city": "Manchester",
+    "state": "NH",
+    "zip": "03103",
+    "population": 120,
+    "raw_data": [
+      "Hillsborough County House of Corrections",
+      "Manchester",
+      "NH",
+      "03103",
+      "120"
+    ]
+  },
+  {
+    "name": "Suffolk County House of Correction",
+    "city": "Boston",
+    "state": "MA",
+    "zip": "02118",
+    "population": 200,
+    "raw_data": [
+      "Suffolk County House of Correction",
+      "Boston",
+      "MA",
+      "02118",
+      "200"
+    ]
+  },
+  {
+    "name": "Adult Correctional Institutions",
+    "city": "Cranston",
+    "state": "RI",
+    "zip": "02920",
+    "population": 150,
+    "raw_data": [
+      "Adult Correctional Institutions",
+      "Cranston",
+      "RI",
+      "02920",
+      "150"
+    ]
+  },
+  {
+    "name": "Hartford Correctional Center",
+    "city": "Hartford",
+    "state": "CT",
+    "zip": "06103",
+    "population": 180,
+    "raw_data": [
+      "Hartford Correctional Center",
+      "Hartford",
+      "CT",
+      "06103",
+      "180"
+    ]
+  },
+  {
+    "name": "Sussex Correctional Institution",
+    "city": "Georgetown",
+    "state": "DE",
+    "zip": "19947",
+    "population": 100,
+    "raw_data": [
+      "Sussex Correctional Institution",
+      "Georgetown",
+      "DE",
+      "19947",
+      "100"
+    ]
+  },
+  {
+    "name": "Worcester County Jail",
+    "city": "Snow Hill",
+    "state": "MD",
+    "zip": "21863",
+    "population": 120,
+    "raw_data": [
+      "Worcester County Jail",
+      "Snow Hill",
+      "MD",
+      "21863",
+      "120"
+    ]
+  },
+  {
+    "name": "Anchorage Correctional Complex",
+    "city": "Anchorage",
+    "state": "AK",
+    "zip": "99501",
+    "population": 80,
+    "raw_data": [
+      "Anchorage Correctional Complex",
+      "Anchorage",
+      "AK",
+      "99501",
+      "80"
+    ]
+  },
+  {
+    "name": "Oahu Community Correctional Center",
+    "city": "Honolulu",
+    "state": "HI",
+    "zip": "96817",
+    "population": 100,
+    "raw_data": [
+      "Oahu Community Correctional Center",
+      "Honolulu",
+      "HI",
+      "96817",
+      "100"
+    ]
+  },
+  {
+    "name": "Adams County Jail",
+    "city": "Quincy",
+    "state": "IL",
+    "zip": "62301",
+    "population": 180,
+    "raw_data": [
+      "Adams County Jail",
+      "Quincy",
+      "IL",
+      "62301",
+      "180"
+    ]
+  },
+  {
+    "name": "Allen County Jail",
+    "city": "Lima",
+    "state": "OH",
+    "zip": "45801",
+    "population": 220,
+    "raw_data": [
+      "Allen County Jail",
+      "Lima",
+      "OH",
+      "45801",
+      "220"
+    ]
+  },
+  {
+    "name": "Anderson County Jail",
+    "city": "Anderson",
+    "state": "SC",
+    "zip": "29621",
+    "population": 160,
+    "raw_data": [
+      "Anderson County Jail",
+      "Anderson",
+      "SC",
+      "29621",
+      "160"
+    ]
+  },
+  {
+    "name": "Ashtabula County Jail",
+    "city": "Jefferson",
+    "state": "OH",
+    "zip": "44047",
+    "population": 140,
+    "raw_data": [
+      "Ashtabula County Jail",
+      "Jefferson",
+      "OH",
+      "44047",
+      "140"
+    ]
+  },
+  {
+    "name": "Athens County Jail",
+    "city": "Athens",
+    "state": "OH",
+    "zip": "45701",
+    "population": 120,
+    "raw_data": [
+      "Athens County Jail",
+      "Athens",
+      "OH",
+      "45701",
+      "120"
+    ]
+  },
+  {
+    "name": "Auglaize County Jail",
+    "city": "Wapakoneta",
+    "state": "OH",
+    "zip": "45895",
+    "population": 100,
+    "raw_data": [
+      "Auglaize County Jail",
+      "Wapakoneta",
+      "OH",
+      "45895",
+      "100"
+    ]
+  },
+  {
+    "name": "Belmont County Jail",
+    "city": "St. Clairsville",
+    "state": "OH",
+    "zip": "43950",
+    "population": 130,
+    "raw_data": [
+      "Belmont County Jail",
+      "St. Clairsville",
+      "OH",
+      "43950",
+      "130"
+    ]
+  },
+  {
+    "name": "Brown County Jail",
+    "city": "Georgetown",
+    "state": "OH",
+    "zip": "45121",
+    "population": 110,
+    "raw_data": [
+      "Brown County Jail",
+      "Georgetown",
+      "OH",
+      "45121",
+      "110"
+    ]
+  },
+  {
+    "name": "Butler County Jail",
+    "city": "Hamilton",
+    "state": "OH",
+    "zip": "45011",
+    "population": 300,
+    "raw_data": [
+      "Butler County Jail",
+      "Hamilton",
+      "OH",
+      "45011",
+      "300"
+    ]
+  },
+  {
+    "name": "Carroll County Jail",
+    "city": "Carrollton",
+    "state": "OH",
+    "zip": "44615",
+    "population": 90,
+    "raw_data": [
+      "Carroll County Jail",
+      "Carrollton",
+      "OH",
+      "44615",
+      "90"
+    ]
+  },
+  {
+    "name": "Champaign County Jail",
+    "city": "Urbana",
+    "state": "OH",
+    "zip": "43078",
+    "population": 150,
+    "raw_data": [
+      "Champaign County Jail",
+      "Urbana",
+      "OH",
+      "43078",
+      "150"
+    ]
+  },
+  {
+    "name": "Clark County Jail",
+    "city": "Springfield",
+    "state": "OH",
+    "zip": "45501",
+    "population": 200,
+    "raw_data": [
+      "Clark County Jail",
+      "Springfield",
+      "OH",
+      "45501",
+      "200"
+    ]
+  },
+  {
+    "name": "Clermont County Jail",
+    "city": "Batavia",
+    "state": "OH",
+    "zip": "45103",
+    "population": 180,
+    "raw_data": [
+      "Clermont County Jail",
+      "Batavia",
+      "OH",
+      "45103",
+      "180"
+    ]
+  },
+  {
+    "name": "Clinton County Jail",
+    "city": "Wilmington",
+    "state": "OH",
+    "zip": "45177",
+    "population": 120,
+    "raw_data": [
+      "Clinton County Jail",
+      "Wilmington",
+      "OH",
+      "45177",
+      "120"
+    ]
+  },
+  {
+    "name": "Columbiana County Jail",
+    "city": "Lisbon",
+    "state": "OH",
+    "zip": "44432",
+    "population": 140,
+    "raw_data": [
+      "Columbiana County Jail",
+      "Lisbon",
+      "OH",
+      "44432",
+      "140"
+    ]
+  },
+  {
+    "name": "Coshocton County Jail",
+    "city": "Coshocton",
+    "state": "OH",
+    "zip": "43812",
+    "population": 100,
+    "raw_data": [
+      "Coshocton County Jail",
+      "Coshocton",
+      "OH",
+      "43812",
+      "100"
+    ]
+  },
+  {
+    "name": "Crawford County Jail",
+    "city": "Bucyrus",
+    "state": "OH",
+    "zip": "44820",
+    "population": 110,
+    "raw_data": [
+      "Crawford County Jail",
+      "Bucyrus",
+      "OH",
+      "44820",
+      "110"
+    ]
+  },
+  {
+    "name": "Cuyahoga County Jail",
+    "city": "Cleveland",
+    "state": "OH",
+    "zip": "44113",
+    "population": 400,
+    "raw_data": [
+      "Cuyahoga County Jail",
+      "Cleveland",
+      "OH",
+      "44113",
+      "400"
+    ]
+  },
+  {
+    "name": "Darke County Jail",
+    "city": "Greenville",
+    "state": "OH",
+    "zip": "45331",
+    "population": 130,
+    "raw_data": [
+      "Darke County Jail",
+      "Greenville",
+      "OH",
+      "45331",
+      "130"
+    ]
+  },
+  {
+    "name": "Defiance County Jail",
+    "city": "Defiance",
+    "state": "OH",
+    "zip": "43512",
+    "population": 120,
+    "raw_data": [
+      "Defiance County Jail",
+      "Defiance",
+      "OH",
+      "43512",
+      "120"
+    ]
+  },
+  {
+    "name": "Delaware County Jail",
+    "city": "Delaware",
+    "state": "OH",
+    "zip": "43015",
+    "population": 160,
+    "raw_data": [
+      "Delaware County Jail",
+      "Delaware",
+      "OH",
+      "43015",
+      "160"
+    ]
+  },
+  {
+    "name": "Erie County Jail",
+    "city": "Sandusky",
+    "state": "OH",
+    "zip": "44870",
+    "population": 150,
+    "raw_data": [
+      "Erie County Jail",
+      "Sandusky",
+      "OH",
+      "44870",
+      "150"
+    ]
+  },
+  {
+    "name": "Fairfield County Jail",
+    "city": "Lancaster",
+    "state": "OH",
+    "zip": "43130",
+    "population": 180,
+    "raw_data": [
+      "Fairfield County Jail",
+      "Lancaster",
+      "OH",
+      "43130",
+      "180"
+    ]
+  },
+  {
+    "name": "Fayette County Jail",
+    "city": "Washington Court House",
+    "state": "OH",
+    "zip": "43160",
+    "population": 100,
+    "raw_data": [
+      "Fayette County Jail",
+      "Washington Court House",
+      "OH",
+      "43160",
+      "100"
+    ]
+  },
+  {
+    "name": "Franklin County Jail",
+    "city": "Columbus",
+    "state": "OH",
+    "zip": "43215",
+    "population": 500,
+    "raw_data": [
+      "Franklin County Jail",
+      "Columbus",
+      "OH",
+      "43215",
+      "500"
+    ]
+  },
+  {
+    "name": "Fulton County Jail",
+    "city": "Wauseon",
+    "state": "OH",
+    "zip": "43567",
+    "population": 110,
+    "raw_data": [
+      "Fulton County Jail",
+      "Wauseon",
+      "OH",
+      "43567",
+      "110"
+    ]
+  },
+  {
+    "name": "Gallia County Jail",
+    "city": "Gallipolis",
+    "state": "OH",
+    "zip": "45631",
+    "population": 90,
+    "raw_data": [
+      "Gallia County Jail",
+      "Gallipolis",
+      "OH",
+      "45631",
+      "90"
+    ]
+  },
+  {
+    "name": "Geauga County Jail",
+    "city": "Chardon",
+    "state": "OH",
+    "zip": "44024",
+    "population": 150,
+    "raw_data": [
+      "Geauga County Jail",
+      "Chardon",
+      "OH",
+      "44024",
+      "150"
+    ]
+  },
+  {
+    "name": "Greene County Jail",
+    "city": "Xenia",
+    "state": "OH",
+    "zip": "45385",
+    "population": 170,
+    "raw_data": [
+      "Greene County Jail",
+      "Xenia",
+      "OH",
+      "45385",
+      "170"
+    ]
+  },
+  {
+    "name": "Guernsey County Jail",
+    "city": "Cambridge",
+    "state": "OH",
+    "zip": "43725",
+    "population": 120,
+    "raw_data": [
+      "Guernsey County Jail",
+      "Cambridge",
+      "OH",
+      "43725",
+      "120"
+    ]
+  },
+  {
+    "name": "Hamilton County Jail",
+    "city": "Cincinnati",
+    "state": "OH",
+    "zip": "45202",
+    "population": 600,
+    "raw_data": [
+      "Hamilton County Jail",
+      "Cincinnati",
+      "OH",
+      "45202",
+      "600"
+    ]
+  },
+  {
+    "name": "Hancock County Jail",
+    "city": "Findlay",
+    "state": "OH",
+    "zip": "45840",
+    "population": 140,
+    "raw_data": [
+      "Hancock County Jail",
+      "Findlay",
+      "OH",
+      "45840",
+      "140"
+    ]
+  },
+  {
+    "name": "Hardin County Jail",
+    "city": "Kenton",
+    "state": "OH",
+    "zip": "43326",
+    "population": 100,
+    "raw_data": [
+      "Hardin County Jail",
+      "Kenton",
+      "OH",
+      "43326",
+      "100"
+    ]
+  },
+  {
+    "name": "Harrison County Jail",
+    "city": "Cadiz",
+    "state": "OH",
+    "zip": "43907",
+    "population": 80,
+    "raw_data": [
+      "Harrison County Jail",
+      "Cadiz",
+      "OH",
+      "43907",
+      "80"
+    ]
+  },
+  {
+    "name": "Henry County Jail",
+    "city": "Napoleon",
+    "state": "OH",
+    "zip": "43545",
+    "population": 110,
+    "raw_data": [
+      "Henry County Jail",
+      "Napoleon",
+      "OH",
+      "43545",
+      "110"
+    ]
+  },
+  {
+    "name": "Highland County Jail",
+    "city": "Hillsboro",
+    "state": "OH",
+    "zip": "45133",
+    "population": 120,
+    "raw_data": [
+      "Highland County Jail",
+      "Hillsboro",
+      "OH",
+      "45133",
+      "120"
+    ]
+  },
+  {
+    "name": "Hocking County Jail",
+    "city": "Logan",
+    "state": "OH",
+    "zip": "43138",
+    "population": 90,
+    "raw_data": [
+      "Hocking County Jail",
+      "Logan",
+      "OH",
+      "43138",
+      "90"
+    ]
+  },
+  {
+    "name": "Holmes County Jail",
+    "city": "Millersburg",
+    "state": "OH",
+    "zip": "44654",
+    "population": 100,
+    "raw_data": [
+      "Holmes County Jail",
+      "Millersburg",
+      "OH",
+      "44654",
+      "100"
+    ]
+  },
+  {
+    "name": "Huron County Jail",
+    "city": "Norwalk",
+    "state": "OH",
+    "zip": "44857",
+    "population": 130,
+    "raw_data": [
+      "Huron County Jail",
+      "Norwalk",
+      "OH",
+      "44857",
+      "130"
+    ]
+  },
+  {
+    "name": "Jackson County Jail",
+    "city": "Jackson",
+    "state": "OH",
+    "zip": "45640",
+    "population": 110,
+    "raw_data": [
+      "Jackson County Jail",
+      "Jackson",
+      "OH",
+      "45640",
+      "110"
+    ]
+  },
+  {
+    "name": "Jefferson County Jail",
+    "city": "Steubenville",
+    "state": "OH",
+    "zip": "43952",
+    "population": 140,
+    "raw_data": [
+      "Jefferson County Jail",
+      "Steubenville",
+      "OH",
+      "43952",
+      "140"
+    ]
+  },
+  {
+    "name": "Knox County Jail",
+    "city": "Mount Vernon",
+    "state": "OH",
+    "zip": "43050",
+    "population": 120,
+    "raw_data": [
+      "Knox County Jail",
+      "Mount Vernon",
+      "OH",
+      "43050",
+      "120"
+    ]
+  },
+  {
+    "name": "Lake County Jail",
+    "city": "Painesville",
+    "state": "OH",
+    "zip": "44077",
+    "population": 200,
+    "raw_data": [
+      "Lake County Jail",
+      "Painesville",
+      "OH",
+      "44077",
+      "200"
+    ]
+  },
+  {
+    "name": "Lawrence County Jail",
+    "city": "Ironton",
+    "state": "OH",
+    "zip": "45638",
+    "population": 100,
+    "raw_data": [
+      "Lawrence County Jail",
+      "Ironton",
+      "OH",
+      "45638",
+      "100"
+    ]
+  },
+  {
+    "name": "Licking County Jail",
+    "city": "Newark",
+    "state": "OH",
+    "zip": "43055",
+    "population": 180,
+    "raw_data": [
+      "Licking County Jail",
+      "Newark",
+      "OH",
+      "43055",
+      "180"
+    ]
+  },
+  {
+    "name": "Logan County Jail",
+    "city": "Bellefontaine",
+    "state": "OH",
+    "zip": "43311",
+    "population": 120,
+    "raw_data": [
+      "Logan County Jail",
+      "Bellefontaine",
+      "OH",
+      "43311",
+      "120"
+    ]
+  },
+  {
+    "name": "Lorain County Jail",
+    "city": "Elyria",
+    "state": "OH",
+    "zip": "44035",
+    "population": 250,
+    "raw_data": [
+      "Lorain County Jail",
+      "Elyria",
+      "OH",
+      "44035",
+      "250"
+    ]
+  },
+  {
+    "name": "Lucas County Jail",
+    "city": "Toledo",
+    "state": "OH",
+    "zip": "43604",
+    "population": 400,
+    "raw_data": [
+      "Lucas County Jail",
+      "Toledo",
+      "OH",
+      "43604",
+      "400"
+    ]
+  },
+  {
+    "name": "Madison County Jail",
+    "city": "London",
+    "state": "OH",
+    "zip": "43140",
+    "population": 110,
+    "raw_data": [
+      "Madison County Jail",
+      "London",
+      "OH",
+      "43140",
+      "110"
+    ]
+  },
+  {
+    "name": "Mahoning County Jail",
+    "city": "Youngstown",
+    "state": "OH",
+    "zip": "44503",
+    "population": 300,
+    "raw_data": [
+      "Mahoning County Jail",
+      "Youngstown",
+      "OH",
+      "44503",
+      "300"
+    ]
+  },
+  {
+    "name": "Marion County Jail",
+    "city": "Marion",
+    "state": "OH",
+    "zip": "43302",
+    "population": 150,
+    "raw_data": [
+      "Marion County Jail",
+      "Marion",
+      "OH",
+      "43302",
+      "150"
+    ]
+  },
+  {
+    "name": "Medina County Jail",
+    "city": "Medina",
+    "state": "OH",
+    "zip": "44256",
+    "population": 160,
+    "raw_data": [
+      "Medina County Jail",
+      "Medina",
+      "OH",
+      "44256",
+      "160"
+    ]
+  },
+  {
+    "name": "Meigs County Jail",
+    "city": "Pomeroy",
+    "state": "OH",
+    "zip": "45769",
+    "population": 80,
+    "raw_data": [
+      "Meigs County Jail",
+      "Pomeroy",
+      "OH",
+      "45769",
+      "80"
+    ]
+  },
+  {
+    "name": "Mercer County Jail",
+    "city": "Celina",
+    "state": "OH",
+    "zip": "45822",
+    "population": 120,
+    "raw_data": [
+      "Mercer County Jail",
+      "Celina",
+      "OH",
+      "45822",
+      "120"
+    ]
+  },
+  {
+    "name": "Miami County Jail",
+    "city": "Troy",
+    "state": "OH",
+    "zip": "45373",
+    "population": 140,
+    "raw_data": [
+      "Miami County Jail",
+      "Troy",
+      "OH",
+      "45373",
+      "140"
+    ]
+  },
+  {
+    "name": "Monroe County Jail",
+    "city": "Woodsfield",
+    "state": "OH",
+    "zip": "43793",
+    "population": 90,
+    "raw_data": [
+      "Monroe County Jail",
+      "Woodsfield",
+      "OH",
+      "43793",
+      "90"
+    ]
+  },
+  {
+    "name": "Montgomery County Jail",
+    "city": "Dayton",
+    "state": "OH",
+    "zip": "45402",
+    "population": 500,
+    "raw_data": [
+      "Montgomery County Jail",
+      "Dayton",
+      "OH",
+      "45402",
+      "500"
+    ]
+  },
+  {
+    "name": "Morgan County Jail",
+    "city": "McConnelsville",
+    "state": "OH",
+    "zip": "43756",
+    "population": 80,
+    "raw_data": [
+      "Morgan County Jail",
+      "McConnelsville",
+      "OH",
+      "43756",
+      "80"
+    ]
+  },
+  {
+    "name": "Morrow County Jail",
+    "city": "Mount Gilead",
+    "state": "OH",
+    "zip": "43338",
+    "population": 100,
+    "raw_data": [
+      "Morrow County Jail",
+      "Mount Gilead",
+      "OH",
+      "43338",
+      "100"
+    ]
+  },
+  {
+    "name": "Muskingum County Jail",
+    "city": "Zanesville",
+    "state": "OH",
+    "zip": "43701",
+    "population": 180,
+    "raw_data": [
+      "Muskingum County Jail",
+      "Zanesville",
+      "OH",
+      "43701",
+      "180"
+    ]
+  },
+  {
+    "name": "Noble County Jail",
+    "city": "Caldwell",
+    "state": "OH",
+    "zip": "43724",
+    "population": 70,
+    "raw_data": [
+      "Noble County Jail",
+      "Caldwell",
+      "OH",
+      "43724",
+      "70"
+    ]
+  },
+  {
+    "name": "Ottawa County Jail",
+    "city": "Port Clinton",
+    "state": "OH",
+    "zip": "43452",
+    "population": 110,
+    "raw_data": [
+      "Ottawa County Jail",
+      "Port Clinton",
+      "OH",
+      "43452",
+      "110"
+    ]
+  },
+  {
+    "name": "Paulding County Jail",
+    "city": "Paulding",
+    "state": "OH",
+    "zip": "45879",
+    "population": 90,
+    "raw_data": [
+      "Paulding County Jail",
+      "Paulding",
+      "OH",
+      "45879",
+      "90"
+    ]
+  },
+  {
+    "name": "Perry County Jail",
+    "city": "New Lexington",
+    "state": "OH",
+    "zip": "43764",
+    "population": 100,
+    "raw_data": [
+      "Perry County Jail",
+      "New Lexington",
+      "OH",
+      "43764",
+      "100"
+    ]
+  },
+  {
+    "name": "Pickaway County Jail",
+    "city": "Circleville",
+    "state": "OH",
+    "zip": "43113",
+    "population": 120,
+    "raw_data": [
+      "Pickaway County Jail",
+      "Circleville",
+      "OH",
+      "43113",
+      "120"
+    ]
+  },
+  {
+    "name": "Pike County Jail",
+    "city": "Waverly",
+    "state": "OH",
+    "zip": "45690",
+    "population": 90,
+    "raw_data": [
+      "Pike County Jail",
+      "Waverly",
+      "OH",
+      "45690",
+      "90"
+    ]
+  },
+  {
+    "name": "Portage County Jail",
+    "city": "Ravenna",
+    "state": "OH",
+    "zip": "44266",
+    "population": 160,
+    "raw_data": [
+      "Portage County Jail",
+      "Ravenna",
+      "OH",
+      "44266",
+      "160"
+    ]
+  },
+  {
+    "name": "Preble County Jail",
+    "city": "Eaton",
+    "state": "OH",
+    "zip": "45320",
+    "population": 110,
+    "raw_data": [
+      "Preble County Jail",
+      "Eaton",
+      "OH",
+      "45320",
+      "110"
+    ]
+  },
+  {
+    "name": "Putnam County Jail",
+    "city": "Ottawa",
+    "state": "OH",
+    "zip": "45875",
+    "population": 100,
+    "raw_data": [
+      "Putnam County Jail",
+      "Ottawa",
+      "OH",
+      "45875",
+      "100"
+    ]
+  },
+  {
+    "name": "Richland County Jail",
+    "city": "Mansfield",
+    "state": "OH",
+    "zip": "44902",
+    "population": 200,
+    "raw_data": [
+      "Richland County Jail",
+      "Mansfield",
+      "OH",
+      "44902",
+      "200"
+    ]
+  },
+  {
+    "name": "Ross County Jail",
+    "city": "Chillicothe",
+    "state": "OH",
+    "zip": "45601",
+    "population": 150,
+    "raw_data": [
+      "Ross County Jail",
+      "Chillicothe",
+      "OH",
+      "45601",
+      "150"
+    ]
+  },
+  {
+    "name": "Sandusky County Jail",
+    "city": "Fremont",
+    "state": "OH",
+    "zip": "43420",
+    "population": 130,
+    "raw_data": [
+      "Sandusky County Jail",
+      "Fremont",
+      "OH",
+      "43420",
+      "130"
+    ]
+  },
+  {
+    "name": "Scioto County Jail",
+    "city": "Portsmouth",
+    "state": "OH",
+    "zip": "45662",
+    "population": 140,
+    "raw_data": [
+      "Scioto County Jail",
+      "Portsmouth",
+      "OH",
+      "45662",
+      "140"
+    ]
+  },
+  {
+    "name": "Seneca County Jail",
+    "city": "Tiffin",
+    "state": "OH",
+    "zip": "44883",
+    "population": 120,
+    "raw_data": [
+      "Seneca County Jail",
+      "Tiffin",
+      "OH",
+      "44883",
+      "120"
+    ]
+  },
+  {
+    "name": "Shelby County Jail",
+    "city": "Sidney",
+    "state": "OH",
+    "zip": "45365",
+    "population": 110,
+    "raw_data": [
+      "Shelby County Jail",
+      "Sidney",
+      "OH",
+      "45365",
+      "110"
+    ]
+  },
+  {
+    "name": "Stark County Jail",
+    "city": "Canton",
+    "state": "OH",
+    "zip": "44702",
+    "population": 300,
+    "raw_data": [
+      "Stark County Jail",
+      "Canton",
+      "OH",
+      "44702",
+      "300"
+    ]
+  },
+  {
+    "name": "Summit County Jail",
+    "city": "Akron",
+    "state": "OH",
+    "zip": "44308",
+    "population": 400,
+    "raw_data": [
+      "Summit County Jail",
+      "Akron",
+      "OH",
+      "44308",
+      "400"
+    ]
+  },
+  {
+    "name": "Trumbull County Jail",
+    "city": "Warren",
+    "state": "OH",
+    "zip": "44481",
+    "population": 250,
+    "raw_data": [
+      "Trumbull County Jail",
+      "Warren",
+      "OH",
+      "44481",
+      "250"
+    ]
+  },
+  {
+    "name": "Tuscarawas County Jail",
+    "city": "New Philadelphia",
+    "state": "OH",
+    "zip": "44663",
+    "population": 140,
+    "raw_data": [
+      "Tuscarawas County Jail",
+      "New Philadelphia",
+      "OH",
+      "44663",
+      "140"
+    ]
+  },
+  {
+    "name": "Union County Jail",
+    "city": "Marysville",
+    "state": "OH",
+    "zip": "43040",
+    "population": 120,
+    "raw_data": [
+      "Union County Jail",
+      "Marysville",
+      "OH",
+      "43040",
+      "120"
+    ]
+  },
+  {
+    "name": "Van Wert County Jail",
+    "city": "Van Wert",
+    "state": "OH",
+    "zip": "45891",
+    "population": 100,
+    "raw_data": [
+      "Van Wert County Jail",
+      "Van Wert",
+      "OH",
+      "45891",
+      "100"
+    ]
+  },
+  {
+    "name": "Vinton County Jail",
+    "city": "McArthur",
+    "state": "OH",
+    "zip": "45651",
+    "population": 80,
+    "raw_data": [
+      "Vinton County Jail",
+      "McArthur",
+      "OH",
+      "45651",
+      "80"
+    ]
+  },
+  {
+    "name": "Warren County Jail",
+    "city": "Lebanon",
+    "state": "OH",
+    "zip": "45036",
+    "population": 180,
+    "raw_data": [
+      "Warren County Jail",
+      "Lebanon",
+      "OH",
+      "45036",
+      "180"
+    ]
+  },
+  {
+    "name": "Washington County Jail",
+    "city": "Marietta",
+    "state": "OH",
+    "zip": "45750",
+    "population": 130,
+    "raw_data": [
+      "Washington County Jail",
+      "Marietta",
+      "OH",
+      "45750",
+      "130"
+    ]
+  },
+  {
+    "name": "Wayne County Jail",
+    "city": "Wooster",
+    "state": "OH",
+    "zip": "44691",
+    "population": 160,
+    "raw_data": [
+      "Wayne County Jail",
+      "Wooster",
+      "OH",
+      "44691",
+      "160"
+    ]
+  },
+  {
+    "name": "Williams County Jail",
+    "city": "Bryan",
+    "state": "OH",
+    "zip": "43506",
+    "population": 110,
+    "raw_data": [
+      "Williams County Jail",
+      "Bryan",
+      "OH",
+      "43506",
+      "110"
+    ]
+  },
+  {
+    "name": "Wood County Jail",
+    "city": "Bowling Green",
+    "state": "OH",
+    "zip": "43402",
+    "population": 140,
+    "raw_data": [
+      "Wood County Jail",
+      "Bowling Green",
+      "OH",
+      "43402",
+      "140"
+    ]
+  },
+  {
+    "name": "Wyandot County Jail",
+    "city": "Upper Sandusky",
+    "state": "OH",
+    "zip": "43351",
+    "population": 90,
+    "raw_data": [
+      "Wyandot County Jail",
+      "Upper Sandusky",
+      "OH",
+      "43351",
+      "90"
+    ]
+  }
+]

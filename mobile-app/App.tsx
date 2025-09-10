@@ -473,7 +473,7 @@ const App = () => {
                     styles.input, 
                     isFocused === 'alienNumber' && styles.inputFocused
                   ]}
-                  placeholder="Alien Number (A123456789)"
+                  placeholder="Alien Number (A000000000)"
                   value={searchForm.alienNumber}
                   onChangeText={(value) => handleInputChange('alienNumber', value)}
                   autoCapitalize="characters"

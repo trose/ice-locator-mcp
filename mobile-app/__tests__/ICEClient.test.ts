@@ -118,7 +118,7 @@ describe('ICEClient', () => {
       await expect(iceClient.searchDetaineeByName('John', 'Doe', '1990-01-01', 'Mexico'))
         .rejects.toThrow('Not connected to ICE Locator MCP server');
         
-      await expect(iceClient.searchDetaineeByAlienNumber('A12345678'))
+      await expect(iceClient.searchDetaineeByAlienNumber('A00000000'))
         .rejects.toThrow('Not connected to ICE Locator MCP server');
     });
   });

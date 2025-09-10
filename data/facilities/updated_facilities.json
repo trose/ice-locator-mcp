@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Adelanto ICE Processing Center",
+    "latitude": 34.5599467,
+    "longitude": -117.4421505,
+    "address": "Adelanto ICE Processing Center, Adelanto, CA, 92301",
+    "population_count": 1847,
+    "created_at": "2025-09-07T12:08:04.082884",
+    "updated_at": "2025-09-07T12:08:04.082893"
+  },
+  {
+    "id": 2,
+    "name": "Aurora Contract Detention Facility",
+    "latitude": 39.0598,
+    "longitude": -105.3111,
+    "address": "Aurora Contract Detention Facility, Aurora, CO, 80011",
+    "population_count": 532,
+    "created_at": "2025-09-07T12:08:05.372549",
+    "updated_at": "2025-09-07T12:08:05.372559"
+  },
+  {
+    "id": 3,
+    "name": "Baker County Detention Center",
+    "latitude": 30.2968674,
+    "longitude": -82.1215872,
+    "address": "Baker County Detention Center, Macclenny, FL, 32063",
+    "population_count": 300,
+    "created_at": "2025-09-07T12:08:06.669074",
+    "updated_at": "2025-09-07T12:08:06.669083"
+  },
+  {
+    "id": 4,
+    "name": "Bergen County Jail",
+    "latitude": 40.8738731,
+    "longitude": -74.0390422,
+    "address": "Bergen County Jail, Hackensack, NJ, 07601",
+    "population_count": 150,
+    "created_at": "2025-09-07T12:08:07.859505",
+    "updated_at": "2025-09-07T12:08:07.859529"
+  },
+  {
+    "id": 5,
+    "name": "Big Spring Correctional Center",
+    "latitude": 32.2590164,
+    "longitude": -101.5030409,
+    "address": "Big Spring Correctional Center, Big Spring, TX, 79720",
+    "population_count": 1200,
+    "created_at": "2025-09-07T12:08:09.282787",
+    "updated_at": "2025-09-07T12:08:09.282797"
+  },
+  {
+    "id": 6,
+    "name": "Bluebonnet Detention Center",
+    "latitude": 32.7680198,
+    "longitude": -99.8881024,
+    "address": "Bluebonnet Detention Center, Anson, TX, 79501",
+    "population_count": 500,
+    "created_at": "2025-09-07T12:08:10.416979",
+    "updated_at": "2025-09-07T12:08:10.416987"
+  },
+  {
+    "id": 7,
+    "name": "Broward Transitional Center",
+    "latitude": 26.2772767,
+    "longitude": -80.1509053,
+    "address": "Broward Transitional Center, Pompano Beach, FL, 33069",
+    "population_count": 700,
+    "created_at": "2025-09-07T12:08:11.665602",
+    "updated_at": "2025-09-07T12:08:11.665610"
+  },
+  {
+    "id": 8,
+    "name": "Calhoun County Correctional Center",
+    "latitude": 43.3266,
+    "longitude": -84.5361,
+    "address": "Calhoun County Correctional Center, Battle Creek, MI, 49015",
+    "population_count": 400,
+    "created_at": "2025-09-07T12:08:12.932324",
+    "updated_at": "2025-09-07T12:08:12.932331"
+  },
+  {
+    "id": 9,
+    "name": "Caroline Detention Facility",
+    "latitude": 37.7693,
+    "longitude": -78.1699,
+    "address": "Caroline Detention Facility, Bowling Green, VA, 22427",
+    "population_count": 600,
+    "created_at": "2025-09-07T12:08:14.452975",
+    "updated_at": "2025-09-07T12:08:14.452985"
+  },
+  {
+    "id": 10,
+    "name": "Cibola County Correctional Center",
+    "latitude": 35.1796636,
+    "longitude": -107.9078742,
+    "address": "Cibola County Correctional Center, Milan, NM, 87021",
+    "population_count": 800,
+    "created_at": "2025-09-07T12:08:15.598669",
+    "updated_at": "2025-09-07T12:08:15.598677"
+  }
+]

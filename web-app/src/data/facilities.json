@@ -1,0 +1,1312 @@
+{
+  "metadata": {
+    "exported_at": "2025-09-09T18:51:48.942864",
+    "total_facilities": 186,
+    "total_population": 62005,
+    "description": "ICE Detention Facilities - Population Data"
+  },
+  "facilities": [
+    {
+      "name": "Dilley Family Residential Center",
+      "latitude": 28.6695971,
+      "longitude": -99.1672017,
+      "address": "Dilley, TX, 78017",
+      "population_count": 2000
+    },
+    {
+      "name": "Adelanto ICE Processing Center",
+      "latitude": 34.5599467,
+      "longitude": -117.4421505,
+      "address": "Adelanto ICE Processing Center, Adelanto, CA, 92301",
+      "population_count": 1847
+    },
+    {
+      "name": "South Texas Family Residential Center",
+      "latitude": 28.6564798,
+      "longitude": -99.2021906,
+      "address": "South Texas Family Residential Center, Dilley, TX, 78017",
+      "population_count": 1800
+    },
+    {
+      "name": "Stewart Detention Center",
+      "latitude": 32.0356341,
+      "longitude": -84.7719795,
+      "address": "Stewart Detention Center, Lumpkin, GA, 31815",
+      "population_count": 1800
+    },
+    {
+      "name": "Otay Mesa Detention Center",
+      "latitude": 32.5765248,
+      "longitude": -116.9154777,
+      "address": "Otay Mesa Detention Center, San Diego, CA, 92154",
+      "population_count": 1500
+    },
+    {
+      "name": "Eloy Detention Center",
+      "latitude": 32.8166837,
+      "longitude": -111.5200433,
+      "address": "Eloy Detention Center, Eloy, AZ, 85131",
+      "population_count": 1500
+    },
+    {
+      "name": "Northwest Detention Center",
+      "latitude": 47.2492053,
+      "longitude": -122.4211756,
+      "address": "Northwest Detention Center, Tacoma, WA, 98421",
+      "population_count": 1500
+    },
+    {
+      "name": "Calexico ICE Processing Center",
+      "latitude": 32.6668134,
+      "longitude": -115.4963754,
+      "address": "Calexico, CA, 92231",
+      "population_count": 1200
+    },
+    {
+      "name": "Big Spring Correctional Center",
+      "latitude": 32.2590164,
+      "longitude": -101.5030409,
+      "address": "Big Spring Correctional Center, Big Spring, TX, 79720",
+      "population_count": 1200
+    },
+    {
+      "name": "Karnes County Residential Center",
+      "latitude": 28.8849772,
+      "longitude": -97.9008356,
+      "address": "Karnes City, TX, 78118",
+      "population_count": 1200
+    },
+    {
+      "name": "La Palma Correctional Center",
+      "latitude": 32.7551703,
+      "longitude": -111.553493,
+      "address": "Eloy, AZ, 85131",
+      "population_count": 1200
+    },
+    {
+      "name": "Port Isabel Service Processing Center",
+      "latitude": 26.0714502,
+      "longitude": -97.4770792,
+      "address": "Los Fresnos, TX, 78566",
+      "population_count": 1100
+    },
+    {
+      "name": "El Paso Service Processing Center",
+      "latitude": 31.7955926,
+      "longitude": -106.3696348,
+      "address": "El Paso Service Processing Center, El Paso, TX, 79925",
+      "population_count": 1000
+    },
+    {
+      "name": "Laredo Processing Center",
+      "latitude": 27.4168043,
+      "longitude": -99.4514344,
+      "address": "Laredo Processing Center, Laredo, TX, 78040",
+      "population_count": 900
+    },
+    {
+      "name": "El Centro Service Processing Center",
+      "latitude": 32.792,
+      "longitude": -115.563051,
+      "address": "El Centro, CA, 92243",
+      "population_count": 800
+    },
+    {
+      "name": "Conroe Processing Center",
+      "latitude": 30.3118769,
+      "longitude": -95.4560512,
+      "address": "Conroe, TX, 77301",
+      "population_count": 800
+    },
+    {
+      "name": "Rio Grande Detention Center",
+      "latitude": 27.5075005,
+      "longitude": -99.5069922,
+      "address": "Laredo, TX, 78040",
+      "population_count": 800
+    },
+    {
+      "name": "Florence Service Processing Center",
+      "latitude": 33.0640298,
+      "longitude": -111.3825565,
+      "address": "Florence Service Processing Center, Florence, AZ, 85132",
+      "population_count": 800
+    },
+    {
+      "name": "Cibola County Correctional Center",
+      "latitude": 35.1796636,
+      "longitude": -107.9078742,
+      "address": "Cibola County Correctional Center, Milan, NM, 87021",
+      "population_count": 800
+    },
+    {
+      "name": "LaSalle Detention Facility",
+      "latitude": 31.6832271,
+      "longitude": -92.1337448,
+      "address": "Jena, LA, 71342",
+      "population_count": 800
+    },
+    {
+      "name": "Houston Contract Detention Facility",
+      "latitude": 29.7589382,
+      "longitude": -95.3676974,
+      "address": "Houston, TX, 77002",
+      "population_count": 700
+    },
+    {
+      "name": "Broward Transitional Center",
+      "latitude": 26.2772767,
+      "longitude": -80.1509053,
+      "address": "Broward Transitional Center, Pompano Beach, FL, 33069",
+      "population_count": 700
+    },
+    {
+      "name": "Imperial Regional Detention Facility",
+      "latitude": 32.6668134,
+      "longitude": -115.4963754,
+      "address": "Calexico, CA, 92231",
+      "population_count": 600
+    },
+    {
+      "name": "Corrections Corporation of America",
+      "latitude": 29.7589382,
+      "longitude": -95.3676974,
+      "address": "Houston, TX, 77002",
+      "population_count": 600
+    },
+    {
+      "name": "Winn Correctional Center",
+      "latitude": 31.7630345,
+      "longitude": -106.04638,
+      "address": "Winnfield, TX, 71483",
+      "population_count": 600
+    },
+    {
+      "name": "Krome Service Processing Center",
+      "latitude": 25.7546881,
+      "longitude": -80.4896527,
+      "address": "Krome Service Processing Center, Miami, FL, 33194",
+      "population_count": 600
+    },
+    {
+      "name": "Otero County Processing Center",
+      "latitude": 32.0786798,
+      "longitude": -106.2779169,
+      "address": "Otero County Processing Center, Chaparral, NM, 88081",
+      "population_count": 600
+    },
+    {
+      "name": "Caroline Detention Facility",
+      "latitude": 38.0498524,
+      "longitude": -77.3469994,
+      "address": "Bowling Green, VA, 22427",
+      "population_count": 600
+    },
+    {
+      "name": "Winn Correctional Center",
+      "latitude": 31.8502693,
+      "longitude": -92.7792943,
+      "address": "Winn Correctional Center, Winnfield, LA, 71483",
+      "population_count": 600
+    },
+    {
+      "name": "Trousdale Turner Correctional Center",
+      "latitude": 36.3521745,
+      "longitude": -86.0915632,
+      "address": "Trousdale Turner Correctional Center, Hartsville, TN, 37074",
+      "population_count": 600
+    },
+    {
+      "name": "Buffalo Federal Detention Facility",
+      "latitude": 43.0203148,
+      "longitude": -78.2016158,
+      "address": "Buffalo Federal Detention Facility, Batavia, NY, 14020",
+      "population_count": 600
+    },
+    {
+      "name": "Hamilton County Jail",
+      "latitude": 39.1014537,
+      "longitude": -84.5124602,
+      "address": "Cincinnati, OH, 45202",
+      "population_count": 600
+    },
+    {
+      "name": "Aurora Contract Detention Facility",
+      "latitude": 39.7405111,
+      "longitude": -104.830994,
+      "address": "Aurora, CO, 80011",
+      "population_count": 532
+    },
+    {
+      "name": "Bluebonnet Detention Center",
+      "latitude": 32.7680198,
+      "longitude": -99.8881024,
+      "address": "Bluebonnet Detention Center, Anson, TX, 79501",
+      "population_count": 500
+    },
+    {
+      "name": "T. Don Hutto Residential Center",
+      "latitude": 30.5647288,
+      "longitude": -97.4194342,
+      "address": "T. Don Hutto Residential Center, Taylor, TX, 76574",
+      "population_count": 500
+    },
+    {
+      "name": "Adams County Correctional Center",
+      "latitude": 31.5576334,
+      "longitude": -91.2211771,
+      "address": "Adams County Correctional Center, Natchez, MS, 39120",
+      "population_count": 500
+    },
+    {
+      "name": "Franklin County Jail",
+      "latitude": 39.9622601,
+      "longitude": -83.0007065,
+      "address": "Columbus, OH, 43215",
+      "population_count": 500
+    },
+    {
+      "name": "Montgomery County Jail",
+      "latitude": 39.7596657,
+      "longitude": -84.1977416,
+      "address": "Montgomery County Jail, Dayton, OH, 45402",
+      "population_count": 500
+    },
+    {
+      "name": "Mesa Verde ICE Processing Facility",
+      "latitude": 35.3738712,
+      "longitude": -119.019463,
+      "address": "Bakersfield, CA, 93308",
+      "population_count": 400
+    },
+    {
+      "name": "Brooks County Detention Center",
+      "latitude": 27.2482748,
+      "longitude": -98.1258468,
+      "address": "Brooks County Detention Center, Falfurrias, TX, 78355",
+      "population_count": 400
+    },
+    {
+      "name": "West Texas Detention Facility",
+      "latitude": 31.1662348,
+      "longitude": -105.3515233,
+      "address": "West Texas Detention Facility, Sierra Blanca, TX, 79851",
+      "population_count": 400
+    },
+    {
+      "name": "Polk County Jail",
+      "latitude": 27.8824098,
+      "longitude": -81.8196765,
+      "address": "Polk County Jail, Bartow, FL, 33830",
+      "population_count": 400
+    },
+    {
+      "name": "Pinal County Jail",
+      "latitude": 33.0398533,
+      "longitude": -111.3756957,
+      "address": "Pinal County Jail, Florence, AZ, 85132",
+      "population_count": 400
+    },
+    {
+      "name": "Denver Contract Detention Facility",
+      "latitude": 39.7392364,
+      "longitude": -104.984862,
+      "address": "Denver, CO, 80202",
+      "population_count": 400
+    },
+    {
+      "name": "Calhoun County Correctional Center",
+      "latitude": 42.3192548,
+      "longitude": -85.1824269,
+      "address": "Battle Creek, MI, 49015",
+      "population_count": 400
+    },
+    {
+      "name": "Farmville Detention Center",
+      "latitude": 37.3213468,
+      "longitude": -78.4415853,
+      "address": "Farmville Detention Center, Farmville, VA, 23901",
+      "population_count": 400
+    },
+    {
+      "name": "Irwin County Detention Center",
+      "latitude": 31.5802816,
+      "longitude": -83.2552781,
+      "address": "Irwin County Detention Center, Ocilla, GA, 31774",
+      "population_count": 400
+    },
+    {
+      "name": "Hardeman County Correctional Center",
+      "latitude": 35.3262451,
+      "longitude": -89.1505724,
+      "address": "Whiteville, TN, 38075",
+      "population_count": 400
+    },
+    {
+      "name": "Sheridan Federal Correctional Institution",
+      "latitude": 45.083863,
+      "longitude": -123.3815878,
+      "address": "Sheridan Federal Correctional Institution, Sheridan, OR, 97378",
+      "population_count": 400
+    },
+    {
+      "name": "Cuyahoga County Jail",
+      "latitude": 41.4996574,
+      "longitude": -81.6936772,
+      "address": "Cleveland, OH, 44113",
+      "population_count": 400
+    },
+    {
+      "name": "Lucas County Jail",
+      "latitude": 41.6566804,
+      "longitude": -83.5364672,
+      "address": "Lucas County Jail, Toledo, OH, 43604",
+      "population_count": 400
+    },
+    {
+      "name": "Summit County Jail",
+      "latitude": 41.0603905,
+      "longitude": -81.5211716,
+      "address": "Summit County Jail, Akron, OH, 44308",
+      "population_count": 400
+    },
+    {
+      "name": "Theo Lacy Facility",
+      "latitude": 33.7811502,
+      "longitude": -117.8875303,
+      "address": "Theo Lacy Facility, Orange, CA, 92868",
+      "population_count": 300
+    },
+    {
+      "name": "Willacy County Processing Center",
+      "latitude": 26.4814565,
+      "longitude": -97.783051,
+      "address": "Raymondville, TX, 78580",
+      "population_count": 300
+    },
+    {
+      "name": "Baker County Detention Center",
+      "latitude": 30.2968674,
+      "longitude": -82.1215872,
+      "address": "Baker County Detention Center, Macclenny, FL, 32063",
+      "population_count": 300
+    },
+    {
+      "name": "Seminole County Jail",
+      "latitude": 28.8117345,
+      "longitude": -81.2680223,
+      "address": "Sanford, FL, 32773",
+      "population_count": 300
+    },
+    {
+      "name": "Elizabeth Contract Detention Facility",
+      "latitude": 40.6639916,
+      "longitude": -74.2107006,
+      "address": "Elizabeth, NJ, 07201",
+      "population_count": 300
+    },
+    {
+      "name": "Folkston ICE Processing Center",
+      "latitude": 30.8717749,
+      "longitude": -81.981524,
+      "address": "Folkston ICE Processing Center, Folkston, GA, 31537",
+      "population_count": 300
+    },
+    {
+      "name": "Etowah County Detention Center",
+      "latitude": 34.0128323,
+      "longitude": -86.0030251,
+      "address": "Gadsden, AL, 35901",
+      "population_count": 300
+    },
+    {
+      "name": "Tallahatchie County Correctional Facility",
+      "latitude": 34.0260769,
+      "longitude": -90.4450243,
+      "address": "Tallahatchie County Correctional Facility, Tutwiler, MS, 38963",
+      "population_count": 300
+    },
+    {
+      "name": "Butler County Jail",
+      "latitude": 39.399223,
+      "longitude": -84.56328,
+      "address": "Butler County Jail, Hamilton, OH, 45011",
+      "population_count": 300
+    },
+    {
+      "name": "Orange County Jail",
+      "latitude": 41.4021497,
+      "longitude": -74.3242129,
+      "address": "Goshen, NY, 10924",
+      "population_count": 300
+    },
+    {
+      "name": "Henderson Detention Center",
+      "latitude": 36.0299427,
+      "longitude": -114.9823566,
+      "address": "Henderson, NV, 89015",
+      "population_count": 300
+    },
+    {
+      "name": "McHenry County Jail",
+      "latitude": 42.3147529,
+      "longitude": -88.4474302,
+      "address": "Woodstock, IL, 60098",
+      "population_count": 300
+    },
+    {
+      "name": "Butler County Jail",
+      "latitude": 39.399223,
+      "longitude": -84.56328,
+      "address": "Butler County Jail, Hamilton, OH, 45011",
+      "population_count": 300
+    },
+    {
+      "name": "Mahoning County Jail",
+      "latitude": 41.1035786,
+      "longitude": -80.6520161,
+      "address": "Youngstown, OH, 44503",
+      "population_count": 300
+    },
+    {
+      "name": "Stark County Jail",
+      "latitude": 40.8387953,
+      "longitude": -81.3087739,
+      "address": "Stark County Jail, Canton, OH, 44702",
+      "population_count": 300
+    },
+    {
+      "name": "Glades County Detention Center",
+      "latitude": 26.8331174,
+      "longitude": -81.0931234,
+      "address": "Moore Haven, FL, 33471",
+      "population_count": 250
+    },
+    {
+      "name": "Richmond County Jail",
+      "latitude": 37.9587465,
+      "longitude": -76.7580211,
+      "address": "Warsaw, VA, 22572",
+      "population_count": 250
+    },
+    {
+      "name": "Boone County Jail",
+      "latitude": 39.0365965,
+      "longitude": -84.728322,
+      "address": "Boone County Jail, Burlington, KY, 41005",
+      "population_count": 250
+    },
+    {
+      "name": "Weber County Correctional Facility",
+      "latitude": 41.240367,
+      "longitude": -111.9935488,
+      "address": "Weber County Correctional Facility, Ogden, UT, 84401",
+      "population_count": 250
+    },
+    {
+      "name": "Porter County Jail",
+      "latitude": 41.466405,
+      "longitude": -87.0595192,
+      "address": "Porter County Jail, Valparaiso, IN, 46383",
+      "population_count": 250
+    },
+    {
+      "name": "Lorain County Jail",
+      "latitude": 41.3673191,
+      "longitude": -82.1073583,
+      "address": "Elyria, OH, 44035",
+      "population_count": 250
+    },
+    {
+      "name": "Trumbull County Jail",
+      "latitude": 41.2367955,
+      "longitude": -80.8190423,
+      "address": "Warren, OH, 44481",
+      "population_count": 250
+    },
+    {
+      "name": "St. Louis County Jail",
+      "latitude": 38.6485039,
+      "longitude": -90.3378037,
+      "address": "St. Louis County Jail, Clayton, MO, 63105",
+      "population_count": 220
+    },
+    {
+      "name": "Allen County Jail",
+      "latitude": 40.7399785,
+      "longitude": -84.105006,
+      "address": "Lima, OH, 45801",
+      "population_count": 220
+    },
+    {
+      "name": "Monroe County Detention Center",
+      "latitude": 24.5770255,
+      "longitude": -81.7514791,
+      "address": "Monroe County Detention Center, Key West, FL, 33040",
+      "population_count": 200
+    },
+    {
+      "name": "Hudson County Correctional Center",
+      "latitude": 40.7278297,
+      "longitude": -74.1077874,
+      "address": "Hudson County Correctional Center, Kearny, NJ, 07032",
+      "population_count": 200
+    },
+    {
+      "name": "Pike County Jail",
+      "latitude": 31.8087678,
+      "longitude": -85.969951,
+      "address": "Troy, AL, 36081",
+      "population_count": 200
+    },
+    {
+      "name": "Grayson County Detention Center",
+      "latitude": 37.4890391,
+      "longitude": -86.2702303,
+      "address": "Grayson County Detention Center, Leitchfield, KY, 42754",
+      "population_count": 200
+    },
+    {
+      "name": "Clinton County Correctional Facility",
+      "latitude": 41.1511182,
+      "longitude": -77.3493663,
+      "address": "Clinton County Correctional Facility, McElhattan, PA, 17748",
+      "population_count": 200
+    },
+    {
+      "name": "Yakima County Jail",
+      "latitude": 46.601557,
+      "longitude": -120.510842,
+      "address": "Yakima, WA, 98902",
+      "population_count": 200
+    },
+    {
+      "name": "Butler County Jail",
+      "latitude": 37.8173015,
+      "longitude": -96.8537388,
+      "address": "El Dorado, KS, 67042",
+      "population_count": 200
+    },
+    {
+      "name": "Sherburne County Jail",
+      "latitude": 45.3038538,
+      "longitude": -93.5671825,
+      "address": "Elk River, MN, 55330",
+      "population_count": 200
+    },
+    {
+      "name": "Alamance County Jail",
+      "latitude": 36.0690258,
+      "longitude": -79.4005756,
+      "address": "Graham, NC, 27253",
+      "population_count": 200
+    },
+    {
+      "name": "Suffolk County House of Correction",
+      "latitude": 42.3341589,
+      "longitude": -71.068675,
+      "address": "Suffolk County House of Correction, Boston, MA, 02118",
+      "population_count": 200
+    },
+    {
+      "name": "Clark County Jail",
+      "latitude": 39.9234046,
+      "longitude": -83.810138,
+      "address": "Springfield, OH, 45501",
+      "population_count": 200
+    },
+    {
+      "name": "Lake County Jail",
+      "latitude": 41.726471,
+      "longitude": -81.2449057,
+      "address": "Lake County Jail, Painesville, OH, 44077",
+      "population_count": 200
+    },
+    {
+      "name": "Richland County Jail",
+      "latitude": 40.7574585,
+      "longitude": -82.512842,
+      "address": "Richland County Jail, Mansfield, OH, 44902",
+      "population_count": 200
+    },
+    {
+      "name": "Hall County Detention Center",
+      "latitude": 40.924271,
+      "longitude": -98.338685,
+      "address": "Grand Island, NE, 68801",
+      "population_count": 180
+    },
+    {
+      "name": "Phelps County Jail",
+      "latitude": 37.9509324,
+      "longitude": -91.7708076,
+      "address": "Rolla, MO, 65401",
+      "population_count": 180
+    },
+    {
+      "name": "Berkeley County Detention Center",
+      "latitude": 33.2007396,
+      "longitude": -80.0182187,
+      "address": "Berkeley County Detention Center, Moncks Corner, SC, 29461",
+      "population_count": 180
+    },
+    {
+      "name": "Hartford Correctional Center",
+      "latitude": 41.7934056,
+      "longitude": -72.6613292,
+      "address": "Hartford Correctional Center, Hartford, CT, 06103",
+      "population_count": 180
+    },
+    {
+      "name": "Adams County Jail",
+      "latitude": 39.9356016,
+      "longitude": -91.4098727,
+      "address": "Quincy, IL, 62301",
+      "population_count": 180
+    },
+    {
+      "name": "Clermont County Jail",
+      "latitude": 39.0919866,
+      "longitude": -84.1850705,
+      "address": "Clermont County Jail, Batavia, OH, 45103",
+      "population_count": 180
+    },
+    {
+      "name": "Fairfield County Jail",
+      "latitude": 39.7132527,
+      "longitude": -82.59836,
+      "address": "Fairfield County Jail, Lancaster, OH, 43130",
+      "population_count": 180
+    },
+    {
+      "name": "Licking County Jail",
+      "latitude": 40.056199,
+      "longitude": -82.4014328,
+      "address": "Licking County Jail, Newark, OH, 43055",
+      "population_count": 180
+    },
+    {
+      "name": "Muskingum County Jail",
+      "latitude": 39.9408474,
+      "longitude": -82.0070985,
+      "address": "Muskingum County Jail, Zanesville, OH, 43701",
+      "population_count": 180
+    },
+    {
+      "name": "Warren County Jail",
+      "latitude": 39.4353373,
+      "longitude": -84.2029922,
+      "address": "Lebanon, OH, 45036",
+      "population_count": 180
+    },
+    {
+      "name": "Greene County Jail",
+      "latitude": 39.6859955,
+      "longitude": -83.9283174,
+      "address": "Greene County Jail, Xenia, OH, 45385",
+      "population_count": 170
+    },
+    {
+      "name": "Anderson County Jail",
+      "latitude": 34.5334395,
+      "longitude": -82.6831902,
+      "address": "Anderson County Jail, Anderson, SC, 29621",
+      "population_count": 160
+    },
+    {
+      "name": "Delaware County Jail",
+      "latitude": 40.3122836,
+      "longitude": -83.0479642,
+      "address": "Delaware County Jail, Delaware, OH, 43015",
+      "population_count": 160
+    },
+    {
+      "name": "Medina County Jail",
+      "latitude": 41.127946,
+      "longitude": -81.8909634,
+      "address": "Medina County Jail, Medina, OH, 44256",
+      "population_count": 160
+    },
+    {
+      "name": "Portage County Jail",
+      "latitude": 41.2147834,
+      "longitude": -81.2575551,
+      "address": "Portage County Jail, Ravenna, OH, 44266",
+      "population_count": 160
+    },
+    {
+      "name": "Wayne County Jail",
+      "latitude": 40.7980976,
+      "longitude": -81.9397733,
+      "address": "Wooster, OH, 44691",
+      "population_count": 160
+    },
+    {
+      "name": "Bergen County Jail",
+      "latitude": 40.8738731,
+      "longitude": -74.0390422,
+      "address": "Bergen County Jail, Hackensack, NJ, 07601",
+      "population_count": 150
+    },
+    {
+      "name": "Chippewa County Correctional Facility",
+      "latitude": 46.497309,
+      "longitude": -84.3454755,
+      "address": "Chippewa County Correctional Facility, Sault Ste. Marie, MI, 49783",
+      "population_count": 150
+    },
+    {
+      "name": "Geauga County Safety Center",
+      "latitude": 41.5824944,
+      "longitude": -81.2034066,
+      "address": "Chardon, OH, 44024",
+      "population_count": 150
+    },
+    {
+      "name": "Cascade County Detention Center",
+      "latitude": 47.5048851,
+      "longitude": -111.29189,
+      "address": "Great Falls, MT, 59401",
+      "population_count": 150
+    },
+    {
+      "name": "Grady County Jail",
+      "latitude": 35.0512159,
+      "longitude": -97.9370036,
+      "address": "Chickasha, OK, 73018",
+      "population_count": 150
+    },
+    {
+      "name": "Dodge County Jail",
+      "latitude": 43.4055504,
+      "longitude": -88.7051037,
+      "address": "Juneau, WI, 53039",
+      "population_count": 150
+    },
+    {
+      "name": "Adult Correctional Institutions",
+      "latitude": 41.779588,
+      "longitude": -71.4366813,
+      "address": "Cranston, RI, 02920",
+      "population_count": 150
+    },
+    {
+      "name": "Champaign County Jail",
+      "latitude": 40.1083912,
+      "longitude": -83.7524298,
+      "address": "Urbana, OH, 43078",
+      "population_count": 150
+    },
+    {
+      "name": "Erie County Jail",
+      "latitude": 41.4530769,
+      "longitude": -82.7111132,
+      "address": "Erie County Jail, Sandusky, OH, 44870",
+      "population_count": 150
+    },
+    {
+      "name": "Geauga County Jail",
+      "latitude": 41.5824944,
+      "longitude": -81.2034066,
+      "address": "Chardon, OH, 44024",
+      "population_count": 150
+    },
+    {
+      "name": "Marion County Jail",
+      "latitude": 40.5886259,
+      "longitude": -83.1287349,
+      "address": "Marion, OH, 43302",
+      "population_count": 150
+    },
+    {
+      "name": "Ross County Jail",
+      "latitude": 39.3331197,
+      "longitude": -82.9824019,
+      "address": "Chillicothe, OH, 45601",
+      "population_count": 150
+    },
+    {
+      "name": "Ashtabula County Jail",
+      "latitude": 41.7392218,
+      "longitude": -80.7700844,
+      "address": "Ashtabula County Jail, Jefferson, OH, 44047",
+      "population_count": 140
+    },
+    {
+      "name": "Columbiana County Jail",
+      "latitude": 40.7720044,
+      "longitude": -80.7681336,
+      "address": "Lisbon, OH, 44432",
+      "population_count": 140
+    },
+    {
+      "name": "Hancock County Jail",
+      "latitude": 41.038313,
+      "longitude": -83.6521917,
+      "address": "Hancock County Jail, Findlay, OH, 45840",
+      "population_count": 140
+    },
+    {
+      "name": "Jefferson County Jail",
+      "latitude": 40.3600714,
+      "longitude": -80.6151034,
+      "address": "Steubenville, OH, 43952",
+      "population_count": 140
+    },
+    {
+      "name": "Miami County Jail",
+      "latitude": 40.0394982,
+      "longitude": -84.2032767,
+      "address": "Troy, OH, 45373",
+      "population_count": 140
+    },
+    {
+      "name": "Scioto County Jail",
+      "latitude": 38.7345374,
+      "longitude": -82.9962742,
+      "address": "Portsmouth, OH, 45662",
+      "population_count": 140
+    },
+    {
+      "name": "Tuscarawas County Jail",
+      "latitude": 40.4908982,
+      "longitude": -81.4426149,
+      "address": "Tuscarawas County Jail, New Philadelphia, OH, 44663",
+      "population_count": 140
+    },
+    {
+      "name": "Wood County Jail",
+      "latitude": 41.3768671,
+      "longitude": -83.6482732,
+      "address": "Wood County Jail, Bowling Green, OH, 43402",
+      "population_count": 140
+    },
+    {
+      "name": "Belmont County Jail",
+      "latitude": 40.0806266,
+      "longitude": -80.9000916,
+      "address": "St. Clairsville, OH, 43950",
+      "population_count": 130
+    },
+    {
+      "name": "Darke County Jail",
+      "latitude": 40.1003265,
+      "longitude": -84.6313447,
+      "address": "Darke County Jail, Greenville, OH, 45331",
+      "population_count": 130
+    },
+    {
+      "name": "Huron County Jail",
+      "latitude": 41.2424219,
+      "longitude": -82.6155745,
+      "address": "Norwalk, OH, 44857",
+      "population_count": 130
+    },
+    {
+      "name": "Sandusky County Jail",
+      "latitude": 41.3575283,
+      "longitude": -83.0837256,
+      "address": "Sandusky County Jail, Fremont, OH, 43420",
+      "population_count": 130
+    },
+    {
+      "name": "Washington County Jail",
+      "latitude": 39.4282793,
+      "longitude": -81.4759425,
+      "address": "Washington County Jail, Marietta, OH, 45750",
+      "population_count": 130
+    },
+    {
+      "name": "Minnehaha County Jail",
+      "latitude": 43.5476008,
+      "longitude": -96.7293629,
+      "address": "Sioux Falls, SD, 57104",
+      "population_count": 120
+    },
+    {
+      "name": "Baxter County Jail",
+      "latitude": 36.3361391,
+      "longitude": -92.3801187,
+      "address": "Mountain Home, AR, 72653",
+      "population_count": 120
+    },
+    {
+      "name": "Berkeley County Jail",
+      "latitude": 39.4562528,
+      "longitude": -77.9639604,
+      "address": "Martinsburg, WV, 25401",
+      "population_count": 120
+    },
+    {
+      "name": "Hillsborough County House of Corrections",
+      "latitude": 42.9956397,
+      "longitude": -71.4547891,
+      "address": "Manchester, NH, 03103",
+      "population_count": 120
+    },
+    {
+      "name": "Worcester County Jail",
+      "latitude": 38.1770634,
+      "longitude": -75.3926959,
+      "address": "Snow Hill, MD, 21863",
+      "population_count": 120
+    },
+    {
+      "name": "Athens County Jail",
+      "latitude": 39.3289242,
+      "longitude": -82.1012479,
+      "address": "Athens, OH, 45701",
+      "population_count": 120
+    },
+    {
+      "name": "Clinton County Jail",
+      "latitude": 39.4453393,
+      "longitude": -83.8285375,
+      "address": "Wilmington, OH, 45177",
+      "population_count": 120
+    },
+    {
+      "name": "Defiance County Jail",
+      "latitude": 41.2844933,
+      "longitude": -84.3557802,
+      "address": "Defiance, OH, 43512",
+      "population_count": 120
+    },
+    {
+      "name": "Guernsey County Jail",
+      "latitude": 40.031183,
+      "longitude": -81.5884561,
+      "address": "Cambridge, OH, 43725",
+      "population_count": 120
+    },
+    {
+      "name": "Highland County Jail",
+      "latitude": 39.2022866,
+      "longitude": -83.611587,
+      "address": "Hillsboro, OH, 45133",
+      "population_count": 120
+    },
+    {
+      "name": "Knox County Jail",
+      "latitude": 40.3933956,
+      "longitude": -82.4857181,
+      "address": "Mount Vernon, OH, 43050",
+      "population_count": 120
+    },
+    {
+      "name": "Logan County Jail",
+      "latitude": 40.3611643,
+      "longitude": -83.7596557,
+      "address": "Bellefontaine, OH, 43311",
+      "population_count": 120
+    },
+    {
+      "name": "Mercer County Jail",
+      "latitude": 40.5463487,
+      "longitude": -84.6152944,
+      "address": "Mercer County Jail, Celina, OH, 45822",
+      "population_count": 120
+    },
+    {
+      "name": "Pickaway County Jail",
+      "latitude": 39.600618,
+      "longitude": -82.9460133,
+      "address": "Circleville, OH, 43113",
+      "population_count": 120
+    },
+    {
+      "name": "Seneca County Jail",
+      "latitude": 41.114485,
+      "longitude": -83.1779537,
+      "address": "Tiffin, OH, 44883",
+      "population_count": 120
+    },
+    {
+      "name": "Union County Jail",
+      "latitude": 40.2364486,
+      "longitude": -83.3671432,
+      "address": "Marysville, OH, 43040",
+      "population_count": 120
+    },
+    {
+      "name": "Brown County Jail",
+      "latitude": 38.8645138,
+      "longitude": -83.9040944,
+      "address": "Georgetown, OH, 45121",
+      "population_count": 110
+    },
+    {
+      "name": "Crawford County Jail",
+      "latitude": 40.8092243,
+      "longitude": -82.9743537,
+      "address": "Crawford County Jail, Bucyrus, OH, 44820",
+      "population_count": 110
+    },
+    {
+      "name": "Fulton County Jail",
+      "latitude": 41.546069,
+      "longitude": -84.1362047,
+      "address": "Wauseon, OH, 43567",
+      "population_count": 110
+    },
+    {
+      "name": "Henry County Jail",
+      "latitude": 41.3911444,
+      "longitude": -84.1237918,
+      "address": "Henry County Jail, Napoleon, OH, 43545",
+      "population_count": 110
+    },
+    {
+      "name": "Jackson County Jail",
+      "latitude": 39.0522947,
+      "longitude": -82.6368314,
+      "address": "Jackson County Jail, Jackson, OH, 45640",
+      "population_count": 110
+    },
+    {
+      "name": "Madison County Jail",
+      "latitude": 39.8864493,
+      "longitude": -83.448253,
+      "address": "London, OH, 43140",
+      "population_count": 110
+    },
+    {
+      "name": "Ottawa County Jail",
+      "latitude": 41.5119954,
+      "longitude": -82.9376919,
+      "address": "Port Clinton, OH, 43452",
+      "population_count": 110
+    },
+    {
+      "name": "Preble County Jail",
+      "latitude": 39.7439398,
+      "longitude": -84.6364891,
+      "address": "Eaton, OH, 45320",
+      "population_count": 110
+    },
+    {
+      "name": "Shelby County Jail",
+      "latitude": 40.284241,
+      "longitude": -84.1555267,
+      "address": "Sidney, OH, 45365",
+      "population_count": 110
+    },
+    {
+      "name": "Williams County Jail",
+      "latitude": 41.4758844,
+      "longitude": -84.553562,
+      "address": "Williams County Jail, Bryan, OH, 43506",
+      "population_count": 110
+    },
+    {
+      "name": "Burleigh County Detention Center",
+      "latitude": 46.808327,
+      "longitude": -100.783739,
+      "address": "Bismarck, ND, 58501",
+      "population_count": 100
+    },
+    {
+      "name": "Hardin County Jail",
+      "latitude": 42.3606883,
+      "longitude": -93.099609,
+      "address": "Eldora, IA, 50627",
+      "population_count": 100
+    },
+    {
+      "name": "Cumberland County Jail",
+      "latitude": 43.6508623,
+      "longitude": -70.2816197,
+      "address": "Cumberland County Jail, Portland, ME, 04101",
+      "population_count": 100
+    },
+    {
+      "name": "Sussex Correctional Institution",
+      "latitude": 38.6900507,
+      "longitude": -75.3858753,
+      "address": "Georgetown, DE, 19947",
+      "population_count": 100
+    },
+    {
+      "name": "Oahu Community Correctional Center",
+      "latitude": 21.3300829,
+      "longitude": -157.8849773,
+      "address": "Oahu Community Correctional Center, Honolulu, HI, 96817",
+      "population_count": 100
+    },
+    {
+      "name": "Auglaize County Jail",
+      "latitude": 40.5678265,
+      "longitude": -84.1935594,
+      "address": "Wapakoneta, OH, 45895",
+      "population_count": 100
+    },
+    {
+      "name": "Coshocton County Jail",
+      "latitude": 40.2753484,
+      "longitude": -81.8662428,
+      "address": "Coshocton County Jail, Coshocton, OH, 43812",
+      "population_count": 100
+    },
+    {
+      "name": "Fayette County Jail",
+      "latitude": 39.5364511,
+      "longitude": -83.4390843,
+      "address": "Washington Court House, OH, 43160",
+      "population_count": 100
+    },
+    {
+      "name": "Hardin County Jail",
+      "latitude": 40.6478171,
+      "longitude": -83.6089968,
+      "address": "Kenton, OH, 43326",
+      "population_count": 100
+    },
+    {
+      "name": "Holmes County Jail",
+      "latitude": 40.5545071,
+      "longitude": -81.9179198,
+      "address": "Millersburg, OH, 44654",
+      "population_count": 100
+    },
+    {
+      "name": "Lawrence County Jail",
+      "latitude": 38.5367471,
+      "longitude": -82.6829406,
+      "address": "Ironton, OH, 45638",
+      "population_count": 100
+    },
+    {
+      "name": "Morrow County Jail",
+      "latitude": 40.5492438,
+      "longitude": -82.8263126,
+      "address": "Morrow County Jail, Mount Gilead, OH, 43338",
+      "population_count": 100
+    },
+    {
+      "name": "Perry County Jail",
+      "latitude": 39.713978,
+      "longitude": -82.2084975,
+      "address": "Perry County Jail, New Lexington, OH, 43764",
+      "population_count": 100
+    },
+    {
+      "name": "Putnam County Jail",
+      "latitude": 41.0059283,
+      "longitude": -84.0390043,
+      "address": "Putnam County Jail, Ottawa, OH, 45875",
+      "population_count": 100
+    },
+    {
+      "name": "Van Wert County Jail",
+      "latitude": 40.8696461,
+      "longitude": -84.5829261,
+      "address": "Van Wert, OH, 45891",
+      "population_count": 100
+    },
+    {
+      "name": "Berks County Residential Center",
+      "latitude": 40.3795408,
+      "longitude": -76.0158335,
+      "address": "Berks County Residential Center, Leesport, PA, 19533",
+      "population_count": 96
+    },
+    {
+      "name": "Carroll County Jail",
+      "latitude": 40.5728404,
+      "longitude": -81.0856532,
+      "address": "Carrollton, OH, 44615",
+      "population_count": 90
+    },
+    {
+      "name": "Gallia County Jail",
+      "latitude": 38.809803,
+      "longitude": -82.2023691,
+      "address": "Gallipolis, OH, 45631",
+      "population_count": 90
+    },
+    {
+      "name": "Hocking County Jail",
+      "latitude": 39.5395981,
+      "longitude": -82.4065106,
+      "address": "Hocking County Jail, Logan, OH, 43138",
+      "population_count": 90
+    },
+    {
+      "name": "Monroe County Jail",
+      "latitude": 39.7625729,
+      "longitude": -81.1153842,
+      "address": "Woodsfield, OH, 43793",
+      "population_count": 90
+    },
+    {
+      "name": "Paulding County Jail",
+      "latitude": 41.1628401,
+      "longitude": -84.5902954,
+      "address": "Paulding, OH, 45879",
+      "population_count": 90
+    },
+    {
+      "name": "Pike County Jail",
+      "latitude": 39.126735,
+      "longitude": -82.9854553,
+      "address": "Waverly, OH, 45690",
+      "population_count": 90
+    },
+    {
+      "name": "Wyandot County Jail",
+      "latitude": 40.8272785,
+      "longitude": -83.2813089,
+      "address": "Upper Sandusky, OH, 43351",
+      "population_count": 90
+    },
+    {
+      "name": "Chittenden County Correctional Facility",
+      "latitude": 44.4671635,
+      "longitude": -73.1715669,
+      "address": "South Burlington, VT, 05403",
+      "population_count": 80
+    },
+    {
+      "name": "Anchorage Correctional Complex",
+      "latitude": 61.2183804,
+      "longitude": -149.857649,
+      "address": "Anchorage Correctional Complex, Anchorage, AK, 99501",
+      "population_count": 80
+    },
+    {
+      "name": "Harrison County Jail",
+      "latitude": 40.2728452,
+      "longitude": -80.9967628,
+      "address": "Cadiz, OH, 43907",
+      "population_count": 80
+    },
+    {
+      "name": "Meigs County Jail",
+      "latitude": 39.0280514,
+      "longitude": -82.0342217,
+      "address": "Pomeroy, OH, 45769",
+      "population_count": 80
+    },
+    {
+      "name": "Morgan County Jail",
+      "latitude": 39.6491005,
+      "longitude": -81.852712,
+      "address": "Morgan County Jail, McConnelsville, OH, 43756",
+      "population_count": 80
+    },
+    {
+      "name": "Vinton County Jail",
+      "latitude": 39.2464596,
+      "longitude": -82.4784898,
+      "address": "McArthur, OH, 45651",
+      "population_count": 80
+    },
+    {
+      "name": "Noble County Jail",
+      "latitude": 39.7478508,
+      "longitude": -81.5165127,
+      "address": "Caldwell, OH, 43724",
+      "population_count": 70
+    }
+  ]
+}
