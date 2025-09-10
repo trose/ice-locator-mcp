@@ -230,8 +230,31 @@ const DeckGlHeatmap: React.FC = () => {
     <div className="relative h-full w-full">
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-20 bg-white shadow-md p-4">
-        <h1 className="text-2xl font-bold text-gray-900">ICE Detention Facilities</h1>
-        <p className="text-sm text-gray-500">Heatmap view of facility populations</p>
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-2xl font-bold text-gray-900">ICE Detention Facilities Heatmap</h1>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            This interactive visualization helps bring transparency to immigration detention by mapping facility locations and population data across the United States. 
+            Our goal is to make this information more accessible to advocates, researchers, and families seeking to understand the detention system.
+          </p>
+          <div className="flex flex-wrap gap-4 text-xs text-blue-600">
+            <a 
+              href="https://github.com/trose/ice-locator-mcp" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-blue-800 underline"
+            >
+              📁 View Source Code
+            </a>
+            <a 
+              href="https://tracreports.org/immigration/detentionstats/facilities.html" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-blue-800 underline"
+            >
+              📊 Source Data: TRAC Reports
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Map container */}
