@@ -11,8 +11,8 @@ import type { Color } from '@deck.gl/core';
 // Import embedded data
 import facilitiesData from '../../data/facilities.json';
 
-// Using a free style from CartoCDN
-const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+// Using Voyager style from CartoCDN - colorful and detailed
+const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
 
 // Types for our data
 interface Facility {
