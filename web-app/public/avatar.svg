@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="heat" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0.4" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#bg)" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Heatmap pattern representing facilities -->
+  <g opacity="0.9">
+    <!-- Facility dots with heatmap colors -->
+    <circle cx="25" cy="25" r="3" fill="#fbbf24" opacity="0.8"/>
+    <circle cx="75" cy="25" r="4" fill="#f59e0b" opacity="0.9"/>
+    <circle cx="50" cy="35" r="2.5" fill="#fbbf24" opacity="0.7"/>
+    <circle cx="30" cy="50" r="3" fill="#f59e0b" opacity="0.8"/>
+    <circle cx="70" cy="50" r="2.5" fill="#fbbf24" opacity="0.7"/>
+    <circle cx="25" cy="70" r="2.5" fill="#f59e0b" opacity="0.6"/>
+    <circle cx="75" cy="70" r="3" fill="#ef4444" opacity="0.8"/>
+    <circle cx="50" cy="75" r="4" fill="#ef4444" opacity="0.9"/>
+    <circle cx="40" cy="40" r="2" fill="#fbbf24" opacity="0.6"/>
+    <circle cx="60" cy="60" r="2.5" fill="#f59e0b" opacity="0.7"/>
+  </g>
+  
+  <!-- Central location indicator -->
+  <circle cx="50" cy="50" r="2" fill="#ffffff" opacity="0.9"/>
+  <circle cx="50" cy="50" r="1" fill="#1e40af"/>
+  
+  <!-- Subtle heatmap overlay -->
+  <circle cx="50" cy="50" r="35" fill="url(#heat)" opacity="0.2"/>
+  
+  <!-- Border accent -->
+  <circle cx="50" cy="50" r="48" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+</svg>
