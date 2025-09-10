@@ -228,30 +228,33 @@ const DeckGlHeatmap: React.FC = () => {
 
   return (
     <div className="relative h-full w-full">
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 bg-white shadow-md p-4">
-        <div className="flex flex-col space-y-2">
-          <h1 className="text-2xl font-bold text-gray-900">ICE Detention Facilities Heatmap</h1>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            This interactive visualization helps bring transparency to immigration detention by mapping facility locations and population data across the United States. 
-            Our goal is to make this information more accessible to advocates, researchers, and families seeking to understand the detention system.
+      {/* Info Panel */}
+      <div className="absolute top-4 right-4 z-20 max-w-sm">
+        <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <h1 className="text-lg font-semibold text-gray-900">ICE Facilities</h1>
+          </div>
+          <p className="text-xs text-gray-600 leading-relaxed mb-3">
+            Interactive heatmap showing detention facilities and population data across the US. 
+            Bringing transparency to immigration detention.
           </p>
-          <div className="flex flex-wrap gap-4 text-xs text-blue-600">
+          <div className="flex flex-col gap-1">
             <a 
               href="https://github.com/trose/ice-locator-mcp" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="hover:text-blue-800 underline"
+              className="text-xs text-blue-600 hover:text-blue-800 hover:underline transition-colors"
             >
-              📁 View Source Code
+              📁 Source Code
             </a>
             <a 
               href="https://tracreports.org/immigration/detentionstats/facilities.html" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="hover:text-blue-800 underline"
+              className="text-xs text-blue-600 hover:text-blue-800 hover:underline transition-colors"
             >
-              📊 Source Data: TRAC Reports
+              📊 Data: TRAC Reports
             </a>
           </div>
         </div>
@@ -261,27 +264,27 @@ const DeckGlHeatmap: React.FC = () => {
       <div ref={mapContainerRef} className="absolute top-0 left-0 w-full h-full"></div>
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 z-10 bg-white rounded-lg shadow-lg p-4">
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Legend</h3>
+      <div className="absolute bottom-4 left-4 z-10 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-3">
+        <h3 className="text-sm font-medium text-gray-900 mb-2">Population Density</h3>
         <div className="flex items-center mb-1">
-          <div className="w-4 h-4 bg-gray-200 rounded-full mr-2"></div>
-          <span className="text-sm">0 population</span>
+          <div className="w-3 h-3 bg-gray-200 rounded-full mr-2"></div>
+          <span className="text-xs">0 population</span>
         </div>
         <div className="flex items-center mb-1">
-          <div className="w-4 h-4 bg-yellow-200 rounded-full mr-2"></div>
-          <span className="text-sm">1-200 population</span>
+          <div className="w-3 h-3 bg-yellow-200 rounded-full mr-2"></div>
+          <span className="text-xs">1-200 population</span>
         </div>
         <div className="flex items-center mb-1">
-          <div className="w-4 h-4 bg-orange-300 rounded-full mr-2"></div>
-          <span className="text-sm">201-500 population</span>
+          <div className="w-3 h-3 bg-orange-300 rounded-full mr-2"></div>
+          <span className="text-xs">201-500 population</span>
         </div>
         <div className="flex items-center mb-1">
-          <div className="w-4 h-4 bg-orange-500 rounded-full mr-2"></div>
-          <span className="text-sm">501-1000 population</span>
+          <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+          <span className="text-xs">501-1000 population</span>
         </div>
         <div className="flex items-center">
-          <div className="w-4 h-4 bg-red-600 rounded-full mr-2"></div>
-          <span className="text-sm">1000+ population</span>
+          <div className="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
+          <span className="text-xs">1000+ population</span>
         </div>
         <div className="mt-3 text-xs text-gray-500">
           Showing {heatmapData.length} facilities with population data
