@@ -18,7 +18,7 @@
     "@tailwindcss/postcss": "^4.1.13",
     "deck.gl": "^9.1.14",
     "leaflet": "^1.9.4",
-    "mapbo x-gl": "^3.14.0",
+    "mapbox-gl": "^3.14.0",
     "maplibre-gl": "^5.7.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
