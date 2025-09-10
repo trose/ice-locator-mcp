@@ -1,0 +1,120 @@
+name: Update Facility Data
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC (1 AM EST, 10 PM PST previous day)
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual triggering
+    inputs:
+      force_update:
+        description: 'Force update even if no changes detected'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # Fetch full history for proper diff detection
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 geopy
+      
+      - name: Fetch and update facility data
+        run: |
+          python scripts/update_facility_data.py
+        env:
+          # Add any required environment variables here
+          PYTHONUNBUFFERED: 1
+      
+      - name: Check for changes
+        id: changes
+        run: |
+          # Check if the facilities.json file has changed
+          if git diff --quiet web-app/src/data/facilities.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in facility data"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in facility data"
+            
+            # Show the diff for logging
+            echo "=== DIFF ==="
+            git diff web-app/src/data/facilities.json
+            echo "=== END DIFF ==="
+          fi
+      
+      - name: Create Pull Request
+        if: steps.changes.outputs.changed == 'true' || github.event.inputs.force_update == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            Update facility data from TRAC Reports
+            
+            - Updated facility population counts
+            - Updated facility metadata
+            - Data fetched on: ${{ github.run_number }}
+            - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          title: "🤖 Automated: Update ICE facility data (${{ github.run_number }})"
+          body: |
+            ## 📊 Automated Facility Data Update
+            
+            This PR contains updated facility data from TRAC Reports.
+            
+            **📅 Update Details:**
+            - **Workflow Run**: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            - **Triggered**: ${{ github.event_name }}
+            - **Timestamp**: ${{ github.event.head_commit.timestamp || github.run_started_at }}
+            
+            **🔍 Changes:**
+            - Updated facility population counts
+            - Updated facility metadata
+            - Updated export timestamp
+            
+            **✅ Review Checklist:**
+            - [ ] Data looks reasonable
+            - [ ] No unexpected changes in facility count
+            - [ ] Population numbers are within expected ranges
+            - [ ] Metadata is correct
+            - [ ] No facilities were unexpectedly removed/added
+            
+            **📈 Data Summary:**
+            Check the updated `web-app/src/data/facilities.json` file for the latest statistics.
+            
+            **🤖 Auto-merge:**
+            This PR will be automatically merged if all checks pass and no manual review is required.
+            
+            ---
+            *This PR was created automatically by the [Update Facility Data workflow](.github/workflows/update-facility-data.yml)*
+          branch: automated-data-update-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            automated
+            data-update
+            facility-data
+          assignees: ${{ github.actor }}
+      
+      - name: Comment on PR if no changes
+        if: steps.changes.outputs.changed == 'false' && github.event_name == 'workflow_dispatch'
+        run: |
+          echo "No changes detected in facility data. This is normal if the data hasn't changed since the last update."
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Facility data update failed!"
+          echo "Check the workflow logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

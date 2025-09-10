@@ -1,0 +1,84 @@
+name: Auto-merge Data Updates
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'web-app/src/data/facilities.json'
+
+jobs:
+  auto-merge:
+    # Only auto-merge PRs created by the automated workflow
+    if: |
+      github.actor == 'github-actions[bot]' && 
+      contains(github.event.pull_request.title, 'Automated: Update ICE facility data') &&
+      github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Validate data changes
+        run: |
+          echo "🔍 Validating automated data update..."
+          
+          # Check if only the facilities.json file was changed
+          changed_files=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          echo "Changed files: $changed_files"
+          
+          # Verify only expected files were changed
+          if echo "$changed_files" | grep -v "web-app/src/data/facilities.json"; then
+            echo "❌ Unexpected files changed. Aborting auto-merge."
+            exit 1
+          fi
+          
+          # Validate JSON structure
+          if ! python -c "import json; json.load(open('web-app/src/data/facilities.json'))"; then
+            echo "❌ Invalid JSON structure. Aborting auto-merge."
+            exit 1
+          fi
+          
+          echo "✅ Data validation passed"
+      
+      - name: Auto-approve PR
+        uses: hmarr/auto-approve-action@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      
+      - name: Enable auto-merge
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash
+          merge-commit-message: |
+            Automated: Update ICE facility data
+            
+            - Updated facility population counts
+            - Updated facility metadata
+            - Data fetched on: ${{ github.run_number }}
+            
+            Auto-merged by GitHub Actions workflow.
+      
+      - name: Comment on successful auto-merge
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🤖 **Auto-merge enabled!**
+              
+              This automated data update has been validated and will be automatically merged once all checks pass.
+              
+              **Validation Results:**
+              - ✅ Only expected files changed
+              - ✅ JSON structure is valid
+              - ✅ Data update is from automated workflow
+              
+              The PR will be merged using the squash method to keep the commit history clean.`
+            })
