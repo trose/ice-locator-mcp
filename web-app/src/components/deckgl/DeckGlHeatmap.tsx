@@ -245,7 +245,7 @@ const DeckGlHeatmap: React.FC = () => {
             <div className="text-xs text-blue-800">
               <div className="font-medium">📅 Latest Data Update</div>
               <div className="text-blue-600">
-                {facilitiesData.metadata?.last_updated || facilitiesData.metadata?.exported_at || 'Unknown'}
+                {facilitiesData.metadata?.exported_at || 'Unknown'}
               </div>
               <div className="text-blue-500 text-xs mt-1">
                 {facilitiesData.metadata?.total_facilities || 0} facilities • {facilitiesData.metadata?.total_population?.toLocaleString() || 0} detainees
