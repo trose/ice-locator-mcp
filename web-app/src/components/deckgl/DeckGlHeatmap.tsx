@@ -239,6 +239,20 @@ const DeckGlHeatmap: React.FC = () => {
             Interactive heatmap showing detention facilities and population data across the US. 
             Bringing transparency to immigration detention.
           </p>
+          
+          {/* Data update info */}
+          <div className="mb-3 p-2 bg-blue-50 rounded border-l-2 border-blue-200">
+            <div className="text-xs text-blue-800">
+              <div className="font-medium">📅 Latest Data Update</div>
+              <div className="text-blue-600">
+                {facilitiesData.metadata?.last_updated || facilitiesData.metadata?.exported_at || 'Unknown'}
+              </div>
+              <div className="text-blue-500 text-xs mt-1">
+                {facilitiesData.metadata?.total_facilities || 0} facilities • {facilitiesData.metadata?.total_population?.toLocaleString() || 0} detainees
+              </div>
+            </div>
+          </div>
+          
           <div className="flex flex-col gap-1">
             <a 
               href="https://github.com/trose/ice-locator-mcp" 
@@ -254,7 +268,7 @@ const DeckGlHeatmap: React.FC = () => {
               rel="noopener noreferrer"
               className="text-xs text-blue-600 hover:text-blue-800 hover:underline transition-colors"
             >
-              📊 Data: TRAC Reports
+              📊 Data: TRAC Reports (auto-updated daily)
             </a>
           </div>
         </div>
