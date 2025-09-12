@@ -14,6 +14,10 @@ jobs:
       contains(github.event.pull_request.title, 'Automated: Update ICE facility data') &&
       github.event.pull_request.draft == false
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     
     steps:
       - name: Checkout code
