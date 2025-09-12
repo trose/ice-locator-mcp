@@ -1,0 +1,23 @@
+Subject: Partnership Request - ICE Activity Mapping Project
+
+Dear TRAC Reports Team,
+
+I hope this message finds you well. My name is Taylor Rose, and I'm a developer passionate about creating transparency around immigration detention through data visualization.
+
+I've recently launched ice-map.org, an interactive heatmap that visualizes ICE detention facilities and population data across the United States. Our project is powered entirely by your excellent data from TRAC Reports, and we're committed to keeping our visualizations current with automated daily updates.
+
+Your work at TRAC Reports has been invaluable in bringing transparency to immigration enforcement, and I'm deeply grateful for the comprehensive data you provide. The facility statistics you publish have enabled us to create a powerful tool that helps people understand the scope and distribution of detention across the country.
+
+I'm writing to request your assistance with expanding our project's impact. We're seeking more detailed data about ICE arrests and removals broken down by county, ZIP code, and facility on a monthly basis. Specifically, we're looking for August 2025 data to begin with, as this would allow us to create more granular visualizations that show not just where people are detained, but where enforcement actions are occurring.
+
+Additionally, I'd like to humbly suggest that TRAC Reports consider publishing this detailed arrest/removal data in a tabular format similar to your current facilities report. This would not only benefit our project but could serve as a valuable resource for researchers, advocates, and journalists working to understand immigration enforcement patterns.
+
+We're committed to maintaining the highest standards of data accuracy and are happy to provide attribution and links back to TRAC Reports. Our automated system ensures that any data you publish will be incorporated into our visualizations within 24 hours, keeping the public informed with the most current information available.
+
+Thank you for your time and consideration. I'd be honored to discuss this partnership opportunity further and am happy to provide more details about our project or answer any questions you might have.
+
+With gratitude and respect,
+
+Taylor Rose
+Developer, ICE Activity Mapping Project
+ice-map.org
