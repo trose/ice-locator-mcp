@@ -11,6 +11,17 @@ import type { Color } from '@deck.gl/core';
 // Import embedded data
 import facilitiesData from '../../data/facilities.json';
 
+// Mobile detection utility
+const isMobileDevice = (): boolean => {
+  // Check screen size
+  if (window.innerWidth <= 768) return true;
+  
+  // Check user agent
+  const userAgent = navigator.userAgent.toLowerCase();
+  const mobileKeywords = ['mobile', 'android', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone'];
+  return mobileKeywords.some(keyword => userAgent.includes(keyword));
+};
+
 // Using Voyager style from CartoCDN - colorful and detailed
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json';
 
@@ -29,12 +40,16 @@ interface HeatmapPoint {
   facility: Facility;
 }
 
-const INITIAL_VIEW_STATE = {
-  longitude: -98.5795,
-  latitude: 39.8283,
-  zoom: 3.5,
-  pitch: 0,
-  bearing: 0
+// Mobile-responsive initial view state
+const getInitialViewState = () => {
+  const isMobile = isMobileDevice();
+  return {
+    longitude: -98.5795,
+    latitude: 39.8283,
+    zoom: isMobile ? 2.5 : 3.5, // Zoom out more on mobile
+    pitch: 0,
+    bearing: 0
+  };
 };
 
 // Color range for the heatmap - properly typed as Color[]
@@ -56,12 +71,17 @@ const DeckGlHeatmap: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [clickInfo, setClickInfo] = useState<any>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
 
-  // Load embedded facilities data
+  // Mobile detection and data loading
   useEffect(() => {
+    // Detect mobile device
+    setIsMobile(isMobileDevice());
+    
+    // Load embedded facilities data
     try {
       console.log('Loading embedded facilities data...');
       console.log('Data metadata:', facilitiesData.metadata);
@@ -80,14 +100,16 @@ const DeckGlHeatmap: React.FC = () => {
   useEffect(() => {
     if (loading || error || !mapContainerRef.current) return;
 
+    const initialViewState = getInitialViewState();
+    
     // Create MapLibre map
     mapRef.current = new maplibregl.Map({
       container: mapContainerRef.current,
       style: MAP_STYLE,
-      center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
-      zoom: INITIAL_VIEW_STATE.zoom,
-      pitch: INITIAL_VIEW_STATE.pitch,
-      bearing: INITIAL_VIEW_STATE.bearing
+      center: [initialViewState.longitude, initialViewState.latitude],
+      zoom: initialViewState.zoom,
+      pitch: initialViewState.pitch,
+      bearing: initialViewState.bearing
     });
 
     // Add navigation controls
@@ -228,32 +250,37 @@ const DeckGlHeatmap: React.FC = () => {
 
   return (
     <div className="relative h-full w-full">
-      {/* Info Panel */}
-      <div className="absolute top-4 right-4 z-20 max-w-sm">
-        <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-4">
+      {/* Info Panel - Mobile Responsive */}
+      <div className={`absolute z-20 ${isMobile ? 'top-2 right-2 left-2 max-w-none' : 'top-4 right-4 max-w-sm'}`}>
+        <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-4'}`}>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-            <h1 className="text-lg font-semibold text-gray-900">ICE Facilities</h1>
+            <h1 className={`font-semibold text-gray-900 ${isMobile ? 'text-sm' : 'text-lg'}`}>ICE Facilities</h1>
           </div>
-          <p className="text-xs text-gray-600 leading-relaxed mb-3">
-            Interactive heatmap showing detention facilities and population data across the US. 
-            Bringing transparency to immigration detention.
+          <p className={`text-gray-600 leading-relaxed mb-3 ${isMobile ? 'text-xs' : 'text-xs'}`}>
+            {isMobile 
+              ? 'Interactive heatmap of ICE detention facilities across the US.'
+              : 'Interactive heatmap showing detention facilities and population data across the US. Bringing transparency to immigration detention.'
+            }
           </p>
           
-          {/* Data update info */}
-          <div className="mb-3 p-2 bg-blue-50 rounded border-l-2 border-blue-200">
-            <div className="text-xs text-blue-800">
+          {/* Data update info - Mobile Responsive */}
+          <div className={`mb-3 bg-blue-50 rounded border-l-2 border-blue-200 ${isMobile ? 'p-1' : 'p-2'}`}>
+            <div className={`text-blue-800 ${isMobile ? 'text-xs' : 'text-xs'}`}>
               <div className="font-medium">📅 Latest Data Update</div>
               <div className="text-blue-600">
                 {facilitiesData.metadata?.exported_at || 'Unknown'}
               </div>
-              <div className="text-blue-500 text-xs mt-1">
-                {facilitiesData.metadata?.total_facilities || 0} facilities • {facilitiesData.metadata?.total_population?.toLocaleString() || 0} detainees
+              <div className={`text-blue-500 mt-1 ${isMobile ? 'text-xs' : 'text-xs'}`}>
+                {isMobile 
+                  ? `${facilitiesData.metadata?.total_facilities || 0} facilities • ${facilitiesData.metadata?.total_population?.toLocaleString() || 0} detainees`
+                  : `${facilitiesData.metadata?.total_facilities || 0} facilities • ${facilitiesData.metadata?.total_population?.toLocaleString() || 0} detainees`
+                }
               </div>
             </div>
           </div>
           
-          <div className="flex flex-col gap-1">
+          <div className={`flex flex-col gap-1 ${isMobile ? 'text-xs' : ''}`}>
             <a 
               href="https://github.com/trose/ice-locator-mcp" 
               target="_blank" 
@@ -268,7 +295,7 @@ const DeckGlHeatmap: React.FC = () => {
               rel="noopener noreferrer"
               className="text-xs text-blue-600 hover:text-blue-800 hover:underline transition-colors"
             >
-              📊 Data: TRAC Reports (auto-updated daily)
+              📊 Data: TRAC Reports {isMobile ? '(daily)' : '(auto-updated daily)'}
             </a>
           </div>
         </div>
@@ -277,35 +304,38 @@ const DeckGlHeatmap: React.FC = () => {
       {/* Map container */}
       <div ref={mapContainerRef} className="absolute top-0 left-0 w-full h-full"></div>
 
-      {/* Legend */}
-      <div className="absolute bottom-4 left-4 z-10 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-3">
-        <h3 className="text-sm font-medium text-gray-900 mb-2">Population Density</h3>
-        <div className="flex items-center mb-1">
-          <div className="w-3 h-3 bg-gray-200 rounded-full mr-2"></div>
+      {/* Legend - Mobile Responsive */}
+      <div className={`absolute z-10 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'bottom-2 left-2 right-2 p-2' : 'bottom-4 left-4 p-3'}`}>
+        <h3 className={`font-medium text-gray-900 mb-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>Population Density</h3>
+        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
+          <div className={`bg-gray-200 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
           <span className="text-xs">0 population</span>
         </div>
-        <div className="flex items-center mb-1">
-          <div className="w-3 h-3 bg-yellow-200 rounded-full mr-2"></div>
+        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
+          <div className={`bg-yellow-200 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
           <span className="text-xs">1-200 population</span>
         </div>
-        <div className="flex items-center mb-1">
-          <div className="w-3 h-3 bg-orange-300 rounded-full mr-2"></div>
+        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
+          <div className={`bg-orange-300 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
           <span className="text-xs">201-500 population</span>
         </div>
-        <div className="flex items-center mb-1">
-          <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
+          <div className={`bg-orange-500 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
           <span className="text-xs">501-1000 population</span>
         </div>
-        <div className="flex items-center">
-          <div className="w-3 h-3 bg-red-600 rounded-full mr-2"></div>
+        <div className={`flex items-center ${isMobile ? 'text-xs' : ''}`}>
+          <div className={`bg-red-600 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
           <span className="text-xs">1000+ population</span>
         </div>
-        <div className="mt-3 text-xs text-gray-500">
-          Showing {heatmapData.length} facilities with population data
+        <div className={`mt-3 text-gray-500 ${isMobile ? 'text-xs' : 'text-xs'}`}>
+          {isMobile 
+            ? `${heatmapData.length} facilities`
+            : `Showing ${heatmapData.length} facilities with population data`
+          }
         </div>
       </div>
 
-      {/* Hover tooltip */}
+      {/* Hover tooltip - Mobile Responsive */}
       {hoverInfo && hoverInfo.object && (
         <div 
           style={{
@@ -314,11 +344,12 @@ const DeckGlHeatmap: React.FC = () => {
             top: hoverInfo.y + 10,
             background: 'rgba(0, 0, 0, 0.8)',
             color: 'white',
-            padding: '8px',
+            padding: isMobile ? '6px' : '8px',
             borderRadius: '4px',
             pointerEvents: 'none',
-            fontSize: '12px',
-            zIndex: 30
+            fontSize: isMobile ? '10px' : '12px',
+            zIndex: 30,
+            maxWidth: isMobile ? '200px' : 'none'
           }}
         >
           <div className="font-semibold">{hoverInfo.object.facility.name}</div>
@@ -327,31 +358,33 @@ const DeckGlHeatmap: React.FC = () => {
         </div>
       )}
       
-      {/* Click popup */}
+      {/* Click popup - Mobile Responsive */}
       {clickInfo && clickInfo.object && (
         <div 
           style={{
             position: 'absolute',
-            left: clickInfo.x,
-            top: clickInfo.y,
+            left: isMobile ? '10px' : clickInfo.x,
+            top: isMobile ? '50%' : clickInfo.y,
+            transform: isMobile ? 'translateY(-50%)' : 'none',
             background: 'white',
-            padding: '12px',
+            padding: isMobile ? '8px' : '12px',
             borderRadius: '4px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
             zIndex: 30,
-            minWidth: '200px'
+            minWidth: isMobile ? 'calc(100vw - 20px)' : '200px',
+            maxWidth: isMobile ? 'calc(100vw - 20px)' : 'none'
           }}
         >
-          <div className="font-semibold text-lg">{clickInfo.object.facility.name}</div>
-          <div className="text-gray-600">{clickInfo.object.facility.address || 'No address available'}</div>
+          <div className={`font-semibold ${isMobile ? 'text-sm' : 'text-lg'}`}>{clickInfo.object.facility.name}</div>
+          <div className={`text-gray-600 ${isMobile ? 'text-xs' : ''}`}>{clickInfo.object.facility.address || 'No address available'}</div>
           <div className="mt-2">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-medium bg-red-100 text-red-800 ${isMobile ? 'text-xs' : 'text-xs'}`}>
               {clickInfo.object.facility.population_count} population
             </span>
           </div>
           <button 
             onClick={() => setClickInfo(null)}
-            className="absolute top-1 right-1 text-gray-500 hover:text-gray-700"
+            className={`absolute top-1 right-1 text-gray-500 hover:text-gray-700 ${isMobile ? 'text-lg' : ''}`}
           >
             ×
           </button>
