@@ -65,8 +65,13 @@ class HistoricalTRACDataFetcher:
             # Extract and clean population count
             count_str = record.get('count', '0').strip()
             population_count = 0
-            if count_str and count_str.isdigit():
-                population_count = int(count_str)
+            
+            if count_str:
+                # Remove spaces and commas, then convert to int
+                # TRAC data format: "               2,172" -> "2172"
+                cleaned_count = count_str.replace(',', '').replace(' ', '')
+                if cleaned_count.isdigit():
+                    population_count = int(cleaned_count)
             
             # Skip facilities with no population
             if population_count == 0:
@@ -137,27 +142,100 @@ class HistoricalTRACDataFetcher:
         name = re.sub(r'\s+', ' ', name)  # Normalize whitespace
         return name.strip()
     
-    def match_facility_to_database(self, trac_facility: TRACFacility, db_facilities: List[Dict]) -> Optional[Dict]:
-        """Match TRAC facility to database facility using various strategies."""
-        trac_name_normalized = self.normalize_facility_name(trac_facility.name)
+    def normalize_facility_name_advanced(self, name: str) -> str:
+        """Advanced normalization with abbreviation handling."""
+        name = name.upper().strip()
         
-        # Strategy 1: Exact name match
+        # Handle common abbreviations and variations
+        abbreviations = {
+            'DET': 'DETENTION',
+            'DETENTION': 'DETENTION',
+            'CORRECTIONAL': 'DETENTION',  # Map correctional to detention for matching
+            'CORRECTIONS': 'DETENTION',   # Map corrections to detention for matching
+            'CENTER': 'CENTER',
+            'CENTRE': 'CENTER',
+            'FACILITY': 'FACILITY',
+            'JAIL': 'DETENTION',          # Map jail to detention for matching
+            'PRISON': 'DETENTION',        # Map prison to detention for matching
+            'PROCESSING': 'PROCESSING',
+            'SERVICE': 'SERVICE',
+            'ICE': 'ICE'
+        }
+        
+        # Replace abbreviations with standardized terms
+        for abbrev, standard in abbreviations.items():
+            name = re.sub(r'\b' + abbrev + r'\b', standard, name)
+        
+        # Remove common suffixes
+        name = re.sub(r'\s+(ICE|DETENTION|CENTER|FACILITY|PROCESSING|SERVICE)\s*$', '', name)
+        name = re.sub(r'\s+', ' ', name)  # Normalize whitespace
+        return name.strip()
+    
+    def extract_location_from_address(self, address: str) -> tuple:
+        """Extract city and state from address string."""
+        if not address:
+            return None, None
+        
+        # Common patterns: "City, State, ZIP" or "City, State ZIP"
+        parts = [part.strip() for part in address.split(',')]
+        if len(parts) >= 2:
+            city = parts[0].strip()
+            state_zip = parts[1].strip()
+            # Extract state (first 2 characters)
+            state = state_zip[:2] if len(state_zip) >= 2 else None
+            return city, state
+        
+        return None, None
+    
+    def match_facility_to_database(self, trac_facility: TRACFacility, db_facilities: List[Dict]) -> Optional[Dict]:
+        """Match TRAC facility to database facility using improved strategies."""
+        trac_name_normalized = self.normalize_facility_name(trac_facility.name)
+        trac_name_advanced = self.normalize_facility_name_advanced(trac_facility.name)
+        
+        # Strategy 1: Exact name match (original)
         for db_facility in db_facilities:
             db_name_normalized = self.normalize_facility_name(db_facility['name'])
             if trac_name_normalized == db_name_normalized:
                 return db_facility
         
-        # Strategy 2: Partial name match
+        # Strategy 2: Advanced normalization match
         for db_facility in db_facilities:
-            db_name_normalized = self.normalize_facility_name(db_facility['name'])
-            if (trac_name_normalized in db_name_normalized or 
-                db_name_normalized in trac_name_normalized):
+            db_name_advanced = self.normalize_facility_name_advanced(db_facility['name'])
+            if trac_name_advanced == db_name_advanced:
                 return db_facility
         
-        # Strategy 3: Location-based matching
+        # Strategy 3: Partial name match with advanced normalization
         for db_facility in db_facilities:
+            db_name_advanced = self.normalize_facility_name_advanced(db_facility['name'])
+            if (trac_name_advanced in db_name_advanced or 
+                db_name_advanced in trac_name_advanced):
+                return db_facility
+        
+        # Strategy 4: Location-based matching with address parsing
+        for db_facility in db_facilities:
+            # Try direct state/city match first
             if (trac_facility.state == db_facility.get('state', '') and
                 trac_facility.city.upper() == db_facility.get('city', '').upper()):
+                return db_facility
+            
+            # Try address parsing for database facility
+            db_city, db_state = self.extract_location_from_address(db_facility.get('address', ''))
+            if (db_city and db_state and
+                trac_facility.state == db_state and
+                trac_facility.city.upper() == db_city.upper()):
+                return db_facility
+        
+        # Strategy 5: Fuzzy matching for similar names
+        for db_facility in db_facilities:
+            db_name_advanced = self.normalize_facility_name_advanced(db_facility['name'])
+            # Check if the core parts match (excluding common words)
+            trac_core = re.sub(r'\b(COUNTY|CITY|TOWN|VILLAGE)\b', '', trac_name_advanced).strip()
+            db_core = re.sub(r'\b(COUNTY|CITY|TOWN|VILLAGE)\b', '', db_name_advanced).strip()
+            
+            if trac_core and db_core and (
+                trac_core in db_core or db_core in trac_core or
+                len(set(trac_core.split()) & set(db_core.split())) >= 2
+            ):
                 return db_facility
         
         return None
@@ -174,20 +252,46 @@ class HistoricalTRACDataFetcher:
         
         facilities = []
         for row in cursor.fetchall():
+            # Extract city and state from address for better matching
+            city, state = self.extract_location_from_address(row[4])
+            
             facilities.append({
                 'id': row[0],
                 'name': row[1],
                 'latitude': row[2],
                 'longitude': row[3],
                 'address': row[4],
-                'population_count': row[5]
+                'population_count': row[5],
+                'city': city,
+                'state': state
             })
         
         conn.close()
         return facilities
     
+    def apply_entity_discernment_algorithm(self, facility_records: List[TRACFacility]) -> TRACFacility:
+        """
+        Apply entity discernment algorithm to resolve multiple records for the same facility.
+        
+        Strategy:
+        1. If multiple records exist for the same facility, take the most recent record
+        2. Keep the most recent download_date and population count
+        3. This handles cases where facilities have multiple data collection points or updates
+        """
+        if not facility_records:
+            return None
+        
+        if len(facility_records) == 1:
+            return facility_records[0]
+        
+        # Find the most recent record (by download_date)
+        most_recent = max(facility_records, key=lambda r: r.download_date)
+        
+        logger.debug(f"Entity discernment: {most_recent.name} - {len(facility_records)} records, using most recent: {most_recent.download_date} with population {most_recent.population_count}")
+        return most_recent
+
     def update_database_with_monthly_data(self, monthly_data: Dict[str, List[TRACFacility]]):
-        """Update database with monthly population data."""
+        """Update database with monthly population data using entity discernment algorithm."""
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -207,41 +311,73 @@ class HistoricalTRACDataFetcher:
             )
         """)
         
+        # Create unique index to prevent duplicates
+        try:
+            cursor.execute("""
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_monthly_population_unique 
+                ON monthly_population(facility_id, month_year)
+            """)
+        except sqlite3.OperationalError:
+            # Index might already exist, continue
+            pass
+        
         # Clear existing monthly data
         cursor.execute("DELETE FROM monthly_population")
         
         total_records = 0
         matched_facilities = 0
+        entity_discernment_applied = 0
         
         for month_year, facilities in monthly_data.items():
             logger.info(f"Processing {month_year}: {len(facilities)} facilities")
             
+            # Group facilities by name for entity discernment
+            facility_groups = {}
             for trac_facility in facilities:
+                # Use normalized name as key for grouping
+                normalized_name = self.normalize_facility_name_advanced(trac_facility.name)
+                if normalized_name not in facility_groups:
+                    facility_groups[normalized_name] = []
+                facility_groups[normalized_name].append(trac_facility)
+            
+            # Apply entity discernment and process each group
+            for normalized_name, facility_group in facility_groups.items():
+                # Apply entity discernment algorithm
+                resolved_facility = self.apply_entity_discernment_algorithm(facility_group)
+                
+                if len(facility_group) > 1:
+                    entity_discernment_applied += 1
+                    logger.debug(f"Applied entity discernment to {resolved_facility.name}: {len(facility_group)} records -> 1 record")
+                
                 # Match to database facility
-                db_facility = self.match_facility_to_database(trac_facility, db_facilities)
+                db_facility = self.match_facility_to_database(resolved_facility, db_facilities)
                 
                 if db_facility:
-                    # Insert monthly population record
+                    # Use INSERT OR REPLACE to handle potential duplicates
                     cursor.execute("""
-                        INSERT INTO monthly_population 
+                        INSERT OR REPLACE INTO monthly_population 
                         (facility_id, month_year, population_count, download_date)
                         VALUES (?, ?, ?, ?)
                     """, (
                         db_facility['id'],
                         month_year,
-                        trac_facility.population_count,
-                        trac_facility.download_date
+                        resolved_facility.population_count,
+                        resolved_facility.download_date
                     ))
                     matched_facilities += 1
                 else:
-                    logger.warning(f"Could not match TRAC facility: {trac_facility.name}")
+                    # This is expected behavior - many TRAC facilities are not in our ICE-focused database
+                    logger.debug(f"TRAC facility not in ICE database: {resolved_facility.name}")
                 
                 total_records += 1
         
         conn.commit()
         conn.close()
         
+        unmatched_facilities = total_records - matched_facilities
         logger.info(f"Updated database with {total_records} records, matched {matched_facilities} facilities")
+        logger.info(f"Applied entity discernment to {entity_discernment_applied} facility groups")
+        logger.info(f"Unmatched facilities: {unmatched_facilities} (expected - these are non-ICE facilities like county jails)")
     
     def export_monthly_data_for_frontend(self, output_file: str = "web-app/src/data/facilities_monthly_optimized.json"):
         """Export monthly data in the format expected by the frontend."""

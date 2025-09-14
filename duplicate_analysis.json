@@ -1,0 +1,637 @@
+{
+  "analysis_date": "2025-09-14T12:43:13.820000",
+  "total_duplicate_groups": 2585,
+  "top_duplicate_facilities": [
+    {
+      "facility_id": 121,
+      "facility_name": "Polk County Jail",
+      "facility_address": "Polk County Jail, Bartow, FL, 33830",
+      "duplicate_groups": 62
+    },
+    {
+      "facility_id": 110,
+      "facility_name": "Rio Grande Detention Center",
+      "facility_address": "Laredo, TX, 78040",
+      "duplicate_groups": 62
+    },
+    {
+      "facility_id": 95,
+      "facility_name": "Imperial Regional Detention Facility",
+      "facility_address": "Calexico, CA, 92231",
+      "duplicate_groups": 61
+    },
+    {
+      "facility_id": 103,
+      "facility_name": "Corrections Corporation of America",
+      "facility_address": "Houston, TX, 77002",
+      "duplicate_groups": 60
+    },
+    {
+      "facility_id": 92,
+      "facility_name": "Adelanto ICE Processing Center",
+      "facility_address": "Adelanto ICE Processing Center, Adelanto, CA, 92301",
+      "duplicate_groups": 60
+    },
+    {
+      "facility_id": 94,
+      "facility_name": "El Centro Service Processing Center",
+      "facility_address": "El Centro, CA, 92243",
+      "duplicate_groups": 58
+    },
+    {
+      "facility_id": 102,
+      "facility_name": "Conroe Processing Center",
+      "facility_address": "Conroe, TX, 77301",
+      "duplicate_groups": 54
+    },
+    {
+      "facility_id": 157,
+      "facility_name": "Orange County Jail",
+      "facility_address": "Goshen, NY, 10924",
+      "duplicate_groups": 52
+    },
+    {
+      "facility_id": 158,
+      "facility_name": "Northwest Detention Center",
+      "facility_address": "Northwest Detention Center, Tacoma, WA, 98421",
+      "duplicate_groups": 46
+    },
+    {
+      "facility_id": 276,
+      "facility_name": "Wood County Jail",
+      "facility_address": "Wood County Jail, Bowling Green, OH, 43402",
+      "duplicate_groups": 45
+    }
+  ],
+  "sample_duplicates": [
+    {
+      "facility_id": 121,
+      "facility_name": "Polk County Jail",
+      "facility_address": "Polk County Jail, Bartow, FL, 33830",
+      "month_year": "2021-05",
+      "record_count": 6,
+      "records": [
+        {
+          "id": 10983,
+          "facility_id": 121,
+          "month_year": "2021-05",
+          "population_count": 91,
+          "download_date": "05/03/2021",
+          "created_at": "2025-09-14 18:32:27"
+        },
+        {
+          "id": 11002,
+          "facility_id": 121,
+          "month_year": "2021-05",
+          "population_count": 26,
+          "download_date": "05/03/2021",
+          "created_at": "2025-09-14 18:32:27"
+        },
+        {
+          "id": 10901,
+          "facility_id": 121,
+          "month_year": "2021-05",
+          "population_count": 102,
+          "download_date": "05/13/2021",
+          "created_at": "2025-09-14 18:32:25"
+        },
+        {
+          "id": 10925,
+          "facility_id": 121,
+          "month_year": "2021-05",
+          "population_count": 25,
+          "download_date": "05/13/2021",
+          "created_at": "2025-09-14 18:32:26"
+        },
+        {
+          "id": 10836,
+          "facility_id": 121,
+          "month_year": "2021-05",
+          "population_count": 75,
+          "download_date": "05/28/2021",
+          "created_at": "2025-09-14 18:32:24"
+        },
+        {
+          "id": 10851,
+          "facility_id": 121,
+          "month_year": "2021-05",
+          "population_count": 30,
+          "download_date": "05/28/2021",
+          "created_at": "2025-09-14 18:32:24"
+        }
+      ]
+    },
+    {
+      "facility_id": 121,
+      "facility_name": "Polk County Jail",
+      "facility_address": "Polk County Jail, Bartow, FL, 33830",
+      "month_year": "2023-05",
+      "record_count": 6,
+      "records": [
+        {
+          "id": 8092,
+          "facility_id": 121,
+          "month_year": "2023-05",
+          "population_count": 595,
+          "download_date": "05/01/2023",
+          "created_at": "2025-09-14 18:31:27"
+        },
+        {
+          "id": 8112,
+          "facility_id": 121,
+          "month_year": "2023-05",
+          "population_count": 25,
+          "download_date": "05/01/2023",
+          "created_at": "2025-09-14 18:31:28"
+        },
+        {
+          "id": 8002,
+          "facility_id": 121,
+          "month_year": "2023-05",
+          "population_count": 565,
+          "download_date": "05/15/2023",
+          "created_at": "2025-09-14 18:31:26"
+        },
+        {
+          "id": 8039,
+          "facility_id": 121,
+          "month_year": "2023-05",
+          "population_count": 25,
+          "download_date": "05/15/2023",
+          "created_at": "2025-09-14 18:31:26"
+        },
+        {
+          "id": 7963,
+          "facility_id": 121,
+          "month_year": "2023-05",
+          "population_count": 552,
+          "download_date": "05/30/2023",
+          "created_at": "2025-09-14 18:31:25"
+        },
+        {
+          "id": 7982,
+          "facility_id": 121,
+          "month_year": "2023-05",
+          "population_count": 25,
+          "download_date": "05/30/2023",
+          "created_at": "2025-09-14 18:31:25"
+        }
+      ]
+    },
+    {
+      "facility_id": 121,
+      "facility_name": "Polk County Jail",
+      "facility_address": "Polk County Jail, Bartow, FL, 33830",
+      "month_year": "2023-09",
+      "record_count": 6,
+      "records": [
+        {
+          "id": 7477,
+          "facility_id": 121,
+          "month_year": "2023-09",
+          "population_count": 549,
+          "download_date": "09/04/2023",
+          "created_at": "2025-09-14 18:31:16"
+        },
+        {
+          "id": 7508,
+          "facility_id": 121,
+          "month_year": "2023-09",
+          "population_count": 25,
+          "download_date": "09/04/2023",
+          "created_at": "2025-09-14 18:31:16"
+        },
+        {
+          "id": 7411,
+          "facility_id": 121,
+          "month_year": "2023-09",
+          "population_count": 557,
+          "download_date": "09/18/2023",
+          "created_at": "2025-09-14 18:31:14"
+        },
+        {
+          "id": 7442,
+          "facility_id": 121,
+          "month_year": "2023-09",
+          "population_count": 25,
+          "download_date": "09/18/2023",
+          "created_at": "2025-09-14 18:31:15"
+        },
+        {
+          "id": 7350,
+          "facility_id": 121,
+          "month_year": "2023-09",
+          "population_count": 565,
+          "download_date": "09/30/2023",
+          "created_at": "2025-09-14 18:31:13"
+        },
+        {
+          "id": 7382,
+          "facility_id": 121,
+          "month_year": "2023-09",
+          "population_count": 25,
+          "download_date": "09/30/2023",
+          "created_at": "2025-09-14 18:31:14"
+        }
+      ]
+    },
+    {
+      "facility_id": 110,
+      "facility_name": "Rio Grande Detention Center",
+      "facility_address": "Laredo, TX, 78040",
+      "month_year": "2021-05",
+      "record_count": 6,
+      "records": [
+        {
+          "id": 10973,
+          "facility_id": 110,
+          "month_year": "2021-05",
+          "population_count": 151,
+          "download_date": "05/03/2021",
+          "created_at": "2025-09-14 18:32:27"
+        },
+        {
+          "id": 10982,
+          "facility_id": 110,
+          "month_year": "2021-05",
+          "population_count": 91,
+          "download_date": "05/03/2021",
+          "created_at": "2025-09-14 18:32:27"
+        },
+        {
+          "id": 10896,
+          "facility_id": 110,
+          "month_year": "2021-05",
+          "population_count": 147,
+          "download_date": "05/13/2021",
+          "created_at": "2025-09-14 18:32:25"
+        },
+        {
+          "id": 10904,
+          "facility_id": 110,
+          "month_year": "2021-05",
+          "population_count": 95,
+          "download_date": "05/13/2021",
+          "created_at": "2025-09-14 18:32:25"
+        },
+        {
+          "id": 10823,
+          "facility_id": 110,
+          "month_year": "2021-05",
+          "population_count": 160,
+          "download_date": "05/28/2021",
+          "created_at": "2025-09-14 18:32:23"
+        },
+        {
+          "id": 10843,
+          "facility_id": 110,
+          "month_year": "2021-05",
+          "population_count": 59,
+          "download_date": "05/28/2021",
+          "created_at": "2025-09-14 18:32:24"
+        }
+      ]
+    },
+    {
+      "facility_id": 110,
+      "facility_name": "Rio Grande Detention Center",
+      "facility_address": "Laredo, TX, 78040",
+      "month_year": "2023-05",
+      "record_count": 6,
+      "records": [
+        {
+          "id": 8116,
+          "facility_id": 110,
+          "month_year": "2023-05",
+          "population_count": 343,
+          "download_date": "05/01/2023",
+          "created_at": "2025-09-14 18:31:28"
+        },
+        {
+          "id": 8126,
+          "facility_id": 110,
+          "month_year": "2023-05",
+          "population_count": 184,
+          "download_date": "05/01/2023",
+          "created_at": "2025-09-14 18:31:28"
+        },
+        {
+          "id": 8017,
+          "facility_id": 110,
+          "month_year": "2023-05",
+          "population_count": 333,
+          "download_date": "05/15/2023",
+          "created_at": "2025-09-14 18:31:26"
+        },
+        {
+          "id": 8020,
+          "facility_id": 110,
+          "month_year": "2023-05",
+          "population_count": 182,
+          "download_date": "05/15/2023",
+          "created_at": "2025-09-14 18:31:26"
+        },
+        {
+          "id": 7986,
+          "facility_id": 110,
+          "month_year": "2023-05",
+          "population_count": 329,
+          "download_date": "05/30/2023",
+          "created_at": "2025-09-14 18:31:25"
+        },
+        {
+          "id": 7994,
+          "facility_id": 110,
+          "month_year": "2023-05",
+          "population_count": 182,
+          "download_date": "05/30/2023",
+          "created_at": "2025-09-14 18:31:26"
+        }
+      ]
+    },
+    {
+      "facility_id": 110,
+      "facility_name": "Rio Grande Detention Center",
+      "facility_address": "Laredo, TX, 78040",
+      "month_year": "2023-09",
+      "record_count": 6,
+      "records": [
+        {
+          "id": 7487,
+          "facility_id": 110,
+          "month_year": "2023-09",
+          "population_count": 322,
+          "download_date": "09/04/2023",
+          "created_at": "2025-09-14 18:31:16"
+        },
+        {
+          "id": 7491,
+          "facility_id": 110,
+          "month_year": "2023-09",
+          "population_count": 184,
+          "download_date": "09/04/2023",
+          "created_at": "2025-09-14 18:31:16"
+        },
+        {
+          "id": 7421,
+          "facility_id": 110,
+          "month_year": "2023-09",
+          "population_count": 324,
+          "download_date": "09/18/2023",
+          "created_at": "2025-09-14 18:31:14"
+        },
+        {
+          "id": 7425,
+          "facility_id": 110,
+          "month_year": "2023-09",
+          "population_count": 183,
+          "download_date": "09/18/2023",
+          "created_at": "2025-09-14 18:31:15"
+        },
+        {
+          "id": 7360,
+          "facility_id": 110,
+          "month_year": "2023-09",
+          "population_count": 327,
+          "download_date": "09/30/2023",
+          "created_at": "2025-09-14 18:31:13"
+        },
+        {
+          "id": 7364,
+          "facility_id": 110,
+          "month_year": "2023-09",
+          "population_count": 182,
+          "download_date": "09/30/2023",
+          "created_at": "2025-09-14 18:31:13"
+        }
+      ]
+    },
+    {
+      "facility_id": 95,
+      "facility_name": "Imperial Regional Detention Facility",
+      "facility_address": "Calexico, CA, 92231",
+      "month_year": "2025-03",
+      "record_count": 9,
+      "records": [
+        {
+          "id": 5712,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 674,
+          "download_date": "03/03/2025",
+          "created_at": "2025-09-14 18:30:39"
+        },
+        {
+          "id": 5720,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 4,
+          "download_date": "03/03/2025",
+          "created_at": "2025-09-14 18:30:39"
+        },
+        {
+          "id": 5742,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 41,
+          "download_date": "03/03/2025",
+          "created_at": "2025-09-14 18:30:40"
+        },
+        {
+          "id": 5644,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 671,
+          "download_date": "03/17/2025",
+          "created_at": "2025-09-14 18:30:37"
+        },
+        {
+          "id": 5652,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 10,
+          "download_date": "03/17/2025",
+          "created_at": "2025-09-14 18:30:37"
+        },
+        {
+          "id": 5673,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 47,
+          "download_date": "03/17/2025",
+          "created_at": "2025-09-14 18:30:38"
+        },
+        {
+          "id": 5574,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 666,
+          "download_date": "03/31/2025",
+          "created_at": "2025-09-14 18:30:36"
+        },
+        {
+          "id": 5580,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 13,
+          "download_date": "03/31/2025",
+          "created_at": "2025-09-14 18:30:36"
+        },
+        {
+          "id": 5602,
+          "facility_id": 95,
+          "month_year": "2025-03",
+          "population_count": 70,
+          "download_date": "03/31/2025",
+          "created_at": "2025-09-14 18:30:36"
+        }
+      ]
+    },
+    {
+      "facility_id": 95,
+      "facility_name": "Imperial Regional Detention Facility",
+      "facility_address": "Calexico, CA, 92231",
+      "month_year": "2025-06",
+      "record_count": 8,
+      "records": [
+        {
+          "id": 5199,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 666,
+          "download_date": "06/09/2025",
+          "created_at": "2025-09-14 18:30:27"
+        },
+        {
+          "id": 5205,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 50,
+          "download_date": "06/09/2025",
+          "created_at": "2025-09-14 18:30:27"
+        },
+        {
+          "id": 5230,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 145,
+          "download_date": "06/09/2025",
+          "created_at": "2025-09-14 18:30:28"
+        },
+        {
+          "id": 5142,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 58,
+          "download_date": "06/23/2025",
+          "created_at": "2025-09-14 18:30:26"
+        },
+        {
+          "id": 5144,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 667,
+          "download_date": "06/23/2025",
+          "created_at": "2025-09-14 18:30:26"
+        },
+        {
+          "id": 5145,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 165,
+          "download_date": "06/23/2025",
+          "created_at": "2025-09-14 18:30:26"
+        },
+        {
+          "id": 5155,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 112,
+          "download_date": "06/23/2025",
+          "created_at": "2025-09-14 18:30:26"
+        },
+        {
+          "id": 5157,
+          "facility_id": 95,
+          "month_year": "2025-06",
+          "population_count": 61,
+          "download_date": "06/23/2025",
+          "created_at": "2025-09-14 18:30:26"
+        }
+      ]
+    },
+    {
+      "facility_id": 95,
+      "facility_name": "Imperial Regional Detention Facility",
+      "facility_address": "Calexico, CA, 92231",
+      "month_year": "2025-08",
+      "record_count": 8,
+      "records": [
+        {
+          "id": 4941,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 664,
+          "download_date": "08/04/2025",
+          "created_at": "2025-09-14 18:30:21"
+        },
+        {
+          "id": 4950,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 78,
+          "download_date": "08/04/2025",
+          "created_at": "2025-09-14 18:30:21"
+        },
+        {
+          "id": 4959,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 3,
+          "download_date": "08/04/2025",
+          "created_at": "2025-09-14 18:30:21"
+        },
+        {
+          "id": 4975,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 202,
+          "download_date": "08/04/2025",
+          "created_at": "2025-09-14 18:30:22"
+        },
+        {
+          "id": 4852,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 665,
+          "download_date": "08/18/2025",
+          "created_at": "2025-09-14 18:30:19"
+        },
+        {
+          "id": 4859,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 88,
+          "download_date": "08/18/2025",
+          "created_at": "2025-09-14 18:30:19"
+        },
+        {
+          "id": 4873,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 3,
+          "download_date": "08/18/2025",
+          "created_at": "2025-09-14 18:30:19"
+        },
+        {
+          "id": 4889,
+          "facility_id": 95,
+          "month_year": "2025-08",
+          "population_count": 213,
+          "download_date": "08/18/2025",
+          "created_at": "2025-09-14 18:30:20"
+        }
+      ]
+    }
+  ]
+}

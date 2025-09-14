@@ -44,6 +44,12 @@ jobs:
           # Add any required environment variables here
           PYTHONUNBUFFERED: 1
       
+      - name: Clean up any duplicate records
+        run: |
+          python scripts/cleanup_duplicates.py --execute
+        env:
+          PYTHONUNBUFFERED: 1
+      
       - name: Check for changes
         id: changes
         run: |
