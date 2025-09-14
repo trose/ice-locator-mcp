@@ -76,6 +76,7 @@ const DeckGlHeatmap: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState<string>(monthlyFacilitiesData.meta.l);
   const [topFacilities, setTopFacilities] = useState<MonthlyFacilityData[]>([]);
   const [totalPopulation, setTotalPopulation] = useState<number>(0);
+  const [isFacilitiesListExpanded, setIsFacilitiesListExpanded] = useState(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
@@ -334,36 +335,47 @@ const DeckGlHeatmap: React.FC = () => {
         </div>
       </div>
 
-      {/* Top Facilities List - Mobile Responsive */}
-      <div className={`absolute z-20 ${isMobile ? 'top-32 right-2 left-2' : 'top-4 left-80'}`}>
+      {/* Facility Population Overview - Mobile Responsive */}
+      <div className={`absolute z-20 ${isMobile ? 'top-32 left-2 right-2' : 'top-4 left-4'}`}>
         <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-3'}`}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-            <h3 className={`font-medium text-gray-900 ${isMobile ? 'text-sm' : 'text-base'}`}>Top Facilities</h3>
+          <div 
+            className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 rounded p-1 -m-1"
+            onClick={() => setIsFacilitiesListExpanded(!isFacilitiesListExpanded)}
+          >
+            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+            <h3 className={`font-medium text-gray-900 ${isMobile ? 'text-sm' : 'text-base'}`}>
+              Population Overview
+            </h3>
             <span className={`text-gray-500 ${isMobile ? 'text-xs' : 'text-sm'}`}>
               ({totalPopulation.toLocaleString()} total)
             </span>
+            <button className="ml-auto text-gray-400 hover:text-gray-600">
+              {isFacilitiesListExpanded ? '−' : '+'}
+            </button>
           </div>
-          <div className={`space-y-1 max-h-64 overflow-y-auto ${isMobile ? 'text-xs' : 'text-sm'}`}>
-            {topFacilities.map((facility, index) => (
-              <div key={facility.id} className="flex items-center justify-between py-1 px-2 rounded hover:bg-gray-50">
-                <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <span className={`font-medium text-gray-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                    #{index + 1}
-                  </span>
-                  <span className="truncate text-gray-900" title={facility.name}>
-                    {facility.name}
+          
+          {isFacilitiesListExpanded && (
+            <div className={`space-y-1 max-h-64 overflow-y-auto ${isMobile ? 'text-xs' : 'text-sm'}`}>
+              {topFacilities.map((facility, index) => (
+                <div key={facility.id} className="flex items-center justify-between py-1 px-2 rounded hover:bg-gray-50">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className={`font-medium text-gray-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>
+                      #{index + 1}
+                    </span>
+                    <span className="truncate text-gray-900" title={facility.name}>
+                      {facility.name}
+                    </span>
+                  </div>
+                  <span className={`font-semibold text-blue-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>
+                    {facility.population_count.toLocaleString()}
                   </span>
                 </div>
-                <span className={`font-semibold text-red-600 ${isMobile ? 'text-xs' : 'text-sm'}`}>
-                  {facility.population_count.toLocaleString()}
-                </span>
-              </div>
-            ))}
-          </div>
-          {topFacilities.length === 0 && (
-            <div className={`text-gray-500 text-center py-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>
-              No data available for this month
+              ))}
+              {topFacilities.length === 0 && (
+                <div className={`text-gray-500 text-center py-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>
+                  No data available for this month
+                </div>
+              )}
             </div>
           )}
         </div>
