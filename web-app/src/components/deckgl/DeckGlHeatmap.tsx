@@ -9,7 +9,8 @@ import { HeatmapLayer } from '@deck.gl/aggregation-layers';
 import { ScatterplotLayer } from '@deck.gl/layers';
 import type { Color } from '@deck.gl/core';
 // Import embedded data
-import facilitiesData from '../../data/facilities.json';
+import { monthlyFacilitiesData } from '../../data/monthlyFacilitiesData';
+import { getFacilitiesForMonth, getAvailableMonths, formatMonthYear } from '../../utils/monthlyDataUtils';
 
 // Mobile detection utility
 const isMobileDevice = (): boolean => {
@@ -72,6 +73,7 @@ const DeckGlHeatmap: React.FC = () => {
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [clickInfo, setClickInfo] = useState<any>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState<string>(monthlyFacilitiesData.meta.l);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
@@ -81,20 +83,20 @@ const DeckGlHeatmap: React.FC = () => {
     // Detect mobile device
     setIsMobile(isMobileDevice());
     
-    // Load embedded facilities data
+    // Load monthly facilities data for selected month
     try {
-      console.log('Loading embedded facilities data...');
-      console.log('Data metadata:', facilitiesData.metadata);
-      console.log('Sample facilities data:', facilitiesData.facilities.slice(0, 3));
+      console.log('Loading monthly facilities data for:', selectedMonth);
+      console.log('Monthly data metadata:', monthlyFacilitiesData.meta);
       
-      setFacilities(facilitiesData.facilities);
+      const monthlyFacilities = getFacilitiesForMonth(monthlyFacilitiesData, selectedMonth);
+      setFacilities(monthlyFacilities);
       setLoading(false);
     } catch (err) {
-      console.error('Failed to load embedded data:', err);
+      console.error('Failed to load monthly data:', err);
       setError('Failed to load facilities data: ' + (err as Error).message);
       setLoading(false);
     }
-  }, []);
+  }, [selectedMonth]);
 
   // Initialize MapLibre map and DeckGL overlay
   useEffect(() => {
@@ -267,14 +269,14 @@ const DeckGlHeatmap: React.FC = () => {
           {/* Data update info - Mobile Responsive */}
           <div className={`mb-3 bg-blue-50 rounded border-l-2 border-blue-200 ${isMobile ? 'p-1' : 'p-2'}`}>
             <div className={`text-blue-800 ${isMobile ? 'text-xs' : 'text-xs'}`}>
-              <div className="font-medium">📅 Latest Data Update</div>
+              <div className="font-medium">📅 Historical Data Available</div>
               <div className="text-blue-600">
-                {facilitiesData.metadata?.exported_at || 'Unknown'}
+                {monthlyFacilitiesData.meta.t}
               </div>
               <div className={`text-blue-500 mt-1 ${isMobile ? 'text-xs' : 'text-xs'}`}>
                 {isMobile 
-                  ? `${facilitiesData.metadata?.total_facilities || 0} facilities • ${facilitiesData.metadata?.total_population?.toLocaleString() || 0} detainees`
-                  : `${facilitiesData.metadata?.total_facilities || 0} facilities • ${facilitiesData.metadata?.total_population?.toLocaleString() || 0} detainees`
+                  ? `${monthlyFacilitiesData.meta.f} facilities • ${monthlyFacilitiesData.meta.m.length} months of data`
+                  : `${monthlyFacilitiesData.meta.f} facilities • ${monthlyFacilitiesData.meta.m.length} months of historical data (2019-2025)`
                 }
               </div>
             </div>
@@ -297,6 +299,30 @@ const DeckGlHeatmap: React.FC = () => {
             >
               📊 Data: TRAC Reports {isMobile ? '(daily)' : '(auto-updated daily)'}
             </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Month Selector - Mobile Responsive */}
+      <div className={`absolute z-20 ${isMobile ? 'top-20 right-2 left-2' : 'top-4 left-4'}`}>
+        <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-3'}`}>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <h3 className={`font-medium text-gray-900 ${isMobile ? 'text-sm' : 'text-base'}`}>Select Month</h3>
+          </div>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className={`w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${isMobile ? 'text-xs p-1' : 'text-sm p-2'}`}
+          >
+            {getAvailableMonths(monthlyFacilitiesData).map((month) => (
+              <option key={month} value={month}>
+                {formatMonthYear(month)}
+              </option>
+            ))}
+          </select>
+          <div className={`mt-2 text-gray-500 ${isMobile ? 'text-xs' : 'text-xs'}`}>
+            Showing data for {formatMonthYear(selectedMonth)}
           </div>
         </div>
       </div>

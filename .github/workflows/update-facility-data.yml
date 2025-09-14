@@ -39,7 +39,7 @@ jobs:
       
       - name: Fetch and update facility data
         run: |
-          python scripts/update_facility_data.py
+          python scripts/fetch_historical_trac_data.py
         env:
           # Add any required environment variables here
           PYTHONUNBUFFERED: 1
@@ -47,17 +47,17 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          # Check if the facilities.json file has changed
-          if git diff --quiet web-app/src/data/facilities.json; then
+          # Check if the monthly facilities data has changed
+          if git diff --quiet web-app/src/data/facilities_monthly_optimized.json; then
             echo "changed=false" >> $GITHUB_OUTPUT
-            echo "No changes detected in facility data"
+            echo "No changes detected in monthly facility data"
           else
             echo "changed=true" >> $GITHUB_OUTPUT
-            echo "Changes detected in facility data"
+            echo "Changes detected in monthly facility data"
             
             # Show the diff for logging
             echo "=== DIFF ==="
-            git diff web-app/src/data/facilities.json
+            git diff web-app/src/data/facilities_monthly_optimized.json
             echo "=== END DIFF ==="
           fi
       
@@ -67,17 +67,18 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: |
-            Update facility data from TRAC Reports
+            Update monthly facility data from TRAC Reports
             
-            - Updated facility population counts
+            - Updated monthly facility population counts
+            - Historical data from 2019-09 to present
             - Updated facility metadata
             - Data fetched on: ${{ github.run_number }}
             - Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          title: "🤖 Automated: Update ICE facility data (${{ github.run_number }})"
+          title: "🤖 Automated: Update ICE monthly facility data (${{ github.run_number }})"
           body: |
-            ## 📊 Automated Facility Data Update
+            ## 📊 Automated Monthly Facility Data Update
             
-            This PR contains updated facility data from TRAC Reports.
+            This PR contains updated monthly facility data from TRAC Reports.
             
             **📅 Update Details:**
             - **Workflow Run**: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
@@ -85,19 +86,21 @@ jobs:
             - **Timestamp**: ${{ github.event.head_commit.timestamp || github.run_started_at }}
             
             **🔍 Changes:**
-            - Updated facility population counts
+            - Updated monthly facility population counts
+            - Historical data from 2019-09 to present
             - Updated facility metadata
             - Updated export timestamp
             
             **✅ Review Checklist:**
-            - [ ] Data looks reasonable
+            - [ ] Monthly data looks reasonable
             - [ ] No unexpected changes in facility count
             - [ ] Population numbers are within expected ranges
+            - [ ] Available months are properly listed
             - [ ] Metadata is correct
             - [ ] No facilities were unexpectedly removed/added
             
             **📈 Data Summary:**
-            Check the updated `web-app/src/data/facilities.json` file for the latest statistics.
+            Check the updated `web-app/src/data/facilities_monthly_optimized.json` file for the latest statistics.
             
             **🤖 Auto-merge:**
             This PR will be automatically merged if all checks pass and no manual review is required.
