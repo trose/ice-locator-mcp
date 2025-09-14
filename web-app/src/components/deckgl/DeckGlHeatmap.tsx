@@ -339,7 +339,7 @@ const DeckGlHeatmap: React.FC = () => {
       </div>
 
       {/* Facility Population Overview - Mobile Responsive */}
-      <div className={`absolute z-20 ${isMobile ? 'top-32 left-2 right-2' : 'top-4 left-4'}`}>
+      <div className={`absolute z-20 ${isMobile ? 'top-32 left-2 right-2' : 'top-32 left-4'}`}>
         <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-3'}`}>
           <div 
             className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 rounded p-1 -m-1"
