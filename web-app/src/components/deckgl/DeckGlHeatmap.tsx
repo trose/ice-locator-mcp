@@ -78,6 +78,7 @@ const DeckGlHeatmap: React.FC = () => {
   const [totalPopulation, setTotalPopulation] = useState<number>(0);
   const [isFacilitiesListExpanded, setIsFacilitiesListExpanded] = useState(false);
   const [hoveredFacilityName, setHoveredFacilityName] = useState<string | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
@@ -367,8 +368,14 @@ const DeckGlHeatmap: React.FC = () => {
                       ? 'bg-orange-100 border border-orange-300' 
                       : 'hover:bg-gray-50'
                   }`}
-                  onMouseEnter={() => {
+                  onMouseEnter={(e) => {
                     setHoveredFacilityName(facility.name);
+                    // Get mouse position for tooltip
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setTooltipPosition({
+                      x: rect.left + rect.width / 2,
+                      y: rect.top - 10
+                    });
                     // Create hover info for the tooltip
                     const facilityData = facilities.find(f => f.name === facility.name);
                     if (facilityData) {
@@ -376,14 +383,15 @@ const DeckGlHeatmap: React.FC = () => {
                         object: {
                           facility: facilityData
                         },
-                        x: 0, // Will be positioned by the tooltip component
-                        y: 0
+                        x: rect.left + rect.width / 2,
+                        y: rect.top - 10
                       });
                     }
                   }}
                   onMouseLeave={() => {
                     setHoveredFacilityName(null);
                     setHoverInfo(null);
+                    setTooltipPosition(null);
                   }}
                 >
                   <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -447,9 +455,9 @@ const DeckGlHeatmap: React.FC = () => {
       {hoverInfo && hoverInfo.object && (
         <div 
           style={{
-            position: 'absolute',
-            left: hoverInfo.x === 0 ? (isMobile ? '10px' : '20px') : hoverInfo.x + 10,
-            top: hoverInfo.y === 0 ? (isMobile ? '10px' : '20px') : hoverInfo.y + 10,
+            position: 'fixed',
+            left: tooltipPosition ? tooltipPosition.x : (isMobile ? '10px' : '20px'),
+            top: tooltipPosition ? tooltipPosition.y : (isMobile ? '10px' : '20px'),
             background: 'rgba(0, 0, 0, 0.8)',
             color: 'white',
             padding: isMobile ? '6px' : '8px',
@@ -457,7 +465,8 @@ const DeckGlHeatmap: React.FC = () => {
             pointerEvents: 'none',
             fontSize: isMobile ? '10px' : '12px',
             zIndex: 30,
-            maxWidth: isMobile ? '200px' : 'none'
+            maxWidth: isMobile ? '200px' : 'none',
+            transform: tooltipPosition ? 'translateX(-50%)' : 'none'
           }}
         >
           <div className="font-semibold">{hoverInfo.object.facility.name}</div>
