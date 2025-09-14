@@ -79,17 +79,6 @@ export function getLatestMonth(data: OptimizedMonthlyData): string {
 }
 
 /**
- * Get total population for a specific month
- */
-export function getTotalPopulationForMonth(
-  data: OptimizedMonthlyData,
-  monthYear: string
-): number {
-  const facilities = getFacilitiesForMonth(data, monthYear);
-  return facilities.reduce((total, facility) => total + facility.population_count, 0);
-}
-
-/**
  * Get facility count for a specific month
  */
 export function getFacilityCountForMonth(
@@ -190,6 +179,31 @@ export function getMonthOptions(data: OptimizedMonthlyData): { value: string; la
     value: month,
     label: formatMonthYear(month)
   })).reverse(); // Most recent first
+}
+
+/**
+ * Get top facilities by population for a specific month
+ */
+export function getTopFacilitiesForMonth(
+  data: OptimizedMonthlyData,
+  monthYear: string,
+  limit: number = 10
+): MonthlyFacilityData[] {
+  const facilities = getFacilitiesForMonth(data, monthYear);
+  return facilities
+    .sort((a, b) => b.population_count - a.population_count)
+    .slice(0, limit);
+}
+
+/**
+ * Get total population for a specific month
+ */
+export function getTotalPopulationForMonth(
+  data: OptimizedMonthlyData,
+  monthYear: string
+): number {
+  const facilities = getFacilitiesForMonth(data, monthYear);
+  return facilities.reduce((total, facility) => total + facility.population_count, 0);
 }
 
 /**
