@@ -265,15 +265,23 @@ const DeckGlHeatmap: React.FC = () => {
 
   return (
     <div className="relative h-full w-full">
-      {/* Mobile UI Toggle Button */}
+      {/* Mobile UI Controls */}
       {isMobile && (
-        <div className="absolute top-2 right-2 z-30 flex items-center gap-2">
-          {/* Current month indicator when UI is hidden */}
-          {!isMobileUIVisible && (
-            <div className="bg-white/95 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg border border-gray-200">
-              <span className="text-xs text-gray-600">{formatMonthYear(selectedMonth)}</span>
-            </div>
-          )}
+        <div className="absolute top-2 left-2 z-30 flex items-center gap-2">
+          {/* Month selector dropdown */}
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="bg-white/95 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg border border-gray-200 text-xs text-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            {getAvailableMonths(monthlyFacilitiesData).map((month) => (
+              <option key={month} value={month}>
+                {formatMonthYear(month)}
+              </option>
+            ))}
+          </select>
+          
+          {/* UI toggle button */}
           <button
             onClick={() => setIsMobileUIVisible(!isMobileUIVisible)}
             className="bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-lg border border-gray-200 hover:bg-white transition-colors"
@@ -343,38 +351,36 @@ const DeckGlHeatmap: React.FC = () => {
         </div>
       </div>
 
-      {/* Month Selector - Mobile Responsive */}
-      <div className={`absolute z-20 transition-all duration-300 ${
-        isMobile 
-          ? (isMobileUIVisible ? 'top-20 right-2 left-2 opacity-100' : 'top-20 right-2 left-2 opacity-0 pointer-events-none')
-          : 'top-4 left-4'
-      }`}>
-        <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-3'}`}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-            <h3 className={`font-medium text-gray-900 ${isMobile ? 'text-sm' : 'text-base'}`}>Select Month</h3>
-          </div>
-          <select
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-            className={`w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${isMobile ? 'text-xs p-1' : 'text-sm p-2'}`}
-          >
-            {getAvailableMonths(monthlyFacilitiesData).map((month) => (
-              <option key={month} value={month}>
-                {formatMonthYear(month)}
-              </option>
-            ))}
-          </select>
-          <div className={`mt-2 text-gray-500 ${isMobile ? 'text-xs' : 'text-xs'}`}>
-            Showing data for {formatMonthYear(selectedMonth)}
+      {/* Month Selector - Desktop Only */}
+      {!isMobile && (
+        <div className="absolute z-20 top-4 left-4">
+          <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <h3 className="font-medium text-gray-900 text-base">Select Month</h3>
+            </div>
+            <select
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="w-full bg-white border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm p-2"
+            >
+              {getAvailableMonths(monthlyFacilitiesData).map((month) => (
+                <option key={month} value={month}>
+                  {formatMonthYear(month)}
+                </option>
+              ))}
+            </select>
+            <div className="mt-2 text-gray-500 text-xs">
+              Showing data for {formatMonthYear(selectedMonth)}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Facility Population Overview - Mobile Responsive */}
       <div className={`absolute z-20 transition-all duration-300 ${
         isMobile 
-          ? (isMobileUIVisible ? 'top-40 left-2 right-2 opacity-100' : 'top-40 left-2 right-2 opacity-0 pointer-events-none')
+          ? (isMobileUIVisible ? 'top-20 left-2 right-2 opacity-100' : 'top-20 left-2 right-2 opacity-0 pointer-events-none')
           : 'top-40 left-4'
       }`}>
         <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-3'}`}>
