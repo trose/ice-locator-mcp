@@ -79,6 +79,7 @@ const DeckGlHeatmap: React.FC = () => {
   const [isFacilitiesListExpanded, setIsFacilitiesListExpanded] = useState(false);
   const [hoveredFacilityName, setHoveredFacilityName] = useState<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isMobileUIVisible, setIsMobileUIVisible] = useState(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
@@ -264,8 +265,35 @@ const DeckGlHeatmap: React.FC = () => {
 
   return (
     <div className="relative h-full w-full">
+      {/* Mobile UI Toggle Button */}
+      {isMobile && (
+        <div className="absolute top-2 right-2 z-30 flex items-center gap-2">
+          {/* Current month indicator when UI is hidden */}
+          {!isMobileUIVisible && (
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg border border-gray-200">
+              <span className="text-xs text-gray-600">{formatMonthYear(selectedMonth)}</span>
+            </div>
+          )}
+          <button
+            onClick={() => setIsMobileUIVisible(!isMobileUIVisible)}
+            className="bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-lg border border-gray-200 hover:bg-white transition-colors"
+            aria-label="Toggle UI elements"
+          >
+            <div className="w-5 h-5 flex flex-col justify-center items-center">
+              <div className={`w-3 h-0.5 bg-gray-600 transition-transform ${isMobileUIVisible ? 'rotate-45 translate-y-0.5' : ''}`}></div>
+              <div className={`w-3 h-0.5 bg-gray-600 transition-opacity ${isMobileUIVisible ? 'opacity-0' : 'mt-0.5'}`}></div>
+              <div className={`w-3 h-0.5 bg-gray-600 transition-transform ${isMobileUIVisible ? '-rotate-45 -translate-y-0.5' : 'mt-0.5'}`}></div>
+            </div>
+          </button>
+        </div>
+      )}
+
       {/* Info Panel - Mobile Responsive */}
-      <div className={`absolute z-20 ${isMobile ? 'top-2 right-2 left-2 max-w-none' : 'top-4 right-4 max-w-sm'}`}>
+      <div className={`absolute z-20 transition-all duration-300 ${
+        isMobile 
+          ? (isMobileUIVisible ? 'top-2 right-2 left-2 max-w-none opacity-100' : 'top-2 right-2 left-2 max-w-none opacity-0 pointer-events-none')
+          : 'top-4 right-4 max-w-sm'
+      }`}>
         <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-4'}`}>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -316,7 +344,11 @@ const DeckGlHeatmap: React.FC = () => {
       </div>
 
       {/* Month Selector - Mobile Responsive */}
-      <div className={`absolute z-20 ${isMobile ? 'top-20 right-2 left-2' : 'top-4 left-4'}`}>
+      <div className={`absolute z-20 transition-all duration-300 ${
+        isMobile 
+          ? (isMobileUIVisible ? 'top-20 right-2 left-2 opacity-100' : 'top-20 right-2 left-2 opacity-0 pointer-events-none')
+          : 'top-4 left-4'
+      }`}>
         <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-3'}`}>
           <div className="flex items-center gap-2 mb-2">
             <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -340,7 +372,11 @@ const DeckGlHeatmap: React.FC = () => {
       </div>
 
       {/* Facility Population Overview - Mobile Responsive */}
-      <div className={`absolute z-20 ${isMobile ? 'top-40 left-2 right-2' : 'top-40 left-4'}`}>
+      <div className={`absolute z-20 transition-all duration-300 ${
+        isMobile 
+          ? (isMobileUIVisible ? 'top-40 left-2 right-2 opacity-100' : 'top-40 left-2 right-2 opacity-0 pointer-events-none')
+          : 'top-40 left-4'
+      }`}>
         <div className={`bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'p-2' : 'p-3'}`}>
           <div 
             className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-50 rounded p-1 -m-1"
@@ -422,33 +458,46 @@ const DeckGlHeatmap: React.FC = () => {
 
       {/* Legend - Mobile Responsive */}
       <div className={`absolute z-10 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 ${isMobile ? 'bottom-2 left-2 right-2 p-2' : 'bottom-4 left-4 p-3'}`}>
-        <h3 className={`font-medium text-gray-900 mb-2 ${isMobile ? 'text-xs' : 'text-sm'}`}>Population Density</h3>
-        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
-          <div className={`bg-gray-200 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
-          <span className="text-xs">0 population</span>
-        </div>
-        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
-          <div className={`bg-yellow-200 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
-          <span className="text-xs">1-200 population</span>
-        </div>
-        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
-          <div className={`bg-orange-300 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
-          <span className="text-xs">201-500 population</span>
-        </div>
-        <div className={`flex items-center mb-1 ${isMobile ? 'text-xs' : ''}`}>
-          <div className={`bg-orange-500 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
-          <span className="text-xs">501-1000 population</span>
-        </div>
-        <div className={`flex items-center ${isMobile ? 'text-xs' : ''}`}>
-          <div className={`bg-red-600 rounded-full mr-2 ${isMobile ? 'w-2 h-2' : 'w-3 h-3'}`}></div>
-          <span className="text-xs">1000+ population</span>
-        </div>
-        <div className={`mt-3 text-gray-500 ${isMobile ? 'text-xs' : 'text-xs'}`}>
-          {isMobile 
-            ? `${heatmapData.length} facilities`
-            : `Showing ${heatmapData.length} facilities with population data`
-          }
-        </div>
+        {isMobile ? (
+          // Compact mobile legend
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-yellow-200 rounded-full"></div>
+              <div className="w-2 h-2 bg-orange-300 rounded-full"></div>
+              <div className="w-2 h-2 bg-red-600 rounded-full"></div>
+            </div>
+            <span className="text-xs text-gray-600">Population</span>
+            <span className="text-xs text-gray-500">{heatmapData.length} facilities</span>
+          </div>
+        ) : (
+          // Full desktop legend
+          <>
+            <h3 className="font-medium text-gray-900 mb-2 text-sm">Population Density</h3>
+            <div className="flex items-center mb-1">
+              <div className="bg-gray-200 rounded-full mr-2 w-3 h-3"></div>
+              <span className="text-xs">0 population</span>
+            </div>
+            <div className="flex items-center mb-1">
+              <div className="bg-yellow-200 rounded-full mr-2 w-3 h-3"></div>
+              <span className="text-xs">1-200 population</span>
+            </div>
+            <div className="flex items-center mb-1">
+              <div className="bg-orange-300 rounded-full mr-2 w-3 h-3"></div>
+              <span className="text-xs">201-500 population</span>
+            </div>
+            <div className="flex items-center mb-1">
+              <div className="bg-orange-500 rounded-full mr-2 w-3 h-3"></div>
+              <span className="text-xs">501-1000 population</span>
+            </div>
+            <div className="flex items-center">
+              <div className="bg-red-600 rounded-full mr-2 w-3 h-3"></div>
+              <span className="text-xs">1000+ population</span>
+            </div>
+            <div className="mt-3 text-gray-500 text-xs">
+              Showing {heatmapData.length} facilities with population data
+            </div>
+          </>
+        )}
       </div>
 
       {/* Hover tooltip - Mobile Responsive */}
