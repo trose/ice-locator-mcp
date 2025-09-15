@@ -38,6 +38,36 @@ Add to your Claude Desktop config:
 }
 ```
 
+## Available Tools
+
+### 🔍 Search Tools
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `search_detainee_by_name` | Search by personal information with fuzzy matching | `first_name`, `last_name`, `date_of_birth`, `country_of_birth`, `middle_name`, `language`, `fuzzy_search` |
+| `search_detainee_by_alien_number` | Search by alien registration number (A-number) | `alien_number`, `language` |
+| `smart_detainee_search` | AI-powered natural language search | `query`, `context`, `suggest_corrections`, `language` |
+| `bulk_search_detainees` | Search multiple detainees simultaneously | `search_requests`, `max_concurrent`, `continue_on_error` |
+| `generate_search_report` | Generate comprehensive reports for legal use | `search_criteria`, `results`, `report_type`, `format` |
+
+### 📋 Prompts
+
+| Prompt | Description | Arguments |
+|--------|-------------|-----------|
+| `detainee_search_guide` | Guide for searching ICE detainees with best practices | `search_type`, `user_role` |
+| `legal_report_template` | Template for generating legal reports from search results | `report_type`, `client_name` |
+| `family_support_guide` | Comprehensive guide for families searching for detained relatives | `relationship`, `language` |
+
+### 📚 Resources
+
+| Resource | Description | Type |
+|----------|-------------|------|
+| `ice://facilities/database` | Comprehensive database of ICE detention facilities | JSON |
+| `ice://search/history` | Track and manage previous search queries and results | JSON |
+| `ice://legal/templates` | Templates for legal documents and correspondence | Markdown |
+| `ice://support/resources` | Resources for families of detainees | Markdown |
+| `ice://statistics/trends` | Historical data and trends about ICE detention | JSON |
+
 ## Usage Examples
 
 ```python
