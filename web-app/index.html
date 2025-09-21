@@ -4,17 +4,71 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primary Meta Tags -->
+
+    <!-- Performance and SEO Meta Tags -->
     <title>ICE Facility Heatmap - Immigration Detention Centers | Real-time Population Data</title>
     <meta name="title" content="ICE Facility Heatmap - Immigration Detention Centers | Real-time Population Data" />
     <meta name="description" content="Interactive heatmap of ICE detention facilities across the United States with real-time population data, facility locations, and historical trends. Track immigration detention statistics from 2019-2025." />
     <meta name="keywords" content="immigration detention, ICE facilities, detention centers, immigration statistics, population data, detention heatmap, immigration transparency, detention facility locations, ICE data, immigration detention trends" />
     <meta name="author" content="ICE Locator MCP" />
+
+    <!-- Mobile Optimization -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="ICE Facility Heatmap" />
+
+    <!-- Performance Hints -->
+    <link rel="preload" href="/src/data/monthlyFacilitiesData.ts" as="fetch" crossorigin />
+    <link rel="dns-prefetch" href="//basemaps.cartocdn.com" />
+    <link rel="dns-prefetch" href="//api.mapbox.com" />
+    <link rel="preconnect" href="https://basemaps.cartocdn.com" crossorigin />
+
+    <!-- Resource Hints for Critical Assets -->
+    <link rel="modulepreload" href="/src/main.tsx" />
+    <link rel="modulepreload" href="/src/App.tsx" />
+    <link rel="modulepreload" href="/src/components/deckgl/DeckGlHeatmap.tsx" />
+
+    <!-- Critical CSS -->
+    <style>
+      /* Critical above-the-fold styles */
+      .loading-spinner {
+        display: inline-block;
+        width: 3rem;
+        height: 3rem;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      /* Optimize font loading */
+      @font-face {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: local('Inter'), url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap') format('woff2');
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        margin: 0;
+        overflow-x: hidden;
+      }
+    </style>
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://ice-locator-mcp.vercel.app/" />
+     <meta property="og:url" content="https://ice-locator-mcp.vercel.app/" />
+     <meta name="google-site-verification" content="" />
+     <meta name="msvalidate.01" content="" />
+     <meta name="yandex-verification" content="" />
     <meta property="og:title" content="ICE Facility Heatmap - Immigration Detention Centers | Real-time Population Data" />
     <meta property="og:description" content="Interactive heatmap of ICE detention facilities across the United States with real-time population data, facility locations, and historical trends. Track immigration detention statistics from 2019-2025." />
     <meta property="og:image" content="https://ice-locator-mcp.vercel.app/og-image.png" />
@@ -32,7 +86,42 @@
     <!-- Additional Meta Tags -->
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#1e40af" />
+    <meta name="msapplication-TileColor" content="#1e40af" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
     <link rel="canonical" href="https://ice-locator-mcp.vercel.app/" />
+
+    <!-- Mobile-specific optimizations -->
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="HandheldFriendly" content="true" />
+
+    <!-- Performance and Core Web Vitals -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="renderer" content="webkit" />
+
+    <!-- Security -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https: wss:; worker-src 'self' blob:;" />
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json" as="fetch" crossorigin />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Service Worker Registration -->
+    <script>
+      // Register service worker for caching and offline support
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
