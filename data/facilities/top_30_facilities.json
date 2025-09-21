@@ -1,0 +1,422 @@
+[
+  {
+    "name": "Dilley Family Residential Center",
+    "city": "Dilley",
+    "state": "TX",
+    "zip": "78017",
+    "population": 2000,
+    "raw_data": [
+      "Dilley Family Residential Center",
+      "Dilley",
+      "TX",
+      "78017",
+      "2000"
+    ]
+  },
+  {
+    "name": "Adelanto ICE Processing Center",
+    "city": "Adelanto",
+    "state": "CA",
+    "zip": "92301",
+    "population": 1847,
+    "raw_data": [
+      "Adelanto ICE Processing Center",
+      "Adelanto",
+      "CA",
+      "92301",
+      "1847"
+    ]
+  },
+  {
+    "name": "South Texas Family Residential Center",
+    "city": "Dilley",
+    "state": "TX",
+    "zip": "78017",
+    "population": 1800,
+    "raw_data": [
+      "South Texas Family Residential Center",
+      "Dilley",
+      "TX",
+      "78017",
+      "1800"
+    ]
+  },
+  {
+    "name": "Stewart Detention Center",
+    "city": "Lumpkin",
+    "state": "GA",
+    "zip": "31815",
+    "population": 1800,
+    "raw_data": [
+      "Stewart Detention Center",
+      "Lumpkin",
+      "GA",
+      "31815",
+      "1800"
+    ]
+  },
+  {
+    "name": "Otay Mesa Detention Center",
+    "city": "San Diego",
+    "state": "CA",
+    "zip": "92154",
+    "population": 1500,
+    "raw_data": [
+      "Otay Mesa Detention Center",
+      "San Diego",
+      "CA",
+      "92154",
+      "1500"
+    ]
+  },
+  {
+    "name": "Eloy Detention Center",
+    "city": "Eloy",
+    "state": "AZ",
+    "zip": "85131",
+    "population": 1500,
+    "raw_data": [
+      "Eloy Detention Center",
+      "Eloy",
+      "AZ",
+      "85131",
+      "1500"
+    ]
+  },
+  {
+    "name": "Northwest Detention Center",
+    "city": "Tacoma",
+    "state": "WA",
+    "zip": "98421",
+    "population": 1500,
+    "raw_data": [
+      "Northwest Detention Center",
+      "Tacoma",
+      "WA",
+      "98421",
+      "1500"
+    ]
+  },
+  {
+    "name": "Calexico ICE Processing Center",
+    "city": "Calexico",
+    "state": "CA",
+    "zip": "92231",
+    "population": 1200,
+    "raw_data": [
+      "Calexico ICE Processing Center",
+      "Calexico",
+      "CA",
+      "92231",
+      "1200"
+    ]
+  },
+  {
+    "name": "Big Spring Correctional Center",
+    "city": "Big Spring",
+    "state": "TX",
+    "zip": "79720",
+    "population": 1200,
+    "raw_data": [
+      "Big Spring Correctional Center",
+      "Big Spring",
+      "TX",
+      "79720",
+      "1200"
+    ]
+  },
+  {
+    "name": "Karnes County Residential Center",
+    "city": "Karnes City",
+    "state": "TX",
+    "zip": "78118",
+    "population": 1200,
+    "raw_data": [
+      "Karnes County Residential Center",
+      "Karnes City",
+      "TX",
+      "78118",
+      "1200"
+    ]
+  },
+  {
+    "name": "La Palma Correctional Center",
+    "city": "Eloy",
+    "state": "AZ",
+    "zip": "85131",
+    "population": 1200,
+    "raw_data": [
+      "La Palma Correctional Center",
+      "Eloy",
+      "AZ",
+      "85131",
+      "1200"
+    ]
+  },
+  {
+    "name": "Port Isabel Service Processing Center",
+    "city": "Los Fresnos",
+    "state": "TX",
+    "zip": "78566",
+    "population": 1100,
+    "raw_data": [
+      "Port Isabel Service Processing Center",
+      "Los Fresnos",
+      "TX",
+      "78566",
+      "1100"
+    ]
+  },
+  {
+    "name": "El Paso Service Processing Center",
+    "city": "El Paso",
+    "state": "TX",
+    "zip": "79925",
+    "population": 1000,
+    "raw_data": [
+      "El Paso Service Processing Center",
+      "El Paso",
+      "TX",
+      "79925",
+      "1000"
+    ]
+  },
+  {
+    "name": "Laredo Processing Center",
+    "city": "Laredo",
+    "state": "TX",
+    "zip": "78040",
+    "population": 900,
+    "raw_data": [
+      "Laredo Processing Center",
+      "Laredo",
+      "TX",
+      "78040",
+      "900"
+    ]
+  },
+  {
+    "name": "El Centro Service Processing Center",
+    "city": "El Centro",
+    "state": "CA",
+    "zip": "92243",
+    "population": 800,
+    "raw_data": [
+      "El Centro Service Processing Center",
+      "El Centro",
+      "CA",
+      "92243",
+      "800"
+    ]
+  },
+  {
+    "name": "Conroe Processing Center",
+    "city": "Conroe",
+    "state": "TX",
+    "zip": "77301",
+    "population": 800,
+    "raw_data": [
+      "Conroe Processing Center",
+      "Conroe",
+      "TX",
+      "77301",
+      "800"
+    ]
+  },
+  {
+    "name": "Rio Grande Detention Center",
+    "city": "Laredo",
+    "state": "TX",
+    "zip": "78040",
+    "population": 800,
+    "raw_data": [
+      "Rio Grande Detention Center",
+      "Laredo",
+      "TX",
+      "78040",
+      "800"
+    ]
+  },
+  {
+    "name": "Florence Service Processing Center",
+    "city": "Florence",
+    "state": "AZ",
+    "zip": "85132",
+    "population": 800,
+    "raw_data": [
+      "Florence Service Processing Center",
+      "Florence",
+      "AZ",
+      "85132",
+      "800"
+    ]
+  },
+  {
+    "name": "Cibola County Correctional Center",
+    "city": "Milan",
+    "state": "NM",
+    "zip": "87021",
+    "population": 800,
+    "raw_data": [
+      "Cibola County Correctional Center",
+      "Milan",
+      "NM",
+      "87021",
+      "800"
+    ]
+  },
+  {
+    "name": "LaSalle Detention Facility",
+    "city": "Jena",
+    "state": "LA",
+    "zip": "71342",
+    "population": 800,
+    "raw_data": [
+      "LaSalle Detention Facility",
+      "Jena",
+      "LA",
+      "71342",
+      "800"
+    ]
+  },
+  {
+    "name": "Houston Contract Detention Facility",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77002",
+    "population": 700,
+    "raw_data": [
+      "Houston Contract Detention Facility",
+      "Houston",
+      "TX",
+      "77002",
+      "700"
+    ]
+  },
+  {
+    "name": "Broward Transitional Center",
+    "city": "Pompano Beach",
+    "state": "FL",
+    "zip": "33069",
+    "population": 700,
+    "raw_data": [
+      "Broward Transitional Center",
+      "Pompano Beach",
+      "FL",
+      "33069",
+      "700"
+    ]
+  },
+  {
+    "name": "Imperial Regional Detention Facility",
+    "city": "Calexico",
+    "state": "CA",
+    "zip": "92231",
+    "population": 600,
+    "raw_data": [
+      "Imperial Regional Detention Facility",
+      "Calexico",
+      "CA",
+      "92231",
+      "600"
+    ]
+  },
+  {
+    "name": "Corrections Corporation of America",
+    "city": "Houston",
+    "state": "TX",
+    "zip": "77002",
+    "population": 600,
+    "raw_data": [
+      "Corrections Corporation of America",
+      "Houston",
+      "TX",
+      "77002",
+      "600"
+    ]
+  },
+  {
+    "name": "Winn Correctional Center",
+    "city": "Winnfield",
+    "state": "TX",
+    "zip": "71483",
+    "population": 600,
+    "raw_data": [
+      "Winn Correctional Center",
+      "Winnfield",
+      "TX",
+      "71483",
+      "600"
+    ]
+  },
+  {
+    "name": "Krome Service Processing Center",
+    "city": "Miami",
+    "state": "FL",
+    "zip": "33194",
+    "population": 600,
+    "raw_data": [
+      "Krome Service Processing Center",
+      "Miami",
+      "FL",
+      "33194",
+      "600"
+    ]
+  },
+  {
+    "name": "Otero County Processing Center",
+    "city": "Chaparral",
+    "state": "NM",
+    "zip": "88081",
+    "population": 600,
+    "raw_data": [
+      "Otero County Processing Center",
+      "Chaparral",
+      "NM",
+      "88081",
+      "600"
+    ]
+  },
+  {
+    "name": "Caroline Detention Facility",
+    "city": "Bowling Green",
+    "state": "VA",
+    "zip": "22427",
+    "population": 600,
+    "raw_data": [
+      "Caroline Detention Facility",
+      "Bowling Green",
+      "VA",
+      "22427",
+      "600"
+    ]
+  },
+  {
+    "name": "Winn Correctional Center",
+    "city": "Winnfield",
+    "state": "LA",
+    "zip": "71483",
+    "population": 600,
+    "raw_data": [
+      "Winn Correctional Center",
+      "Winnfield",
+      "LA",
+      "71483",
+      "600"
+    ]
+  },
+  {
+    "name": "Trousdale Turner Correctional Center",
+    "city": "Hartsville",
+    "state": "TN",
+    "zip": "37074",
+    "population": 600,
+    "raw_data": [
+      "Trousdale Turner Correctional Center",
+      "Hartsville",
+      "TN",
+      "37074",
+      "600"
+    ]
+  }
+]
