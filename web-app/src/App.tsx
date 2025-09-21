@@ -1,20 +1,10 @@
-import React, { Suspense, lazy } from 'react';
 import PerformanceMonitorComponent from './components/PerformanceMonitor';
+import DeckGlTest from './DeckGlTest';
 
-// Lazy load the main component for better initial load performance
-const DeckGlTest = lazy(() => import('./DeckGlTest'));
-
-const App: React.FC = () => {
+function App() {
   return (
     <div className="h-screen w-screen">
-      <Suspense fallback={
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p className="mt-4 text-white text-lg">Loading ICE Facility Heatmap...</p>
-        </div>
-      }>
-        <DeckGlTest />
-      </Suspense>
+      <DeckGlTest />
 
       {/* Performance Monitor - Only show in development */}
       {process.env.NODE_ENV === 'development' && (
@@ -22,6 +12,6 @@ const App: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 export default App;
