@@ -1,8 +1,28 @@
-User-agent: *
-Allow: /
+ User-agent: *
+ Allow: /
 
-# Sitemap
-Sitemap: https://ice-locator-mcp.vercel.app/sitemap.xml
+ # Sitemap
+ Sitemap: https://ice-locator-mcp.vercel.app/sitemap.xml
 
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
+ # Crawl-delay for respectful crawling
+ Crawl-delay: 1
+
+ # Block access to static assets that don't need indexing
+ Disallow: /favicon.svg
+ Disallow: /og-image.svg
+ Disallow: /vite.svg
+ Disallow: /avatar*.svg
+ Disallow: /avatar*.png
+ Disallow: /avatar*.jpg
+
+ # Allow access to data files for transparency
+ Allow: /facilities.csv
+
+ # Allow access to the og-image.html for social media crawlers
+ Allow: /og-image.html
+
+ # Block common bot traps and development files
+ Disallow: /src/
+ Disallow: /node_modules/
+ Disallow: /*.log
+ Disallow: /*.tmp
