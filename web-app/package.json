@@ -9,6 +9,7 @@
     "build:analyze": "tsc -b && vite build --mode analyze",
     "lint": "eslint .",
     "preview": "vite preview",
+    "start": "vite preview --port $PORT",
     "lighthouse": "lighthouse http://localhost:5173 --output html --output-path ./lighthouse-report.html",
     "performance": "npm run build && npm run lighthouse"
   },
