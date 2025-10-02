@@ -1,0 +1,90 @@
+import { EndpointParameterInstructions } from "@smithy/middleware-endpoint";
+import { Command as $Command } from "@smithy/smithy-client";
+import { Handler, HttpHandlerOptions as __HttpHandlerOptions, MetadataBearer as __MetadataBearer, MiddlewareStack } from "@smithy/types";
+import { CloudFrontClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../CloudFrontClient";
+import { GetMonitoringSubscriptionRequest, GetMonitoringSubscriptionResult } from "../models/models_1";
+/**
+ * @public
+ */
+export { __MetadataBearer, $Command };
+/**
+ * @public
+ *
+ * The input for {@link GetMonitoringSubscriptionCommand}.
+ */
+export interface GetMonitoringSubscriptionCommandInput extends GetMonitoringSubscriptionRequest {
+}
+/**
+ * @public
+ *
+ * The output of {@link GetMonitoringSubscriptionCommand}.
+ */
+export interface GetMonitoringSubscriptionCommandOutput extends GetMonitoringSubscriptionResult, __MetadataBearer {
+}
+/**
+ * @public
+ * <p>Gets information about whether additional CloudWatch metrics are enabled for the
+ * 			specified CloudFront distribution.</p>
+ * @example
+ * Use a bare-bones client and the command you need to make an API call.
+ * ```javascript
+ * import { CloudFrontClient, GetMonitoringSubscriptionCommand } from "@aws-sdk/client-cloudfront"; // ES Modules import
+ * // const { CloudFrontClient, GetMonitoringSubscriptionCommand } = require("@aws-sdk/client-cloudfront"); // CommonJS import
+ * const client = new CloudFrontClient(config);
+ * const input = { // GetMonitoringSubscriptionRequest
+ *   DistributionId: "STRING_VALUE", // required
+ * };
+ * const command = new GetMonitoringSubscriptionCommand(input);
+ * const response = await client.send(command);
+ * // { // GetMonitoringSubscriptionResult
+ * //   MonitoringSubscription: { // MonitoringSubscription
+ * //     RealtimeMetricsSubscriptionConfig: { // RealtimeMetricsSubscriptionConfig
+ * //       RealtimeMetricsSubscriptionStatus: "Enabled" || "Disabled", // required
+ * //     },
+ * //   },
+ * // };
+ *
+ * ```
+ *
+ * @param GetMonitoringSubscriptionCommandInput - {@link GetMonitoringSubscriptionCommandInput}
+ * @returns {@link GetMonitoringSubscriptionCommandOutput}
+ * @see {@link GetMonitoringSubscriptionCommandInput} for command's `input` shape.
+ * @see {@link GetMonitoringSubscriptionCommandOutput} for command's `response` shape.
+ * @see {@link CloudFrontClientResolvedConfig | config} for CloudFrontClient's `config` shape.
+ *
+ * @throws {@link AccessDenied} (client fault)
+ *  <p>Access denied.</p>
+ *
+ * @throws {@link NoSuchDistribution} (client fault)
+ *  <p>The specified distribution does not exist.</p>
+ *
+ * @throws {@link NoSuchMonitoringSubscription} (client fault)
+ *  <p>A monitoring subscription does not exist for the specified distribution.</p>
+ *
+ * @throws {@link UnsupportedOperation} (client fault)
+ *  <p>This operation is not supported in this region.</p>
+ *
+ * @throws {@link CloudFrontServiceException}
+ * <p>Base exception class for all service exceptions from CloudFront service.</p>
+ *
+ */
+export declare class GetMonitoringSubscriptionCommand extends $Command<GetMonitoringSubscriptionCommandInput, GetMonitoringSubscriptionCommandOutput, CloudFrontClientResolvedConfig> {
+    readonly input: GetMonitoringSubscriptionCommandInput;
+    static getEndpointParameterInstructions(): EndpointParameterInstructions;
+    /**
+     * @public
+     */
+    constructor(input: GetMonitoringSubscriptionCommandInput);
+    /**
+     * @internal
+     */
+    resolveMiddleware(clientStack: MiddlewareStack<ServiceInputTypes, ServiceOutputTypes>, configuration: CloudFrontClientResolvedConfig, options?: __HttpHandlerOptions): Handler<GetMonitoringSubscriptionCommandInput, GetMonitoringSubscriptionCommandOutput>;
+    /**
+     * @internal
+     */
+    private serialize;
+    /**
+     * @internal
+     */
+    private deserialize;
+}

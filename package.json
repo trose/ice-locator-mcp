@@ -1,0 +1,19 @@
+{
+  "name": "ice-locator-mcp",
+  "version": "1.0.0",
+  "description": "[![MCP Badge](https://lobehub.com/badge/mcp/trose-ice-locator-mcp)](https://lobehub.com/mcp/trose-ice-locator-mcp)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

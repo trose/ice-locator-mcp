@@ -1,0 +1,85 @@
+import { EndpointParameterInstructions } from "@smithy/middleware-endpoint";
+import { Command as $Command } from "@smithy/smithy-client";
+import { Handler, HttpHandlerOptions as __HttpHandlerOptions, MetadataBearer as __MetadataBearer, MiddlewareStack } from "@smithy/types";
+import { CloudFrontClientResolvedConfig, ServiceInputTypes, ServiceOutputTypes } from "../CloudFrontClient";
+import { GetPublicKeyConfigRequest, GetPublicKeyConfigResult } from "../models/models_1";
+/**
+ * @public
+ */
+export { __MetadataBearer, $Command };
+/**
+ * @public
+ *
+ * The input for {@link GetPublicKeyConfigCommand}.
+ */
+export interface GetPublicKeyConfigCommandInput extends GetPublicKeyConfigRequest {
+}
+/**
+ * @public
+ *
+ * The output of {@link GetPublicKeyConfigCommand}.
+ */
+export interface GetPublicKeyConfigCommandOutput extends GetPublicKeyConfigResult, __MetadataBearer {
+}
+/**
+ * @public
+ * <p>Gets a public key configuration.</p>
+ * @example
+ * Use a bare-bones client and the command you need to make an API call.
+ * ```javascript
+ * import { CloudFrontClient, GetPublicKeyConfigCommand } from "@aws-sdk/client-cloudfront"; // ES Modules import
+ * // const { CloudFrontClient, GetPublicKeyConfigCommand } = require("@aws-sdk/client-cloudfront"); // CommonJS import
+ * const client = new CloudFrontClient(config);
+ * const input = { // GetPublicKeyConfigRequest
+ *   Id: "STRING_VALUE", // required
+ * };
+ * const command = new GetPublicKeyConfigCommand(input);
+ * const response = await client.send(command);
+ * // { // GetPublicKeyConfigResult
+ * //   PublicKeyConfig: { // PublicKeyConfig
+ * //     CallerReference: "STRING_VALUE", // required
+ * //     Name: "STRING_VALUE", // required
+ * //     EncodedKey: "STRING_VALUE", // required
+ * //     Comment: "STRING_VALUE",
+ * //   },
+ * //   ETag: "STRING_VALUE",
+ * // };
+ *
+ * ```
+ *
+ * @param GetPublicKeyConfigCommandInput - {@link GetPublicKeyConfigCommandInput}
+ * @returns {@link GetPublicKeyConfigCommandOutput}
+ * @see {@link GetPublicKeyConfigCommandInput} for command's `input` shape.
+ * @see {@link GetPublicKeyConfigCommandOutput} for command's `response` shape.
+ * @see {@link CloudFrontClientResolvedConfig | config} for CloudFrontClient's `config` shape.
+ *
+ * @throws {@link AccessDenied} (client fault)
+ *  <p>Access denied.</p>
+ *
+ * @throws {@link NoSuchPublicKey} (client fault)
+ *  <p>The specified public key doesn't exist.</p>
+ *
+ * @throws {@link CloudFrontServiceException}
+ * <p>Base exception class for all service exceptions from CloudFront service.</p>
+ *
+ */
+export declare class GetPublicKeyConfigCommand extends $Command<GetPublicKeyConfigCommandInput, GetPublicKeyConfigCommandOutput, CloudFrontClientResolvedConfig> {
+    readonly input: GetPublicKeyConfigCommandInput;
+    static getEndpointParameterInstructions(): EndpointParameterInstructions;
+    /**
+     * @public
+     */
+    constructor(input: GetPublicKeyConfigCommandInput);
+    /**
+     * @internal
+     */
+    resolveMiddleware(clientStack: MiddlewareStack<ServiceInputTypes, ServiceOutputTypes>, configuration: CloudFrontClientResolvedConfig, options?: __HttpHandlerOptions): Handler<GetPublicKeyConfigCommandInput, GetPublicKeyConfigCommandOutput>;
+    /**
+     * @internal
+     */
+    private serialize;
+    /**
+     * @internal
+     */
+    private deserialize;
+}

@@ -59,6 +59,8 @@ dependencies = [
     "psycopg2-binary>=2.9.0",
     "fastapi>=0.100.0",
     "uvicorn>=0.23.0",
+    "mangum>=0.17.0",
+    "sst>=0.0.0",
 ]
 
 [project.optional-dependencies]
